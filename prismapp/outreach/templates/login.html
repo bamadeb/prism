@@ -1,0 +1,90 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: LOGIN {% endblock %}
+{% load static %}
+
+
+
+{% block body %}
+<!-- CSS -->
+  <style>
+    body{margin:0 auto;padding:0 auto;}img{max-width:100%;height:auto;}
+    @keyframes image {
+    0% {
+    background-image: url({% static '/images/5.jpg' %});
+    }
+    25% {
+    background-image: url({% static '/images/1.jpg' %});
+    }
+    50% {
+    background-image: url({% static '/images/2.jpg' %});
+    }
+    75% {
+    background-image: url({% static '/images/3.jpg' %});
+    }
+    100% {
+    background-image: url({% static '/images/4.jpg' %});
+    }
+    }
+    </style>
+ <link rel='stylesheet' href="{% static '/css/ddc-pack-site.min.6919ddae.css' %}">
+    <link rel="stylesheet" href="{% static '/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/custom.css' %}">
+    <link rel='stylesheet' href="{% static '/css/fonts.css' %}" >
+<div class='page-section-account page-account-login loginHeader'>
+          <div class="frame">
+            <main id='container'>
+              <div class="loginHeaderpart"  >
+                <div class="loginHeaderSubpart">
+                  <div align="center">
+                   <img class='logo' src="{% static '/images/logo1.svg' %}" alt="Healthcare Management" style="width: 300px;">
+                 </div>
+
+                 <div class ="loginBoxMargin">
+                  <div>
+
+                    <div class='ddc-form-signin-options ddc-mgt-4'>
+                      <div class='ddc-form-signin-main'>
+
+                       <form action="/login/" method="POST">
+                        {% csrf_token %}
+
+
+                        <div class='form-group'>
+                          <label>
+
+                            <input type="text" id="userName" name="userName"  placeholder="Email or Username" required=""  autocomplete="off" class="form-control loginField" />
+                          </label>
+                        </div>
+
+                        <div class='form-group loginFieldMargin'  >
+                          <label>
+
+                           <input type="password" id="password" name="password" class="form-control loginField" placeholder="Password" required="" autocomplete="off" />
+                         </label>
+                       </div>
+                       <div>
+
+                        <div  align="center" class="loginFieldMargin"> <button type="submit" name="LogIN" value="1" class="ddc-btn">LOGIN</button>  </div>
+
+                      </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+       <div class="d-flex justify-content-center " style="margin-top:90px; text-align:center;">
+          <div><img class='logo' src="{% static '/images/logo1.svg' %}" alt="prism.com" style="width:60px;"></div>
+          <div class="ps-4">
+          <div style="font-size:24px;">Health Plan Prism</div>
+          <div style="font-size:12px;color:#999;">A Karma Strategies Offering © 2025.</div>
+          </div>
+          </div>
+     </main>
+   </div>
+</div>
+{% endblock %}
+
