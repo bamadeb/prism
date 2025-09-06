@@ -34,7 +34,7 @@ def login(request):
         try:
             response = requests.post(settings.API_URL + "prismAuthentication", json=data)
             result = response.json()  # Decode the JSON response
-            print(result)
+            #print(result)
 
             if response.status_code == 200:
                 user_data = result['data']
@@ -83,7 +83,6 @@ def login(request):
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def mywork(request):
-        print('mywork')
         if not request.session.get('is_logged_in', False):  # Check session value
             return render(request, 'login.html')
         else:
@@ -92,3 +91,10 @@ def mywork(request):
 def logoutuser(request):
     logout(request)
     return redirect('/login')
+
+
+def memberdetails(request):
+    if not request.session.get('is_logged_in', False):  # Check session value
+        return render(request, 'login.html')
+    else:
+        return render(request, 'memberdetails.html')

@@ -1,11 +1,16 @@
-{% extends 'basic.html' %}
-{% block title%} PRISM  :: LOGIN {% endblock %}
-{% load static %}
-
-
-
-{% block body %}
-<!-- CSS -->
+<!doctype html>
+<html lang="en">
+<head>{% load static %}
+    <title>{% block title %} {% endblock %}</title>
+    <!-- Favicons -->
+    <link rel='icon' type='image/png' sizes='32x32' href="{% static '/images/favicon.png' %}">
+    <link rel='icon' type='image/png' sizes='16x16' href="{% static '/images/favicon.png' %}">
+    <link rel='apple-touch-icon' sizes='180x180' href="{% static '/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <meta name='theme-color' content='#259cd8'>
+    <!-- CSS -->
   <style>
     body{margin:0 auto;padding:0 auto;}img{max-width:100%;height:auto;}
     @keyframes image {
@@ -26,10 +31,13 @@
     }
     }
     </style>
- <link rel='stylesheet' href="{% static '/css/ddc-pack-site.min.6919ddae.css' %}">
+    <link rel='stylesheet' href="{% static '/css/ddc-pack-site.min.6919ddae.css' %}">
     <link rel="stylesheet" href="{% static '/css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/custom.css' %}">
     <link rel='stylesheet' href="{% static '/css/fonts.css' %}" >
+</head>
+<body>
+
 <div class='page-section-account page-account-login loginHeader'>
           <div class="frame">
             <main id='container'>
@@ -86,5 +94,6 @@
      </main>
    </div>
 </div>
-{% endblock %}
+</body>
+</html>
 

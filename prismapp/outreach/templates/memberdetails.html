@@ -1,0 +1,3638 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: MEMBER DETAILS {% endblock %}
+{% load static %}
+{% block body %}
+
+<main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
+  <section class="section dashboard">
+    <div class="accordion">
+
+      <div class="d-flex align-items-center justify-content-center py-1 border-primary">
+        <a class="accordionTitle col-2" href="#" style="padding:10px;" ></a>
+        <div class="col-8" style="text-align:center; font-weight:500;">
+          <i class="fa fa-info-circle" aria-hidden="true"></i> | CRIS BONI - #1 | ENROLLEE NO - 9000*1 | CASE NO - #2345  | GENDER - F | DOB - 09/02/2005 |<br>
+          <h5>| HEDIS: <span style="color:#56c729;">100%</span> | P4P: <span style="color:#56c729;">100%</span> | HCC: <span style="color:#56c729;">40%</span> | Claims: <span style="color:#0d6efd;">333</span> |</h5>
+        </div>
+        <div class="col-2">
+          <div class="float-end"  style="margin-right:10px;">
+            <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#largeModal" >Add Action</a>
+          </div>
+        </div>
+        <div style="clear:both"></div>
+      </div>
+
+      <div class="accordionItem accordionItem">
+        <div class="row">
+          <div class="col-lg-4">
+            <div style="background-color:#e4e8ed;" class="px-3 py-1">
+              <div class="row">
+                <div class="col px-1">
+                  <a href="javascript:void(0);"  data-bs-toggle="modal" data-bs-target="#demographic">
+                    <div class="box13 d-flex align-items-center justify-content-center" id="box1">
+                      <div><i class="fa fa-bar-chart f30"></i><br/>DEMOGRAPHIC</div>
+                    </div></a>
+                  </div>
+                  <div class="col px-1">
+                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#plan_details">
+                      <div class="box13 d-flex align-items-center justify-content-center" id="box2">
+                        <div>
+                          <!-- <i class="fa fa-sign-in f30"></i><br/>ACTION LOG -->
+                          <i class="fa fa-pencil-square-o f30"></i><br/>PLAN DETAILS
+                        </div>
+                      </div></a>
+                    </div>
+                    <div class="col px-1">
+                      <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add_address" >
+                        <div class="box13 d-flex align-items-center justify-content-center" id="box3">
+                          <div><i class="fa fa-map-marker f30"></i><br/>ALT ADDRESS</div>
+                        </div></a>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col px-1">
+                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#alt_phone">
+                          <div class="box13 d-flex align-items-center justify-content-center" id="box4">
+                            <div><i class="fa fa-phone f30"></i><br/>ALT PHONE</div>
+                          </div></a>
+                        </div>
+                        <div class="col px-1">
+                          <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#altLanguage">
+                            <div class="box13 d-flex align-items-center justify-content-center" id="box5">
+                              <div><i class="fa fa-external-link f30"></i><br/>ALT LANGUAGE</div>
+                            </div></a>
+                          </div>
+                          <div class="col px-1">
+                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#pcp_list">
+                              <div class="box13 d-flex align-items-center justify-content-center" id="box6">
+                                 <div>
+                                <!--<i class="fa fa-bell-o f30"></i><br/>ALERTS -->
+                                <i class="fa fa-list-alt f30"></i><br/>PCP LIST
+
+
+                                </div>
+                              </div></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div style="background-color:#e4e8ed;" class="px-3 py-1">
+                         <div class="row">
+
+                          <div class="col px-1">
+                            <a href="javascript:void(0);" onclick="addclaim()" data-bs-toggle="modal" data-bs-target="#medical_claim">
+                              <div class="box13 d-flex align-items-center justify-content-center" id="box7">
+                                <div><i class="fa fa-stethoscope f30"></i><br/>MEDICAL CLAIM</div>
+                              </div></a>
+                            </div>
+                            <div class="col px-1">
+                              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#prism_claim">
+                                <div class="box13 d-flex align-items-center justify-content-center" id="box8">
+                                  <div><i class="fa fa-stethoscope" style="font-size:30px;"></i><br/>PRISM CLAIM</div>
+                                </div></a>
+                              </div>
+                              <div class="col px-1">
+                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#crisp_details">
+                                  <div class="box13 d-flex align-items-center justify-content-center" id="box9">
+                                    <div><i class="fa fa-asterisk f30"></i><br/> HEALTH HX</div>
+                                  </div></a>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col px-1">
+                                  <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#rx_claim">
+                                    <div class="box13 d-flex align-items-center justify-content-center" id="box10">
+                                      <div><i class="fa fa-pencil-square-o f30"></i><br/>Rx CLAIM DETAILS</div>
+                                    </div></a>
+                                  </div>
+                                  <div class="col px-1">
+                                    <a  href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#hedis_measure">
+                                      <div class="box13 d-flex align-items-center justify-content-center" id="box11">
+                                        <div><i class="fa fa-folder-open-o f30"></i><br/>VIEW GAPS-IN-CARE</div>
+                                      </div></a>
+                                    </div>
+                                    <div class="col px-1">
+                                      <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#cm_risk_mngt">
+                                        <div class="box13 d-flex align-items-center justify-content-center" id="box12">
+                                          <div><i class="fa fa-circle-o-notch f30"></i><br/> CM RISK ENROLLMENT
+                                          </div>
+                                        </div></a>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-4">
+                                  <div style="background-color:#e4e8ed;" class="px-3 py-1">
+                                    <div class="row">
+                                      <div class="col px-1">
+                                        <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#gift_card">
+                                          <div class="box13 d-flex align-items-center justify-content-center" id="box13">
+                                            <div><i class="fa fa-gift f30"></i><br/>GIFT CARD</div>
+                                          </div></a>
+                                        </div>
+                                        <div class="col px-1">
+                                          <a href="javascript:void(0);" onclick="addAction();">
+                                            <div class="box13 d-flex align-items-center justify-content-center" id="box14">
+                                               <div><i class="fa fa-phone f30"></i><br/>PHONE CALL</div>
+                                            </div></a>
+                                          </div>
+                                          <div class="col px-1">
+                                            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#encounters" >
+                                              <div class="box13 d-flex align-items-center justify-content-center" id="box15">
+                                               <div><i class="fa fa-list-alt f30"></i><br/>ENCOUNTERS</div>
+                                              </div>
+                                            </a>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col px-1">
+                                             <a href="javascript:void(0);"  data-bs-toggle="modal" data-bs-target="#indicators_modal">
+                                              <div class="box13 d-flex align-items-center justify-content-center" id="box16">
+                                                  <div><i class="fa fa-bar-chart f30"></i><br/>INDICATOR</div>
+                                               </div>
+                                              </a>
+                                            </div>
+                                            <div class="col px-1">
+                                              <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="" >
+                                                <div class="box13 d-flex align-items-center justify-content-center" id="box17">
+                                                  <div><i class="fa fa-list-alt f30"></i><br/>TITLE</div>
+                                                </div></a>
+                                              </div>
+                                              <div class="col px-1">
+
+                                                  <a href="javascript:void(0);"  data-bs-toggle="modal" data-bs-target="">
+                                                    <div class="box13 d-flex align-items-center justify-content-center" id="box1">
+                                                      <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>
+                                                    </div></a>
+                                                </div>
+
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div class="row mt-4" style="font-size:15px;">
+
+                                      <!-- START BOX //////////////// -->
+                                      <div class="col-lg-6" >
+                                        <div class="card" id="alert_box" style="height: 364px;">
+                                          <div class="card-body">
+                                            <h5 align="center">ACTION</h5>
+                                            <div class="row">
+                                              <form action="http://localhost/prismKarma/add_prism_action" name="add_prism_action" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+
+                                               <div class="row">
+
+                                                <input type="hidden" name="prism_action_type_txt"  id="prism_action_type_txt" >
+                                                <input type="hidden" name="prism_action_outcome_txt"  id="prism_action_outcome_txt" >
+
+                                                <input type="hidden" name="member_id"  id="member_id" value="1">
+
+                                                <div class="col-lg-4">
+                                                  <input type='text' class="form-control datepicker" name="prism_action_date" id="prism_action_date"  placeholder="ACTION DATE" required value="09/06/2025">
+                                                </div>
+
+                                                <div class="col-lg-4">
+                                                  <select class="form-select"  id="prism_action_type" name="prism_action_type"  required onchange="getdata(this.value);">
+                                                   <option value="">Action Type</option>
+                                                                                                           <option value="10">Engaged</option>
+                                                                                                         <option value="11">Reached</option>
+                                                                                                         <option value="12">Unreachable</option>
+                                                                                                         <option value="13">Verbal Yes</option>
+                                                                                                         <option value="14">Verbal Phone</option>
+                                                                                                         <option value="15">Verbal Voicemail</option>
+                                                                                                         <option value="16">Verbal Text</option>
+
+                                                 </select>
+                                               </div>
+
+                                               <div class="col-lg-4">
+                                                  <select class="form-select"  id="prism_action_outcome" name="prism_action_outcome"  required onchange="getoutcometxt();">
+                                                   <option value="">Action Outcome</option>
+                                                   <!--                                                       <option value="1">Wrong Number</option>
+                                                                                                         <option value="2">Phone Disconnected</option>
+                                                                                                         <option value="3">Left voicemail message</option>
+                                                                                                         <option value="4">Unable to leave a voicemail</option>
+                                                                                                         <option value="5">Member will call back</option>
+                                                                                                         <option value="6">No phone number on file</option>
+                                                                                                         <option value="7">Appointment Scheduled (HEDIS specific)</option>
+                                                                                                         <option value="8">Member cancelled appointment</option>
+                                                                                                         <option value="9">Member completed Appointment</option>
+                                                                                                         <option value="10">No Answer/Left Reminder Card</option>
+                                                                                                         <option value="11">Member request visit another day</option>
+                                                                                                         <option value="12">Left Message with Other</option>
+                                                                                                         <option value="13">Bad Address/Vacant Home</option>
+                                                                                                         <option value="14">Bad Address/Member Doesn't Live There</option>
+                                                                                                         <option value="15">Bad Address - No Apt#</option>
+                                                                                                         <option value="16">Member request Spanish Speaking</option>
+                                                                                                         <option value="17">Member request Amharic speaking</option>
+                                                                                                         <option value="18">Member request Other translation</option>
+                                                                                                         <option value="19">Letter Sent</option>
+                                                                                                         <option value="20">Locked Building</option>
+                                                                                                         <option value="21">Incarcerated</option>
+                                                                                                         <option value="22">Unsafe Environment</option>
+                                                                                                         <option value="23">Service Center Address</option>
+                                                                                                         <option value="24">Successful in-person visit (met target)</option>
+                                                                                                         <option value="25">Email Sent</option>
+                                                                                                         <option value="26">Meeting</option>
+                                                                                                         <option value="27">Bad Address</option>
+                                                                                                         <option value="28">Declined Access</option>
+                                                                                                         <option value="29">Did not Receive</option>
+                                                                                                         <option value="30">Message Left</option>
+                                                                                                         <option value="31">Wrong Number</option>
+                                                                                                         <option value="32">Call Successful</option>
+                                                                                                         <option value="33">No longer in plan</option>
+                                                                                                         <option value="34">No active insurance</option>
+                                                     -->
+                                                 </select>
+                                               </div>
+
+                                              <div class="col-lg-12 mt-3 mb-3">
+                                                <textarea id="textarea_claim_note" class="form-control" name="prism_action_note"  placeholder="Action note"></textarea>
+                                              </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                           <input class="btn btn-primary" type="submit" value="Submit">
+                                         </div>
+                                       </form>
+                                            </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <!-- START BOX //////////////// -->
+                                <div class="col-lg-6" >
+                                  <div class="card" id="alert_box">
+                                    <div class="card-body">
+
+                                      <h5 align="center">ACTION LOG</h5>
+                                      <div class="box_height">
+                                        <div class="tbl_scorll">
+                                          <table class="table table-sm" style="font-size:14px;">
+                                            <thead>
+                                             <tr>
+                                               <th>Log Name</th>
+                                               <th>Details</th>
+                                               <!-- <th>Status</th> -->
+                                               <th width="13%">Log By</th>
+                                               <th width="18%">Date</th>
+                                             </tr>
+                                           </thead>
+                                           <tbody>
+
+                                             <tr>
+                                              <td>Alert</td>
+                                              <td></td>
+                                              <!-- <td></td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/25/2025 19:06</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Engaged</td>
+                                              <td>Call Successful</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/11/2025 12:22</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Engaged</td>
+                                              <td>Meeting</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/11/2025 12:22</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Reached</td>
+                                              <td>Left voicemail message</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/11/2025 12:21</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Unreachable</td>
+                                              <td>Bad Address</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/11/2025 12:21</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Engaged</td>
+                                              <td>Call Successful</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/10/2025 19:15</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Reached</td>
+                                              <td>Left voicemail message</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/10/2025 19:14</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Unreachable</td>
+                                              <td>Wrong Number</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>06/10/2025 19:14</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Alert</td>
+                                              <td>Emergency presentation</td>
+                                              <!-- <td>In-Process</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>04/09/2025 12:33</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td></td>
+                                              <td>Alert</td>
+                                              <!-- <td>Open</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>04/09/2025 12:30</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td></td>
+                                              <td>Alert</td>
+                                              <!-- <td>Open</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>04/09/2025 12:30</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td></td>
+                                              <td>Alert</td>
+                                              <!-- <td>Open</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>04/09/2025 12:28</td>
+                                            </tr>
+
+                                             <tr>
+                                              <td>Visit</td>
+                                              <td>FOLLOW-UP</td>
+                                              <!-- <td>SUCCESS</td> -->
+                                              <td>Jacob Smith</td>
+                                              <td>02/02/2025 05:30</td>
+                                            </tr>
+
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+                                      <!-- START BOX //////////////// -->
+                                      <div class="col-lg-6" >
+                                        <div class="card" id="alert_box">
+                                          <div class="card-body">
+                                            <a class="add_btn" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="add_alert();">+Add</a>
+                                            <h5 align="center">ALERTS</h5>
+                                            <div class="box_height">
+                                              <div class="tbl_scorll">
+                                               <table class="table table-sm" style="font-size:14px;">
+                                                <thead>
+                                                 <tr>
+                                                   <th>Alert</th>
+                                                   <th>Type</th>
+                                                   <th>Status</th>
+                                                   <!-- <th>Due Date</th> -->
+                                                   <th>Due Date</th>
+                                                   <!-- <th>ADDED BY</th> -->
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20409','7','28','1','0','2025-06-25T00:00:00.000Z','Note','2025-06-27T00:00:00.000Z');">ER</a></td>
+                                                  <td  >Emergency presentation</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">06/27/2025</td>
+                                                  <!-- <td align="center">06/25/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20400','7','28','2','0','2025-04-09T00:00:00.000Z','test','2025-04-11T00:00:00.000Z');">ER</a></td>
+                                                  <td  >Emergency presentation</td>
+                                                  <td style=" text-transform: uppercase;">In-Process</td>
+
+                                                  <td align="center">04/11/2025</td>
+                                                  <!-- <td align="center">04/09/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20399','4','79','1','0','2025-04-08T00:00:00.000Z','note','2025-04-11T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[AAP-20 to 44] </td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/11/2025</td>
+                                                  <!-- <td align="center">04/08/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20398','4','79','1','0','2025-04-08T00:00:00.000Z','','2025-04-11T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[AAP-20 to 44] </td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/11/2025</td>
+                                                  <!-- <td align="center">04/08/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20397','4','79','1','0','2025-04-08T00:00:00.000Z','','2025-04-11T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[AAP-20 to 44] </td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/11/2025</td>
+                                                  <!-- <td align="center">04/08/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20396','7','32','1','0','2025-04-02T00:00:00.000Z','','2025-04-10T00:00:00.000Z');">ER</a></td>
+                                                  <td  >Dead on arrival</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/10/2025</td>
+                                                  <!-- <td align="center">04/02/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20395','84','85','1','0','2025-04-09T00:00:00.000Z','High bp test','2025-04-13T00:00:00.000Z');">High BP</a></td>
+                                                  <td  >High BP</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/13/2025</td>
+                                                  <!-- <td align="center">04/09/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20394','84','85','1','0','2025-04-09T00:00:00.000Z','High bp test','2025-04-13T00:00:00.000Z');">High BP</a></td>
+                                                  <td  >High BP</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/13/2025</td>
+                                                  <!-- <td align="center">04/09/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20393','7','28','1','0','2025-04-08T00:00:00.000Z','test note','2025-04-14T00:00:00.000Z');">ER</a></td>
+                                                  <td  >Emergency presentation</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">04/14/2025</td>
+                                                  <!-- <td align="center">04/08/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20377','4','83','1','','2025-02-05T00:00:00.000Z','CCS Non-Compliant in gaps in care','2025-03-07T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[CCS]</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">03/07/2025</td>
+                                                  <!-- <td align="center">02/05/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20357','4','83','1','','2025-02-05T00:00:00.000Z','CCS Non-Compliant in gaps in care','2025-03-07T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[CCS]</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">03/07/2025</td>
+                                                  <!-- <td align="center">02/05/2025</td> -->
+
+                                                </tr>
+
+                                                 <tr>
+                                                  <td><a style="cursor: pointer;text-decoration: underline;" data-bs-toggle="modal" data-bs-target="#add_alert" onclick="getUpdate('20329','4','83','1','','2025-02-05T00:00:00.000Z','CCS Non-Compliant in gaps in care','2025-03-07T00:00:00.000Z');">GAPS-IN-CARE</a></td>
+                                                  <td  >[CCS]</td>
+                                                  <td style=" text-transform: uppercase;">Open</td>
+
+                                                  <td align="center">03/07/2025</td>
+                                                  <!-- <td align="center">02/05/2025</td> -->
+
+                                                </tr>
+
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- START BOX //////////////// -->
+                                      <div class="col-lg-6" >
+                                        <div class="card" id="alert_box">
+                                          <div class="card-body">
+
+                                            <h5 align="center">MEDICAL CLAIM</h5>
+                                            <div class="box_height">
+                                              <div class="tbl_scorll">
+                                               <table class="table table-sm" style="font-size:14px;">
+                                                <thead>
+                                                 <tr>
+                                                   <th>CLAIM #</th>
+                                                   <th>PRIMARY DIAGNOSIS</th>
+                                                   <th>DESCRIPTION</th>
+                                                   <th>DOS</th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+
+
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            <!-- START BOX //////////////// -->
+                            <!-- <div class="col-lg-4" >
+                              <div class="card" id="alert_box">
+                                <div class="card-body">
+
+                                  <h5 align="center">GAPS-IN-CARE</h5>
+                                  <div class="box_height">
+                                    <div class="tbl_scorll" style="overflow:scroll;">
+
+                                      <table class="table table-sm" style="font-size:14px;">
+                                        <thead><tr>
+
+                                          <th>Year</th>
+
+                                          <th>Month</th>
+                                                                                    <th># Non-Compliant</th>
+
+                                          <th>AAP-45 to 64</th>
+
+                                          <th>AAP-Total</th>
+
+                                          <th>BCS</th>
+
+                                          <th>CCS</th>
+
+                                          <th># Measures</th>
+
+                                          <th>ActionStatus</th>
+
+                                      </tr>
+                                    </thead>
+                                    <tbody >
+
+                                       <tr>
+
+                                          <td >2019</td>
+
+                                          <td >5</td>
+
+                                            <td style='color: #FF0000;'>4</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td >4</td>
+
+                                          <td ></td>
+
+                                      </tr>
+
+                                       <tr>
+
+                                          <td >2019</td>
+
+                                          <td >4</td>
+
+                                            <td style='color: #FF0000;'>4</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td >4</td>
+
+                                          <td >Open</td>
+
+                                      </tr>
+
+                                       <tr>
+
+                                          <td >2019</td>
+
+                                          <td >3</td>
+
+                                            <td style='color: #FF0000;'>4</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td style='color: #FF0000;'>Non-Compliant</td>
+
+                                          <td >4</td>
+
+                                          <td ></td>
+
+                                      </tr>
+                                                                      </tbody>
+
+                                </table>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+
+                      <!-- START BOX //////////////// -->
+                         <!--<div class="col-lg-4" >
+                        <div class="card">
+                          <div class="card-body">
+
+                           <a class="add_btn" data-bs-toggle="modal" data-bs-target="#addclaim" onclick="addclaim()">+Add</a>
+                           <h5 align="center">MEDICAL CLAIM</h5>
+                           <div class="box_height">
+                            <div class="tbl_scorll" style="overflow:scroll;">
+                             <table class="table table-sm" style="font-size:14px;">
+                              <thead>
+                                <tr>
+                                  <th>CLAIM #</th>
+                                  <th>PRIMARY DIAGNOSIS</th>
+                                  <th>DESCRIPTION</th>
+
+                                  <th>DOS</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-lg-4" >
+                  <div class="card" id="alt_addr_box">
+                    <div class="card-body">
+                      <a class="add_btn" data-bs-toggle="modal" data-bs-target="#add_address">+Add</a>
+                      <h5 align="center">ALT ADDRESS</h5>
+                      <div class="box_height">
+                        <div class="tbl_scorll">
+                          <table class="table table-sm" style="font-size:14px;" >
+                            <thead>
+                              <tr>
+                                <th>Address</th>
+                                <th width="20%">Added By</th>
+                                <th>Added Date</th>
+                              </tr>
+                            </thead>
+                            <tbody >
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4" >
+                  <div class="card" id="alt_phone_box">
+                    <div class="card-body">
+                     <a class="add_btn" data-bs-toggle="modal" data-bs-target="#alt_phone">+Add</a>
+                     <h5 align="center">ALT PHONE</h5>
+
+                     <div class="box_height">
+                       <div class="tbl_scorll">
+                         <table class="table table-sm" id="alt_phone_table" style="font-size:14px;">
+                          <thead>
+                            <tr>
+                              <th>Alternative Phone No</th>
+                              <th>Added By (INITIAL)</th>
+                              <th>Added Date</th>
+                            </tr>
+                          </thead>
+                          <tbody id="alt_phone_table_body">
+
+                           </tbody>
+                         </table>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+             <div class="col-lg-4" >
+                <div class="card" id="alt_language_box">
+                  <div class="card-body">
+                   <a class="add_btn" data-bs-toggle="modal" data-bs-target="#altLanguage">+Add</a>
+                   <h5 align="center">ALT LANGUAGE</h5>
+                   <div class="box_height">
+                     <div class="tbl_scorll">
+                       <table class="table table-sm" style="font-size:14px;" id="alt_phone_table">
+                        <thead>
+                          <tr>
+                            <th>Alternative Language</th>
+                            <th>Added By (INITIAL)</th>
+                            <th>Added Date</th>
+                          </tr>
+                        </thead>
+                        <tbody id="alt_language_table_body">
+
+                         </tbody>
+                       </table>
+                     </div>
+                   </div>
+                 </div>
+
+               </div>
+             </div> -->
+           </section>
+         </main>
+         <!-- End #main -->
+
+         <!---------------------------------------- MODAL START -------------------------- -->
+
+         <!-- START DEMOGRAPHIC MODAL --->
+         <div class="modal fade" id="demographic" tabindex="-1" data-bs-backdrop="false">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">DEMOGRAPHIC</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="http://localhost/prismKarma/update_member_info" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+              <div class="modal-body">
+               <input type="hidden" name="medicaid_id" value="1">
+               <div class="row">
+                <div class="col-lg-4 mt-3">
+                 <label for="ln"><strong>ADDRESS</strong></label>
+                 <input name="address" id="address" type="text" class="form-control" readonly value="">
+               </div>
+               <div class="col-lg-4 mt-3">
+                <label><strong><a>ALT ADDRESS</a></strong></label>
+                                <input name="alt_number" id="latest_alt_address" type="text" class="form-control"  readonly  value="">
+              </div>
+              <div class="col-lg-4 mt-3">
+               <label for="pn"><strong>PHONE NUMBER</strong></label>
+               <input name="phone_number" id="phone_number" type="text" class="form-control" readonly  value="">
+             </div>
+             <div class="col-lg-4 mt-3">
+               <label for="alt phone"><strong><a >ALT. PHONE</a></strong>
+               </label>
+               <input name="alt_number" id="latest_alt_phone" type="text" class="form-control" readonly  value="">
+             </div>
+             <div class="col-lg-4 mt-3">
+              <label for="city">ROSTER / ALT LANGUAGE</label>
+              <div >
+              N/A
+              <span id="latest_alt_language">
+                              </span>
+            </div>
+          </div>
+          <div class="col-lg-4 mt-3">
+           <label for="city">CITY</label>
+           <input name="city" id="city" type="text" class="form-control" readonly value="" >
+         </div>
+         <div class="col-lg-4 mt-3" >
+          <label for="state">STATE</label>
+          <input name="state" id="state" type="text" class="form-control" readonly  value="">
+        </div>
+        <div class="col-lg-4 mt-3" >
+          <label for="zip code"><strong>ZIP CODE</strong></label>
+          <input name="zip_code" id="zip_code" type="text" class="form-control" readonly value="">
+        </div>
+        <div class="col-lg-4 mt-3" >
+         <label for="zip code"><strong>ASSIGNED TO</strong></label>
+         <select id="assign_to" name="assign_to"  class="form-select">
+          <option value="">SELECT</option>
+                      <option value="41" selected>Jacob Smith</option>
+                      <option value="42" >John Doe</option>
+                      <option value="44" >Mark Williamson</option>
+                      <option value="46" >Padmalochan Pradhan</option>
+                      <option value="45" >Parsuram Samal</option>
+                      <option value="43" >user One</option>
+                  </select>
+      </div>
+      <div class="col-lg-4 mt-3"  >
+        <label for="zip code"><strong>PREFERRED CALL TIME</strong></label>
+        <input name="preferred_call_time" id="preferred_call_time" type="text" class="form-control "  value="">
+      </div>
+      <div class="col-lg-8 mt-3" >
+        <label for="zip code"><strong>PCP NAME,ADDRESS</strong></label>
+        <input name="Provider_Name" id="Provider_Name" type="text" class="form-control"   readonly  value="PROVIDER MARCY, (null : null), NPI : null (null,null,null,null)" >
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </div>
+</form>
+</div>
+</div>
+</div>
+<!-- END DEMOGRAPHIC MODAL --->
+
+        <!-- START INDICATOR MODAL --->
+         <div class="modal fade" id="indicators_modal" tabindex="-1" data-bs-backdrop="false">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">MANAGE MEMBER INDICATORS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="http://localhost/prismKarma/Member_manage_new/update_member_indicatirs" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+              <div class="modal-body">
+               <input type="hidden" name="medicaid_id" value="1">
+               <div class="row">
+                <div class="col-lg-4 mt-3">
+                 <label for="ln"><strong>HIGH DRUG USE</strong></label>
+
+               </div>
+               <div class="col-lg-4 mt-3">
+                <select id="assign_to" name="HIGH_DRUG_USE" id="HIGH_DRUG_USE"  class="form-select">
+                  <option value="0" selected>No</option>
+                  <option value="1" >Yes</option>
+                </select>
+               </div>
+                <div class="col-lg-4 mt-3">
+                </div>
+                <div class="col-lg-4 mt-3">
+                 <label for="ln"><strong>HOMELESSNESS</strong></label>
+
+               </div>
+               <div class="col-lg-4 mt-3">
+                <select id="assign_to" name="HOMELESS" id="HOMELESS"  class="form-select">
+                  <option value="0" selected>No</option>
+                  <option value="1" >Yes</option>
+                </select>
+               </div>
+                <div class="col-lg-4 mt-3">
+                </div>
+                <div class="col-lg-4 mt-3">
+                 <label for="ln"><strong>SUBSTANCE ABUSE</strong></label>
+
+               </div>
+               <div class="col-lg-4 mt-3">
+                <select id="assign_to" name="SUBSTANCE_ABUSE" id="SUBSTANCE_ABUSE" class="form-select">
+                  <option value="0" selected>No</option>
+                  <option value="1" >Yes</option>
+                </select>
+               </div>
+                <div class="col-lg-4 mt-3">
+                </div>
+
+
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Save changes</button>
+  </div>
+</form>
+</div>
+</div>
+</div>
+<!-- END INDICATOR MODAL --->
+<!-- START ACTION LOG MODAL --->
+<div class="modal fade" id="actionlog" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ACTION LOG</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="overflow-y:scroll; height:450px;">
+       <table class="table table-sm" style="font-size:14px;">
+        <thead>
+          <tr>
+            <th>Log Name</th>
+            <th>Entry Type</th>
+            <th>Status</th>
+            <th>Note</th>
+            <th>Logged By</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="log_data">
+
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END ACTION LOG MODAL --->
+  <!-- START ADD Prisim Claim MODAL --->
+  <div class="modal fade" id="add_claim" tabindex="-1" data-bs-backdrop="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+
+         <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Claim</h5>
+         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+       </div>
+       <div class="modal-body">
+         <form action="http://localhost/prismKarma/Member_manage_new/add_prisim_claim" name="addPrisimClaim" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+
+         <div class="row">
+
+          <input type="hidden" name="alert_name"  id="alert_name" >
+          <input type="hidden" name="alert_status_txt"  id="alert_status_txt" >
+          <input type="hidden" name="alert_type_txt"  id="alert_type_txt" >
+
+          <input type="hidden" name="member_id"  id="member_id" value="1">
+
+          <div class="col-lg-4  mt-3">
+            <input type="text" id="txt_claim_number" name="txt_claim_number" placeholder="Claim Number" class="form-control" required>
+
+          </div>
+          <div class="col-lg-4  mt-3">
+
+            <input type="text" id="txt_primary_diagnosos" name="txt_primary_diagnosos" placeholder="Primary Diagnosis" class="form-control" required>
+
+          </div>
+          <div class="col-lg-4  mt-3">
+
+            <input type="text" id="txt_code_desc" name="txt_code_desc" placeholder="Description" class="form-control" required>
+
+          </div>
+
+          <div class="col-lg-4  mt-3">
+            <select class="form-select"  id="select_type" name="select_claim_type"  required>
+             <option value="">Type</option>
+             <option value="IP">IP</option>
+             <option value="OP">OP</option>
+             <option value="ER">ER</option>
+
+           </select>
+         </div>
+         <div class="col-lg-4 mt-3">
+          <input type="text" id="txt_Physician" name="txt_Physician" placeholder="Physician" class="form-control" required>
+
+        </select>
+      </div>
+      <div class="col-lg-4  mt-3">
+        <input type='text' class="form-control datepicker" name="date_dos" id="date_dos" placeholder="DOS" required>
+      </div>
+      <div class="col-lg-4 mt-3 mb-3">
+        <textarea id="textarea_claim_note" class="form-control" name="textarea_claim_note"  placeholder="Add note"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+     <input class="btn btn-primary" type="submit" value="Save">
+   </div>
+ </form>
+
+</div>
+</div>
+</div>
+</div>
+<!-- END ADD Prisim Claim modal MODAL --->
+<!-- START ADD ALERT MODAL --->
+<div class="modal fade" id="add_alert" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ADD/UPDATE ALERT</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form action="http://localhost/prismKarma/member_add_update_alert" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+       <div class="row">
+        <input type="hidden" name="alert_name"  id="alert_name" >
+        <input type="hidden" name="alert_status_txt"  id="alert_status_txt" >
+        <input type="hidden" name="alert_type_txt"  id="alert_type_txt" >
+        <input type="hidden" name="alert_list_id"  id="alert_list_id" >
+        <input type="hidden" name="member_id"  id="member_id" value="1">
+
+        <div class="col-lg-4  mt-3">
+          <select class="form-select" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
+            <option value="">SELECT ALERT</option>
+                         <option value="7">ER</option>
+                        <option value="4">GAPS-IN-CARE</option>
+                        <option value="84">High BP</option>
+                        <option value="76">IP</option>
+                        <option value="3">RECERT</option>
+                        <option value="72">Reminder</option>
+                    </select>
+       </div>
+       <div class="col-lg-4  mt-3">
+         <select class="form-select" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
+          <option value="">SELECT TYPE</option>
+        </select>
+      </div>
+
+      <div class="col-lg-4  mt-3">
+        <select class="form-select" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
+         <option value="">SELECT STATUS</option>
+                    <option value="1" >Open</option>
+                    <option value="2" >In-Process</option>
+                    <option value="3" >Transferred</option>
+                    <option value="4" >Cancel</option>
+                    <option value="5" >Completed</option>
+                    <option value="28" >Visited</option>
+                </select>
+     </div>
+     <div class="col-lg-4 mt-3" style="display:none;" id="assign_user_id_field">
+      <select class="form-select"  name="assign_user_id" id="assign_user_id">
+        <option value="">SELECT USER</option>
+                 <option value="41">Jacob ()</option>
+                <option value="42">John ()</option>
+                <option value="44">Mark ()</option>
+                <option value="46">Padmalochan ()</option>
+                <option value="45">Parsuram ()</option>
+                <option value="43">user ()</option>
+            </select>
+   </div>
+   <div class="col-lg-4  mt-3">
+    <input type='text' class="form-control datepicker" name="created_date" id="created_date" placeholder="Created Date" required>Alert Date
+  </div>
+  <div class="col-lg-4  mt-3">
+    <input type='text' class="form-control datepicker" name="due_date" id="due_date" placeholder="Due Date" >Due Date
+  </div>
+  <div class="col-lg-4 mt-3 mb-3">
+    <textarea id="alert_note" class="form-control" name="alert_note"  placeholder="Add note"></textarea>
+  </div>
+</div>
+<div class="modal-footer">
+ <input class="btn btn-primary" type="submit" value="Save">
+</div>
+</form>
+
+</div>
+</div>
+</div>
+</div>
+<!-- END ADD ALERT MODAL --->
+
+<!-- START ADD ALT ADDRESS MODAL --->
+<div class="modal fade" id="add_address" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ALT ADDRESS</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-5">
+        <form action="http://localhost/prismKarma/add_member_alt_address" name="alt_address_fom" id="alt_address_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+
+         <input type="hidden" name="medicaid_id"  value="1">
+         <div class="col-lg-12  mt-3">
+          <input type="text" id="alt_address" name="alt_address" placeholder="Alternate Address" class="form-control" required>
+        </div>
+        <div class="col-lg-12  mt-3">
+          <input type="text" id="alt_city" name="alt_city" placeholder="Alternate City" class="form-control" required>
+        </div>
+        <div class="col-lg-12  mt-3">
+          <input type="text" id="alt_state" name="alt_state" placeholder="Alternate State" class="form-control" required>
+        </div>
+        <div class="col-lg-12  mt-3 mb-3">
+          <input type="text" id="alt_zip" name="alt_zip" placeholder="Alternate Zip" class="form-control" required>
+        </div>
+        <div class="col-lg-12  mt-3 mb-3">
+          <input type='text' class="form-control datepicker" name="created_date" placeholder="Added Date" >
+        </div>
+
+      <div class="modal-footer">
+       <input class="btn btn-primary" type="submit" value="Save">
+     </div>
+   </form>
+   </div>
+   <div class="col-lg-7">
+      <div class="tbl_scorll">
+          <table class="table table-sm" style="font-size:14px;" >
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Added Date</th>
+                <th width="20%">Added By</th>
+              </tr>
+            </thead>
+            <tbody >
+              <tr><td colspan='3' align='center'>No record found.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+
+   </div>
+   </div>
+
+ </div>
+</div>
+</div>
+</div>
+<!-- END ADD ALT ADDRESS MODAL --->
+
+
+<!-- START ALT PHONE MODAL --->
+<div class="modal fade" id="alt_phone" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ALT PHONE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+           <div class="col-lg-4">
+        <form action="http://localhost/prismKarma/add_member_alt_pnone" name="alt_phone_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+
+         <input type="hidden" name="medicaid_id"  value="1">
+         <div class="col-lg-12  mt-3">
+          <input type="text"  placeholder="Alternate Phone No"   name="alt_phone_no" id="alt_phone_no" class="form-control" onkeyup="formatPhoneNumber(this.value);" maxlength="10" required>
+        </div>
+        <div class="col-lg-12  mt-3" align="right">
+          <input class="btn btn-primary" type="submit" value="Save">
+        </div>
+
+    </form>
+    </div>
+    <div class="col-lg-8">
+      <div class="tbl_scorll">
+         <table class="table table-sm" id="alt_phone_table" style="font-size:14px;">
+          <thead>
+            <tr>
+              <th>Alternative Phone No</th>
+              <th>Added By (INITIAL)</th>
+              <th>Added Date</th>
+            </tr>
+          </thead>
+          <tbody id="alt_phone_table_body">
+                          <tr id="no_phone"><td colspan='3' align="center" >No alt phone found. </td></tr>
+
+                       </tbody>
+         </table>
+       </div>
+
+
+    </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+<!-- END ALT PHONE MODAL --->
+
+<!-- START ALT LANGUAGE MODAL --->
+<div class="modal fade" id="altLanguage" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ALT LANGUAGE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-4">
+       <form action="http://localhost/prismKarma/add_member_alt_language" name="alt_phone_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+
+         <input type="hidden" name="medicaid_id"  value="1">
+         <input type="hidden" name="alt_language_name" id="alt_language_name">
+         <div class="col-lg-12  mt-3">
+          <select name="alt_language" id="alt_language" class="form-select" onchange="get_language_name();">
+                          <option value="55">AF MAAY</option>
+                          <option value="70">AFRIKAAN</option>
+                          <option value="10">ALBANIAN</option>
+                          <option value="11">AMHARIC</option>
+                          <option value="12">ARABIC</option>
+                          <option value="13">ARMENIAN</option>
+                          <option value="56">AZERBAIJANI</option>
+                          <option value="71">BASQUE</option>
+                          <option value="14">BENGALI</option>
+                          <option value="15">BOSNIAN/SERBO CROAT</option>
+                          <option value="72">BULGARIAN</option>
+                          <option value="57">BURMESE</option>
+                          <option value="73">BURMESE</option>
+                          <option value="04">CAMBODIAN/KHMER</option>
+                          <option value="16">CANTONESE CHINESE</option>
+                          <option value="74">CHINESE</option>
+                          <option value="18">CREOLE HAITI FR</option>
+                          <option value="19">CROATION</option>
+                          <option value="20">CZECH</option>
+                          <option value="75">DANISH</option>
+                          <option value="76">DUTCH</option>
+                          <option value="01">ENGLISH</option>
+                          <option value="77">ESTONIAN</option>
+                          <option value="21">FARSI/PERSIAN</option>
+                          <option value="78">FINNISH</option>
+                          <option value="79">FLEMISH</option>
+                          <option value="08">FRENCH</option>
+                          <option value="80">FRENCH-CREOLE</option>
+                          <option value="22">GERMAN</option>
+                          <option value="23">GREEK</option>
+                          <option value="24">GUJARATI INDIA</option>
+                          <option value="25">HEBREW</option>
+                          <option value="26">HINDI INDIA</option>
+                          <option value="27">HMONG</option>
+                          <option value="28">HUNGARIAN</option>
+                          <option value="29">IBO</option>
+                          <option value="82">INDIC</option>
+                          <option value="30">INDONESIAN</option>
+                          <option value="83">IRANIAN</option>
+                          <option value="81">ISLANDIC</option>
+                          <option value="31">ITALIAN</option>
+                          <option value="32">JAPANESE</option>
+                          <option value="61">KHMER</option>
+                          <option value="33">KOREAN</option>
+                          <option value="34">LATVIAN</option>
+                          <option value="35">LITHUANIAN</option>
+                          <option value="36">MALAY</option>
+                          <option value="37">MALAYALAM INDIA</option>
+                          <option value="17">MANDARIAN CHINESE</option>
+                          <option value="84">MON-KHMER</option>
+                          <option value="85">NORWEGIAN</option>
+                          <option value="99">OTHER</option>
+                          <option value="86">PAKISTAN</option>
+                          <option value="38">PASHTO/PUSHTU</option>
+                          <option value="59">PERSIAN</option>
+                          <option value="39">PORTUGUESE</option>
+                          <option value="87">PORTUGUESE-CREOLE</option>
+                          <option value="40">PUNJABI/PANJABI</option>
+                          <option value="41">ROMANIAN</option>
+                          <option value="05">RUSSIAN</option>
+                          <option value="42">SERBIAN</option>
+                          <option value="43">SIGN LANGUAGE</option>
+                          <option value="44">SLOVAK</option>
+                          <option value="45">SLOVENE</option>
+                          <option value="46">SOMALI</option>
+                          <option value="02">SPANISH</option>
+                          <option value="47">SWAHILI</option>
+                          <option value="89">SWEDISH</option>
+                          <option value="48">TAGALOG PHILIPPINES</option>
+                          <option value="49">TAMIL</option>
+                          <option value="50">THAI</option>
+                          <option value="90">TIGENYA</option>
+                          <option value="51">TURKISH</option>
+                          <option value="53">UKRAINIAN</option>
+                          <option value="91">UNKNOWN</option>
+                          <option value="52">URDU</option>
+                          <option value="60">UZBEK</option>
+                          <option value="03">VIETNAMESE</option>
+                          <option value="54">YORUBA</option>
+
+          </select>
+        </div>
+        <div class="col-lg-12  mt-3" align="right">
+          <input class="btn btn-primary" type="submit" value="Save">
+        </div>
+
+    </form>
+    </div>
+    <div class="col-lg-8">
+      <div class="tbl_scorll">
+             <table class="table table-sm" style="font-size:14px;" id="alt_phone_table">
+              <thead>
+                <tr>
+                  <th>Alternative Language</th>
+                  <th>Added By (INITIAL)</th>
+                  <th>Added Date</th>
+                </tr>
+              </thead>
+              <tbody id="alt_language_table_body">
+                                  <tr  ><td colspan='3' align="center" >No alt language found. </td></tr>
+
+                               </tbody>
+             </table>
+           </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+<!-- END ALT LANGUAGE MODAL --->
+
+<!-- START MEDICAL CLAIM MODAL --->
+<div class="modal fade" id="medical_claim" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">MEDICAL CLAIM</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+
+            <form action="http://localhost/prismKarma/add_claim" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+       <div class="row">
+        <input type="hidden" name="medicaid_id"  value="1">
+        <input type="hidden" name="MEM_NO"  value="9000*1">
+        <div class="col-lg-2  ">
+          <input type="text" class="form-control"   placeholder="CLAIM NUMBER" name="prism_claim_number" id="prism_claim_number" readonly>
+        </div>
+        <div class="col-lg-2">
+          <input type="text" name="DOS" id="DOS" placeholder="DATE OF SERVICE" value="06/06/2025" class="form-control datepicker" required>
+        </div>
+        <div class="col-lg-2">
+          <select class="form-control" name="claim_category" style="text-transform: uppercase;"   required>
+             <option value="1">Clinical Events</option>
+              <option value="2">Care Outcomes</option>
+              <option value="3">Care Access</option>
+              <option value="4">Patient Experience</option>
+          </select>
+        </div>
+        <div class="col-lg-2">
+          <select class="form-control" name="claim_kpi" id="claim_kpi"  required style="text-transform: uppercase;">
+            <option value="">SELECT KPI</option>
+            <option value="5">Infections</option>
+            <option value="6">Procedures</option>
+            <option value="7">Errors in medication</option>
+          </select>
+        </div>
+
+        <div class="col-lg-2" id="discharge_date" style="display: none;">
+          <input type="text" name="discharge_date"  placeholder="DISCHARGE DATE" value="09/06/2025" class="form-control datepicker" >
+        </div>
+
+        <div class="col-lg-2" id="deseaseType">
+          <select class="form-control" name="desease_type" id="desease_type"    style="text-transform: uppercase;">
+            <option value="">SELECT DISEASE</option><option value="4">Bacteraemia/sepsis†</option><option value="5">Cellulitis/soft-tissue infections</option><option value="3">Meningitis/encephalitis</option><option value="1">Pneumonia-primary definition</option><option value="2">Pneumonia-secondary definition</option>
+          </select>
+        </div>
+
+        <div class="col-lg-2" id="diagnosisCode">
+          <input type="text" placeholder="038.x, 790.7, 995.91, 995.92" name="primary_diagnosis" id="primary_diagnosis" class="form-control" >
+        </div>
+        <div class="col-lg-12" align="right">
+          <!-- <div id="p_code"></div> -->
+          <div class="modal-footer">
+           <button type="submit" class="btn btn-primary">Create</button>
+         </div>
+        </div>
+
+
+
+         </div>
+       </form>
+
+
+
+
+          <div class="row">
+          <div class="col-lg-12">
+             <table class="table table-sm" id="member_claim_details_list_table_body_id">
+              <thead>
+                <tr>
+                  <th>CLAIM NUMBER</th>
+                  <th>PRIMARY DIAGNOSIS</th>
+                  <th>CODE DESCRIPTION</th>
+                  <th>PHYSICIAN</th>
+                  <th>DOS</th>
+                </tr>
+              </thead>
+              <tbody >
+
+            </tbody>
+          </table>
+        </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+<!-- END MEDICAL CLAIM MODAL --->
+
+<!-- START PRISM CLAIM MODAL --->
+<div class="modal fade" id="prism_claim" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">PRISM CLAIM</h5>
+        &nbsp;  &nbsp;
+        <a class="add_btn" data-bs-toggle="modal" data-bs-target="#add_claim" onclick="add_claim();">+Add</a>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <table class="table table-sm" >
+        <thead>
+          <tr>
+            <th>CLAIM NUMBER</th>
+            <th>PRIMARY DIAGNOSIS</th>
+            <th>TYPE</th>
+            <th>PHYSICIAN</th>
+            <th>NOTE</th>
+            <th>DOS</th>
+            <th>ADDED BY</th>
+          </tr>
+        </thead>
+        <tbody id="prisim_claim_details_list">
+                           <tr  ><td colspan='8' align="center" >No record found. </td></tr>
+
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</div>
+</div>
+<!-- END MEDICAL CLAIM MODAL --->
+
+<!-- START CRISP DETAILS MODAL --->
+<div class="modal fade" id="crisp_details" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">HEALTH HX</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <table class="table" >
+        <thead>
+          <tr>
+            <th>SOURCE</th>
+            <th>HOSPITAL SERVICE</th>
+            <!-- <th>PATIENT COMPLAIN</th> -->
+            <th>EMERGENCY VISITS</th>
+            <th>INPATIENT VISITS</th>
+            <th>EVENT</th>
+            <th>DATE</th>
+          </tr>
+        </thead>
+        <tbody id="crisp_details_list_table_body_id">
+                           <tr><td colspan='7' align="center" >No record found. </td></tr>
+
+
+      </tbody>
+    </table>
+
+  </div>
+</div>
+</div>
+</div>
+<!-- END CRISP DETAILS MODAL --->
+
+<!-- START Rx CLAIM MODAL --->
+<div class="modal fade" id="rx_claim" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rx CLAIM</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+            <form action="http://localhost/prismKarma/add_rx_claim" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+
+           <input type="hidden" name="medicaid_id"  value="1">
+             <div class="row">
+             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
+               <input type="text" class="form-control" name="rx_number" id="rx_number" placeholder="RX NUMBER"   required />
+             </div>
+             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
+               <input type="text" class="form-control" name="ndc" id="ndc" placeholder="NDC"   required />
+             </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
+               <input type="text" class="form-control" name="drug_name" id="drug_name" placeholder="DRUG NAME"   required />
+             </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
+               <input type="text" class="form-control" name="pharmacy" id="pharmacy" placeholder="PHARMACY DETAILS"   required />
+             </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
+               <input type="text" class="form-control datepicker" name="service_date" id="service_date" placeholder="SERVICE DATE"   required />
+             </div>
+             <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2" align="right">
+              <button type="submit" id="btnsubmit" class="btn btn-primary">Submit</button>
+            </div>
+            </div>
+        </form>
+
+
+    <div class="row mt-4">
+      <div class="col-lg-12">
+      <table class="table table-sm" id="member_rx_claim_details_list">
+        <thead>
+          <tr>
+            <th>RX NUMBER</th>
+            <th>NDC</th>
+            <th>DRUG NAME</th>
+            <th>PHARMACY DETAILS</th>
+            <th>SERVICE DATE</th>
+          </tr>
+        </thead>
+        <tbody >
+
+      </tbody>
+    </table>
+    </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+<!-- END Rx CLAIM MODAL --->
+
+<!-- START GAPS-IN-CARE MODAL --->
+<div class="modal fade" id="hedis_measure" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">GAPS-IN-CARE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <table class="table">
+        <thead><tr>
+
+          <th>Year</th>
+
+          <th>Month</th>
+                    <th># Non-Compliant</th>
+
+          <th>AAP-45 to 64</th>
+
+          <th>AAP-Total</th>
+
+          <th>BCS</th>
+
+          <th>CCS</th>
+
+          <th># Measures</th>
+
+          <th>ActionStatus</th>
+
+      </tr>
+    </thead>
+    <tbody id="hedis_details_table_body_id">
+
+       <tr>
+
+          <td >2019</td>
+
+          <td >5</td>
+
+            <td style='color: #FF0000;'>4</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td >4</td>
+
+          <td ></td>
+
+      </tr>
+
+       <tr>
+
+          <td >2019</td>
+
+          <td >4</td>
+
+            <td style='color: #FF0000;'>4</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td >4</td>
+
+          <td >Open</td>
+
+      </tr>
+
+       <tr>
+
+          <td >2019</td>
+
+          <td >3</td>
+
+            <td style='color: #FF0000;'>4</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td style='color: #FF0000;'>Non-Compliant</td>
+
+          <td >4</td>
+
+          <td ></td>
+
+      </tr>
+      </tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<!-- END GAPS-IN-CARE MODAL --->
+
+<!-- START PCP LIST MODAL --->
+<div class="modal fade" id="pcp_list" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">PCP LIST</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>PHYSICIAN</th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr><td colspan='3' align="center" >No Record Available. </td></tr>
+
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END PCP LIST MODAL --->
+
+<!-- START CM RISK MANAGEMENT MODAL --->
+<div class="modal fade" id="cm_risk_mngt" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">CM RISK MANAGEMENT</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <table class="table table-sm" id="tabrisk">
+         <thead>
+          <tr>
+            <th>RISK</th>
+            <th>NOTE</th>
+          </tr>
+        </thead>
+        <tbody>
+                     <tr>
+              <td> In-crisis</td>
+              <td> Checking for membership </</td>
+            </tr>
+                  </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+</div>
+<!-- END CM RISK MANAGEMENT MODAL --->
+
+<!-- START PLAN DETAILS MODAL --->
+<div class="modal fade" id="plan_details" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">PLAN DETAILS HISTORY</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Default Tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Active</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">All</button>
+          </li>
+
+        </ul>
+        <div class="tab-content pt-2" id="myTabContent">
+          <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+           <form method="post" enctype="multipart/form-data" action="http://localhost/prismKarma/Member_details/add_meber_item_note">
+             <table class="table table-sm">
+               <thead>
+                <tr>
+                  <th></th>
+                  <th>PLAN NAME</th>
+                  <th>ASSIGNED TO</th>
+                  <!-- <th>ASSIGNED BY</th> -->
+                  <th>ASSIGNED DATE</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                  <tr>
+                    <td colspan="4">
+                      <textarea class="form-control" name="note" id="note" placeholder="Enter some note..." cols="6" rows="2"></textarea>
+                      <input type="hidden" name="medicaid_id" value="1" >
+                    </td>
+                    <td>
+                      <button class="btn btn-primary" type="submit">Complete</button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </form>
+
+          </div>
+          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <table class="table table-sm">
+             <thead>
+              <tr>
+                <th></th>
+                <th>PLAN NAME</th>
+                <th>ASSIGNED TO</th>
+                <th>STATUS</th>
+                <th>ASSIGNED DATE</th>
+                <th>COMPLETED DATE</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div><!-- End Default Tabs -->
+    </div>
+  </div>
+</div>
+</div>
+<!-- END PLAN DETAILS MODAL --->
+
+<!-- START PLAN DETAILS MODAL --->
+<div class="modal fade" id="encounters" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content"  >
+      <div class="modal-header">
+        <h5 class="modal-title" ><div style="text-align:center;">Summarization of Episode Note (Oct 27, 2023 04:52:01)</div></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+
+
+
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-title mt-2" style="text-align:center;">PROBLEMS</div>
+            <div class="card-body">
+              <table class="table table-sm table-bordered" style="font-size: 14px;">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Condition</th>
+                    <th>ICD9-CM Code</th>
+                    <th>ICD10-CM Code</th>
+                    <th>Onset Dates</th>
+                    <th>Condition Status</th>
+                    <th>W/U Status</th>
+                    <th>Risk</th>
+                    <th>SNOMED Code</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                                 </tbody>
+             </table>
+           </div>
+         </div>
+       </div><!-- End Left side columns -->
+
+
+
+
+       <div class="col-lg-12">
+        <div class="card">
+          <div class="card-title mt-2" style="text-align:center;">ALLERGIES</div>
+          <div class="card-body">
+            <table class="table table-sm table-bordered">
+              <thead>
+                <tr>
+                    <th>DOCUMENT</th>
+                    <th>DATE OF SERVICE</th>
+                    <th>VENDOR</th>
+                    <th>CLAIM TYPE</th>
+                    <th>CODE</th>
+                    <th>DESCRIPTION</th>
+                  </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div><!-- End Left side columns -->
+
+
+
+
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-title mt-2" style="text-align:center;">ENCOUNTERS from 1976-05-14 to 2023-10-26</div>
+          <div class="card-body">
+            <table class="table table-sm table-bordered" style="font-size: 14px;">
+              <thead>
+                <tr>
+                  <th>Encounter</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Provider</th>
+                  <th>Diagnosis</th>
+                </tr>
+              </thead>
+              <tbody>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div><!-- End Left side columns -->
+
+
+
+
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-title mt-2" style="text-align:center;">IMMUNIZATIONS</div>
+        <div class="card-body">
+          <table class="table table-sm table-bordered" style="font-size: 14px;">
+            <thead>
+              <tr>
+                <th>Vaccine</th>
+                <th>Route</th>
+                <th>Administration Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+
+           </tbody>
+         </table>
+       </div>
+
+     </div>
+   </div>
+
+
+
+   <div class="col-lg-12">
+    <div class="card">
+      <div class="card-title mt-2" style="text-align:center;">SOCIAL HISTORY</div>
+      <div class="card-body">
+
+
+        <table class="table table-sm table-bordered" style="font-size: 14px;">
+          <thead>
+            <tr>
+              <th>Social History Observation</th>
+              <th>Description</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+
+        </tbody>
+      </table>
+     <table class="table table-sm table-bordered" style="font-size: 14px;">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Answer</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+              </tbody>
+   </table>
+ </div>
+
+</div>
+</div>
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">REASON FOR REFERRAL</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">VITAL SIGNS</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">MEDICATIONS</div>
+    <div class="card-body">
+      <table class="table table-sm table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr>
+            <th>Medication</th>
+            <th>SIG (Take, Route, Frequency, Duration)</th>
+            <th>Notes</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+                   </tr>
+       </tbody>
+     </table>
+   </div>
+ </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">PROCEDURES</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">RESULTS</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">REASON FOR VISIT</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!--
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">MEDICAL (GENERAL) HISTORY</div>
+    <div class="card-body">
+      <table class="table table-sm table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+                     <tr>
+           <td></td>
+           <td></td>
+           <td></td>
+         </tr>
+
+
+       </tbody>
+     </table>
+   </div>
+
+ </div>
+</div>  -->
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">Goals Section</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">Health Concerns</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">MEDICAL EQUIPMENT</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">MENTAL STATUS</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">FUNCTIONAL STATUS</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">ASSESSMENTS</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">PLAN OF TREATMENT</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+
+
+         </tr>
+
+       </tbody>
+     </table>
+   </div>
+
+ </div>
+</div>
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">Insurance Providers</div>
+    <div class="card-body">
+      <table class="table table-sm table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr>
+            <th>Payer Name</th>
+            <th>Payer Address</th>
+            <th>Payer Phone</th>
+            <th>Insured Name</th>
+            <th>Patient Relationship to Insured</th>
+            <th>Coverage Start Date</th>
+            <th>Coverage End Date</th>
+            <th>Subscriber Number</th>
+            <th>Group Number</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+
+
+       </tbody>
+     </table>
+   </div>
+
+ </div>
+</div>
+
+
+
+
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-title mt-2" style="text-align:center;">MEDICATIONS ADMINISTERED</div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered" style="font-size: 14px;">
+        <thead>
+          <tr>
+
+            <th>Medication</th>
+            <th>Instructions</th>
+            <th>Date of Administration</th>
+            <th>Dosage</th>
+          </tr>
+        </thead>
+        <tbody>
+
+       </tbody>
+     </table>
+   </div>
+
+ </div>
+</div>
+
+
+
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+<!-- END PLAN DETAILS MODAL --->
+
+<!-- START GIFT CARD MODAL --->
+<div class="modal fade" id="gift_card" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">GIFT CARD</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table" >
+          <thead>
+                <tr>
+                  <th width="22%">GIFT CARD</th>
+                  <th>GIFT CARD TYPE</th>
+                  <th>ACTIVITY</th>
+                  <th>INCENTIVE AMOUNT</th>
+                  <th>DOS</th>
+                </tr>
+              </thead>
+              <tbody >
+                               <tr><td colspan='5' align="center" >No Record Available. </td></tr>
+                            </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END GIFT CARD MODAL --->
+
+    <!-- Add Action Modal Start -->
+    <div class="modal fade" id="largeModal" tabindex="-1" data-bs-backdrop="false">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Action</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="card">
+              <div class="card-body">
+
+                <!-- Bordered Tabs -->
+                <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">To-Do</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Appointment</button>
+                  </li>
+                  <!-- <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="referring-tab" data-bs-toggle="tab" data-bs-target="#bordered-referring" type="button" role="tab" aria-controls="profile" aria-selected="false">Transfers</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="rsvp-tab" data-bs-toggle="tab" data-bs-target="#bordered-rsvp" type="button" role="tab" aria-controls="profile" aria-selected="false">RSVP Appointment</button>
+                  </li> -->
+                </ul>
+                <div class="tab-content pt-2" id="borderedTabContent">
+                  <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                   <form action="http://localhost/prismKarma/add_action" name="add_action" role="form" id="add_action" onsubmit="return fileValidation();" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+
+                   <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
+                   <input type="hidden" name="medicaid_id" value="1" >
+                <input type="hidden" name="number_of_attempt"  value=""/>
+                   <input type="hidden" name="visit_alertname" id="visit_alertname">
+                   <input type="hidden" name="action_type_name" id="action_type_name">
+
+                   <!-- <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input type="text" class="form-control" readonly value=""/>
+                    </div>
+                  </div>  -->
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_id" id="action_id" required onChange="set_scheduled_action_status(this.value);">
+                        <option value="">Activity Category</option>
+                                                  <option value="17">ER Follow up</option>
+                                                  <option value="11">Gaps-in-Care</option>
+                                                  <option value="18">Recert</option>
+                                              </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="panel_id" id="panel_id" required>
+                        <option value=""> Activity Type</option>
+                                                  <option value="3">Home visit</option>
+                                                  <option value="1">Letter sent</option>
+                                                  <option value="4">Mailed Reminder Card</option>
+                                                  <option value="7">Meeting</option>
+                                                  <option value="2">Phone call</option>
+                                              </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_result_id" id="action_result_id" required>
+                        <option value="" selected="">Status</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_status" id="action_status" required>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Success">Success</option>
+                        <option value="Failure">Failure</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note"></textarea>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                                          </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input class="form-control" type="file" name="file_visit_update" accept="application/pdf">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12" align="right">
+                      <button type="submit" class="btn btn-primary" >Submit</button>
+                    </div>
+                  </div>
+
+                </form>
+              </div>
+              <div class="tab-pane fade" id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
+                <form action="http://localhost/prismKarma/appoinmentment_add_action" name="appoinmentment_add_action" role="form" id="appoinmentment_add_action" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+
+              <!-- <input type="hidden" name="appointment_reschedule_action_id" id="appointment_reschedule_action_id">
+                <input type="hidden" name="appointment_panel_id" id="panel_id"> -->
+                <input type="hidden" name="provider_id" id="provider_id">
+                <input type="hidden" name="vendor_id" id="vendor_id">
+             <!--  <input type="hidden" name="appointment_panel_name" id="appointment_panelname">
+              <input type="hidden" name="appointment_action_name" id="appointment_action_name"> -->
+              <input type="hidden" name="appointment_medicaid_id" value="1">
+              <input type="hidden" name="app_alertname" id="app_alertname">
+
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <div id="vendor_tab" >
+                    <table width="100%">
+                      <tr>
+                        <td  width="90%">
+                          <input type='text' class="form-control" name="vendor_name" id="vendor_name" placeholder="Search Vendor">
+                        </td>
+                        <td  width="10%">
+                          <input type="button" class="btn btn-primary" value="Search" onClick="get_vendor_list();"   style="margin-left: 10px;">
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="float: left;display: none;" id="vendor_lebel"><b>Vendor List</b></div>
+                    <div style="clear:both;"></div>
+                  </div>
+                  <div id="vendor_replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <div id="doctor_id" style="display: none;">
+                    <table width="100%">
+                      <tr>
+                        <td  width="90%">
+                          <input type='text' class="form-control" name="doctor_name" id="doctor_name" placeholder="Search Doctor">
+                        </td>
+                        <td  width="10%">
+                          <input type="button" class="btn btn-primary" value="Search" onClick="get_doctor_list();"   style="margin-left: 10px;">
+                        </td>
+                      </tr>
+                    </table>
+                    <div style="float: left;display: none;" id="doc_lebel"><b>Doctor List</b></div>
+                    <div style="clear:both;"></div>
+                  </div>
+                  <div id="replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <div >
+                    <input type='text' class="form-control datepicker" name="appointment_action_date" id="appointment_action_date" placeholder="Appointment Date" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <div class='input-group date' id='myDatepicker3'>
+                    <input type='time' class="form-control" placeholder="Appointment Time" name="appointment_action_time" id="appointment_action_time" />
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <input type="text" name="place_of_appointment" id="place_of_appointment"  class="form-control" placeholder="Place of Appointment">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-12">
+                  <select class="form-control" name="transportation_needed" id="transportation_needed" required >
+                    <option value="" >Transportation Needed</option>
+                    <option value="No" >No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+              </div>
+             <!--  onChange="set_transportation_vender_list(this.value);"
+             <div class="row mb-3" id="transportation_vender_div_id" style="display: none;">
+                <div class="col-sm-12">
+                   <select class="form-select" name="transportation_vender" id="transportation_vender">
+                    </select>
+               </div>
+             </div> -->
+             <div class="row mb-3">
+              <div class="col-sm-12">
+                <select class="form-control" name="appointment_action" id="appointment_action" required>
+                  <option value="Failure">Appointment Failure</option>
+                  <option value="Rescheduled">Appointment Rescheduled</option>
+                  <option value="Scheduled" selected >Appointment Scheduled</option>
+                  <option value="Success">Appointment Success</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12">
+                <textarea class="form-control" name="appointment_action_note" id="appointment_action_note" required placeholder="Note"></textarea>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-12">
+                                  <table width="100%">
+                    <tr>
+                      <td>
+                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();" >
+                          <option value=""> SELECT ALERT</option>
+                                                      <option value="4/20399"  >GAPS-IN-CARE([AAP-20 to 44] -04/08/2025)                          </option>
+                                                    <option value="7/20409"  >ER(Emergency presentation-06/25/2025)                          </option>
+                                                    <option value="84/20395"  >High BP(High BP-04/09/2025)                          </option>
+                                              </select>
+                    </td>
+                    <td>
+                      <select class="form-control" style="text-transform: uppercase;" name="app_alert_status_id">
+                                                    <option value="5" >
+                              Completed                            </option>
+                                                  </select>
+                      </td>
+                    </tr>
+                  </table>
+                              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12">
+                <input class="form-control m-b" type="file" name="file_appointment" id="file_appointment" accept="application/pdf">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-12" align="right">
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Reffer details Tab content -->
+        <div class="tab-pane fade" id="bordered-referring" role="tabpanel" aria-labelledby="referring-tab">
+          <form action="http://localhost/prismKarma/Member_manage_new/referring_add" name="referring_add" role="form" id="referring_add" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+
+          <div >
+
+            <input type="hidden" name="user_id" id="user_id">
+            <input type="hidden" name="department_txt" id="department_txt">
+            <input type="hidden" name="referring_parent_id" id="referring_parent_id">
+            <input type="hidden" name="medicaid_id" id="medicaid_id" value="1">
+
+            <div class="form-group">
+             <select class="form-control mb-3" name="referring_department" id="referring_department" required onChange="referring_department_change(this.value);">
+              <option value="">Select Transfer Department </option>
+                             <option value=""></option>
+                        </select>
+
+         </div>
+         <div id="outreach_member_user_list_for_referr">
+          <div class="form-group" id="outreach_management_userlist_id">
+           <select class="form-control mb-3" name="outreach_refer_id[]" id="outreach_refer_id"  multiple>
+             <option value="">Select User </option>
+           </select>
+         </div>
+       </div>
+
+       <div class="form-group">
+        <textarea class="form-control mb-3" name="referring_reason" required placeholder="Reason for Transfer"></textarea>
+      </div>
+      <div class="form-group">
+       <input class="form-control mb-3" type="file" name="file_referral"  id="file_referral" accept="application/pdf">
+     </div>
+
+   </div>
+   <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+</div>
+
+<!-- End -->
+
+<!-- RSVP Tab content -->
+<div class="tab-pane fade" id="bordered-rsvp" role="tabpanel" aria-labelledby="rsvp-tab">
+
+  <form action="http://localhost/prismKarma/Member_manage_new/rsvp_appoinmentment_add_action_new" name="appoinmentment_add_action" role="form" id="appoinmentment_add_action" onsubmit="return fileValidation_appointment();" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+
+  <input type="hidden" name="rsvp_appointment_reschedule_action_id" id="rsvp_appointment_reschedule_action_id">
+  <input type="hidden" name="rsvp_appointment_panel_id" id="rsvp_panel_id">
+  <input type="hidden" name="rsvp_provider_id" id="rsvp_provider_id">
+  <input type="hidden" name="rsvp_vendor_id" id="rsvp_vendor_id">
+  <input type="hidden" name="rsvp_appointment_panel_name" id="rsvp_appointment_panelname">
+  <input type="hidden" name="rsvp_appointment_action_name" id="rsvp_appointment_action_name">
+  <input type="hidden" name="rsvp_appointment_medicaid_id" value="1">
+
+  <div class="form-group">
+   <select class="form-control mb-3" name="external_rsvp" >
+    <option value="">Select Call Administration</option>
+    <option value="External inbound">External inbound</option>
+    <option value="External outbound">External outbound</option>
+  </select>
+</div>
+
+<div class="form-group">
+ <select class="form-control mb-3" name="contact_rsvp">
+  <option value="">Select Contact bar</option>
+  <option value="Caregiver">Caregiver</option>
+  <option value="Member">Enrollee</option>
+  <option value="Member representative">Enrollee representative</option>
+  <option value="Non-member">Non-Enrollee</option>
+  <option value="PCP">PCP</option>
+  <option value="Provider">Provider</option>
+</select>
+</div>
+<div class="form-group">
+ <select class="form-control mb-3" name="status_rsvp">
+  <option value="">Select Status bar</option>
+  <option value="Completed">Completed</option>
+  <option value="Scheduled">Scheduled</option>
+  <option value="Successful">Successful</option>
+  <option value="Unsuccessful">Unsuccessful</option>
+</select>
+</div>
+
+<div class="form-group">
+ <select class="form-control mb-3" name="rsvp_appointment_action_id" id="rsvp_appointment_action_id" required onChange="set_rsvp_appointment_schedule_type(this.value);">
+  <option value="">Select Type</option>
+        <option value=""></option>
+      </select>
+</div>
+<div class="form-group">
+  <div id="vendor_replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+</div>
+
+
+<div class="form-group">
+ <select class="form-control mb-3" name="rsvp_clinic_days_provider_list" id="rsvp_clinic_days_provider_list" style="display: none;"  >
+      <option value=""></option>
+  </select>
+</div>
+
+<div class="form-group">
+ <select class="form-control mb-3" name="rsvp_appointment_schedule_type" id="rsvp_appointment_schedule_type" onChange="appointment_schedule_type_change(this.value);" >
+  <option value="">Select Type</option>
+</select>
+<div id="replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+</div>
+
+<div class="form-group">
+ <input type='text' class="form-control datepicker mb-3" name="rsvp_appointment_action_date" id="rsvp_appointment_action_date" placeholder="Appointment Date" required >
+</div>
+
+<div class="form-group">
+  <div class='input-group date' id='myDatepicker4'>
+   <input type='time' class="form-control mb-3" placeholder="Appointment Time" name="rsvp_appointment_action_time" id="rsvp_appointment_action_time" />
+ </div>
+</div>
+
+<div class="form-group">
+ <input type="text" name="rsvp_place_of_appointment" id="rsvp_place_of_appointment"  class="form-control mb-3" placeholder="Place of Appointment">
+</div>
+<div class="form-group">
+ <input type="text" name="rsvp_location_of_event" id="rsvp_location_of_event"  class="form-control mb-3" placeholder="Location of event/visit">
+</div>
+<div class="form-group">
+ <select class="form-control mb-3" name="rsvp_transportation_needed" id="rsvp_transportation_needed" required onChange="set_rsvp_transportation_vender_list(this.value);">
+  <option value="" >Transportation Needed</option>
+  <option value="No" >No</option>
+  <option value="Yes">Yes</option>
+</select>
+</div>
+<div class="form-group" id="rsvp_transportation_vender_div_id" style="display: none;">
+ <select class="form-control mb-3" name="rsvp_transportation_vender" id="rsvp_transportation_vender"  >
+ </select>
+
+</div>
+
+<div class="form-group">
+ <select class="form-control mb-3" name="rsvp_appointment_action" id="rsvp_appointment_action" required>
+  <option value="">Select Outcome</option>
+</select>
+</div>
+<div class="form-group">
+  <textarea class="form-control mb-3" name="rsvp_appointment_action_note" id="rsvp_appointment_action_note" required placeholder="Note"></textarea>
+</div>
+<div class="form-group">
+ <input class="form-control mb-3" type="file" name="rsvp_file_appointment" id="rsvp_file_appointment" accept="application/pdf">
+</div>
+
+<div class="modal-footer" >
+  <button type="submit" class="btn btn-primary">Submit</button>
+</div>
+</form>
+
+</div>
+
+<!-- End -->
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>   <!-- End Add action Modal-->
+
+
+
+<!-- START ADD ALT ADDRESS MODAL --->
+<div class="modal fade" id="addclaim" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">CREATE A CLAIM</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <form action="http://localhost/prismKarma/Member_manage_new/add_claim" role="form" autocomplete="off" method="post" accept-charset="utf-8">
+       <div class="row">
+        <input type="hidden" name="medicaid_id"  value="1">
+        <input type="hidden" name="MEM_NO"  value="">
+        <div class="col-lg-6  mt-2">
+          <input type="text" class="form-control"   placeholder="CLAIM NUMBER" name="prism_claim_number" id="prism_claim_number" readonly>
+        </div>
+        <div class="col-lg-6  mt-2">
+          <input type="text" name="DOS" id="DOS" placeholder="DATE OF SERVICE" value="06/06/2025" class="form-control datepicker" required>
+        </div>
+        <div class="col-lg-6  mt-2">
+          <select class="form-control" name="claim_category" style="text-transform: uppercase;" onchange="getkpi(this.value);" required>
+              <option value="">SELECT CATEGORY</option>
+              <option value="1">Clinical Events</option>
+              <option value="2">Care Outcomes</option>
+              <option value="3">Care Access</option>
+              <option value="4">Patient Experience</option>
+          </select>
+        </div>
+        <div class="col-lg-6  mt-2">
+          <select class="form-control" name="claim_kpi" id="claim_kpi" onchange="get_desease_type(this.value)" required style="text-transform: uppercase;">
+            <option value="">SELECT TYPE</option>
+          </select>
+        </div>
+
+        <div class="col-lg-6  mt-2" id="discharge_date" style="display: none;">
+          <input type="text" name="discharge_date"  placeholder="DISCHARGE DATE" value="09/06/2025" class="form-control datepicker" >
+        </div>
+
+        <div class="col-lg-6  mt-2" id="deseaseType">
+          <select class="form-control" name="desease_type" id="desease_type" onchange='getcode(this.value)'  style="text-transform: uppercase;">
+            <option value="">SELECT DISEASE</option>
+          </select>
+        </div>
+
+        <div class="col-lg-6  mt-2" id="diagnosisCode">
+          <input type="text" placeholder="PRIMARY DIAGNOSIS" name="primary_diagnosis" id="primary_diagnosis" class="form-control" >
+        </div>
+        <div class="col-lg-12  mt-2">
+          <div id="p_code"></div>
+        </div>
+          <!-- <div class="col-lg-4  mt-2" id="diagnosisDesc">
+          <input type="text" placeholder="CODE DESCRIPTION" name="code_description" id="code_description" class="form-control" >
+          </div>
+          <div class="col-lg-4  mt-2" id="physician">
+          <input type='text' class="form-control" placeholder="PHYSICIAN" name="physician"  >
+          </div>
+          <div class="col-lg-12  mt-2 mb-2">
+            <textarea class="form-control"   placeholder="CLAIM NOTE" name="claim_note" id="claim_note"></textarea>    -->
+          </div>
+          <div class="modal-footer">
+           <button type="submit" class="btn btn-primary">Create</button>
+         </div>
+       </div>
+     </form>
+   </div>
+ </div>
+</div>
+<!-- END ADD ALT ADDRESS MODAL --->
+
+{% endblock %}
+  {% block js %}
+<script type="text/javascript">
+    $('#member_claim_details_list_table_body_id').DataTable();
+$('#member_rx_claim_details_list').DataTable();
+$('.datepicker').datepicker({ changeMonth: true,changeYear: true });
+ function set_scheduled_action_status(scheduled_type){
+            $.ajax({
+             type: "POST",
+             url: 'http://localhost/prismKarma/api/get_scheduled_action_status',
+             data: {scheduled_type: scheduled_type} ,
+             async: false ,
+           }).done(function (data, textStatus, xhr){
+
+              $("#action_result_id").empty();
+              for (i = 0; i < data.length; i++)
+              {
+                $("#action_result_id").append("<option value='"+data[i]['id']+"'>"+data[i]['action_result']+"</option>");
+              }
+
+              var action_type_name = $('#action_id :selected').text();
+              $('#action_type_name').val(action_type_name);
+
+          }).fail(function (jqXHR, textStatus, errorThrown){
+             alert("Action Result Not found.");
+          });
+    }
+
+  function update_status(status,item_plan_id) {
+  //alert(status+'=='+item_plan_id);
+
+  $.ajax({
+   type: "POST",
+   url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/update_plan_item_status/',
+   data: {status: status,item_plan_id: item_plan_id} ,
+   async: false ,
+ })
+  .success(function (data, textStatus, xhr){
+
+
+  })
+  .fail(function (jqXHR, textStatus, errorThrown){
+   alert("Action Result Not found.");
+ });
+}
+function referring_department_change(dept){
+
+  if(dept){
+    $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_team_list_by_department/',
+     data: {dept: dept} ,
+     async: false ,
+   })
+    .success(function (data, textStatus, xhr){
+      $("#outreach_refer_id").empty();
+
+      for (i = 0; i < data.length; i++)
+      {
+        if(data[i]['FistName'] != null){
+          var firstname = data[i]['FistName'];
+        }else{
+          var firstname = '';
+        }
+        $("#outreach_refer_id").append("<option value='"+data[i]['ID']+"'>"+firstname+' '+data[i]['LastName']+" ("+data[i]['member_role']+")</option>");
+      }
+
+      $("#outreach_refer_id").val('');
+
+      var department_txt = $('#referring_department :selected').text();
+    // alert(department_txt);
+    $('#department_txt').val(department_txt);
+  })
+    .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Action Result Not found.");
+
+
+   });
+  }else{
+    $("#outreach_refer_id").empty();
+
+  }
+}
+
+function set_rsvp_transportation_vender_list(transportation_flag){
+  $("#rsvp_transportation_vender_div_id").hide();
+  if(transportation_flag=='Yes'){
+   var scheduled_type=3;
+   $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_appointment_schedule_type/',
+     data: {  scheduled_type: scheduled_type} ,
+     async: false ,
+   })
+   .success(function (data, textStatus, xhr){
+    $("#rsvp_transportation_vender").empty();
+    for (i = 0; i < data.length; i++)
+    {
+      if(scheduled_type==2 || scheduled_type==5 || scheduled_type==6 || scheduled_type==8){
+        var mydate = new Date(data[0]['start_date']);
+        var curr_date = mydate.getDate();
+        var curr_month = mydate.getMonth() + 1; //Months are zero based
+        var curr_year = mydate.getFullYear();
+        var start_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+        var mydate = new Date(data[0]['end_date']);
+        var curr_date = mydate.getDate();
+        var curr_month = mydate.getMonth() + 1; //Months are zero based
+        var curr_year = mydate.getFullYear();
+        var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+        $("#rsvp_transportation_vender").append("<option value='"+data[i]['id']+"'>"+data[i]['class_name']+" "+data[i]['Type']+" ("+start_date+" to "+end_date+" "+data[i]['start_time']+" to "+data[i]['end_time']+")</option>");
+      }else{
+        $("#rsvp_transportation_vender").append("<option value='"+data[i]['id']+"'>"+data[i]['schedule_type']+"</option>");
+      }
+    }
+    $("#rsvp_transportation_vender_div_id").show();
+  })
+   .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Action Result Not found.");
+   });
+ }
+}
+
+
+  function addclaim() {
+      // var mydate = new Date();
+      // var curr_date = mydate.getDate();
+      // var curr_month = mydate.getMonth() + 1; //Months are zero based
+      // var curr_year = mydate.getFullYear();
+      // var hours = mydate.getHours();
+      // var minute = mydate.getMinutes();
+      // var second = mydate.getSeconds();
+      // var format_date = "";
+      $('#prism_claim_number').val(Date.now());
+    }
+
+    function addAction() {
+
+      $('#action_id').val(5);
+      $('#panel_id').val(2);
+      $('#action_date').val('09/06/2025');
+      $("#largeModal").modal('show');
+    }
+
+
+
+    function active_box(id,box_id){
+      $('.box13').removeClass('boxhover');
+      $('.card').removeClass('boxbgcl');
+      $('#'+id).addClass('boxhover');
+      $('#'+box_id).addClass('boxbgcl');
+    }
+
+    function get_visit_alert_name() {
+      var visit_alert_id = $('#visit_alert_id :selected').text();
+      $('#visit_alertname').val(visit_alert_id);
+    }
+
+    function get_vendor_list(){
+     if($('#vendor_name').val()){
+       var vendor_name = $('#vendor_name').val();
+     }else{
+       var vendor_name = $('#vendor_name_update').val();
+     }
+
+     $.ajax({
+       type: "POST",
+       url: 'http://localhost/prismKarma/api/get_vendor_list',
+       data: {vendor_name: vendor_name},
+       async: false
+     }).done(function (data, textStatus, xhr){
+      //console.log(data);
+      $("#vendor_replace_id").show();
+      $("#vendor_replace_id").empty();
+      $('#vendor_lebel').show();
+      $("#vendor_replace_id_update").show();
+      $("#vendor_replace_id_update").empty();
+      $('#vendor_lebel_update').show();
+
+      for (i = 0; i < data.length; i++)
+      {
+        if(data[i]['NPI']==null){
+          data[i]['NPI']='';
+        }
+
+        $("#vendor_replace_id").append('<div style="border:1px solid #e9ebec;padding: 5px;"><span><input type="radio" name="venname" style="width: 40px;height: 15px;" onclick="get_vendor_name(\'' + data[i]['LAST_NAME'] + '\',\''+data[i]['VENDOR_NUM']+'\',1);"></span>'+data[i]['LAST_NAME']+' ('+data[i]['VEND_ADDR_1_TXT']+','+data[i]['VEND_CITY_TXT']+','+data[i]['VEND_ZIP_CD']+',NPI:'+data[i]['NPI']+')</div>');
+
+        $("#vendor_replace_id_update").append('<div style="border:1px solid #e9ebec;padding: 5px;"><span><input type="radio" name="venname" style="width: 40px;height: 15px;" onclick="get_vendor_name(\'' + data[i]['LAST_NAME'] + '\',\''+data[i]['VENDOR_NUM']+'\',2);"></span>'+data[i]['LAST_NAME']+' ('+data[i]['VEND_ADDR_1_TXT']+','+data[i]['VEND_CITY_TXT']+','+data[i]['VEND_ZIP_CD']+',NPI:'+data[i]['NPI']+')</div>');
+
+      }
+    }).fail(function (jqXHR, textStatus, errorThrown){
+     alert("Vendor Not found.");
+   });
+  }
+
+  function get_vendor_name(vendor_name,vendor_id,type){
+       // alert(vendor_name);
+       // alert(vendor_id);
+       // alert(type);
+       if(type == 1){
+        $('#vendor_name').val(vendor_name);
+        $('#vendor_id').val(vendor_id);
+        $('#doctor_id').show();
+      }else if(type == 2){
+        $('#vendor_name_update').val(vendor_name);
+        $('#vendor_id_update').val(vendor_id);
+        $('#doctor_id').show();
+      }else if(type == 3){
+        $('#search_vendor').val(vendor_name);
+        $('#vendor_id_search').val(vendor_id);
+        $('#search_doctor_id').show();
+      }
+    }
+
+    function get_doctor_list(){
+
+     if($('#vendor_id').val()){
+       var vendor_id = $('#vendor_id').val();
+     }else{
+       var vendor_id = $('#vendor_id_update').val();
+     }
+
+     if($('#doctor_name').val()){
+       var doctor_name = $('#doctor_name').val();
+     }else{
+       var doctor_name = $('#doctor_name_update').val();
+     }
+  // alert(vendor_id);
+  // alert(doctor_name);
+
+  $.ajax({
+   type: "POST",
+   url: 'http://localhost/prismKarma/api/get_doctor_list',
+   data: {doctor_name: doctor_name,vendor_id: vendor_id} ,
+   async: false ,
+ })
+  .done(function (data, textStatus, xhr){
+    $("#replace_id").show();
+    $("#replace_id").empty();
+    $('#doc_lebel').show();
+    $("#replace_id_update").show();
+    $("#replace_id_update").empty();
+    $('#doc_lebel_update').show();
+    var html = '';
+    for (i = 0; i < data.length; i++)
+    {
+
+      $("#replace_id").append('<div style="border:1px solid #e9ebec;padding: 5px;"><span><input type="radio" name="docname" style="width: 40px;height: 15px;" onclick="getval(\'' + data[i]['NAME'] + '\','+data[i]['PROVIDER_ID']+',1);"></span>'+data[i]['NAME']+', ('+data[i]['P_S_FLAG']+' : '+data[i]['SPEC_DESC']+'), NPI : '+data[i]['NPI_NUM']+' ('+data[i]['PRIMARY_BUSINESS_ADDR1']+','+data[i]['PRIMARY_BUSINESS_STATE']+','+data[i]['PRIMARY_BUSINESS_CITY']+','+data[i]['PRIMARY_BUSINESS_ZIP']+')</div>');
+
+      $("#replace_id_update").append('<div style="border:1px solid #e9ebec;padding: 5px;"><span><input type="radio" name="docname" style="width: 40px;height: 15px;" onclick="getval(\'' + data[i]['NAME'] + '\','+data[i]['PROVIDER_ID']+',2);"></span>'+data[i]['NAME']+', ('+data[i]['P_S_FLAG']+' : '+data[i]['SPEC_DESC']+'), NPI : '+data[i]['NPI_NUM']+' ('+data[i]['PRIMARY_BUSINESS_ADDR1']+','+data[i]['PRIMARY_BUSINESS_STATE']+','+data[i]['PRIMARY_BUSINESS_CITY']+','+data[i]['PRIMARY_BUSINESS_ZIP']+')</div>');
+    }
+
+  }).fail(function (jqXHR, textStatus, errorThrown){
+   alert("Doctor Not found.");
+ });
+
+}
+
+function get_alert_name() {
+  var app_alert_id = $('#app_alert_id :selected').text();
+  $('#app_alertname').val(app_alert_id);
+}
+
+function set_transportation_vender_list(transportation_flag){
+  $("#transportation_vender_div_id").hide();
+  if(transportation_flag=='Yes'){
+   var scheduled_type=3;
+   $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_appointment_schedule_type/',
+     data: {scheduled_type: scheduled_type} ,
+     async: false ,
+   })
+   .success(function (data, textStatus, xhr){
+    $("#transportation_vender").empty();
+    for (i = 0; i < data.length; i++)
+    {
+      if(scheduled_type==2 || scheduled_type==5 || scheduled_type==6 || scheduled_type==8){
+        var mydate = new Date(data[0]['start_date']);
+        var curr_date = mydate.getDate();
+            var curr_month = mydate.getMonth() + 1; //Months are zero based
+            var curr_year = mydate.getFullYear();
+            var start_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+            var mydate = new Date(data[0]['end_date']);
+            var curr_date = mydate.getDate();
+            var curr_month = mydate.getMonth() + 1; //Months are zero based
+            var curr_year = mydate.getFullYear();
+            var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+            $("#transportation_vender").append("<option value='"+data[i]['id']+"'>"+data[i]['class_name']+" "+data[i]['Type']+" ("+start_date+" to "+end_date+" "+data[i]['start_time']+" to "+data[i]['end_time']+")</option>");
+          }else{
+            $("#transportation_vender").append("<option value='"+data[i]['id']+"'>"+data[i]['schedule_type']+"</option>");
+          }
+        }
+        $("#transportation_vender_div_id").show();
+      })
+   .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Action Result Not found.");
+
+
+   });
+ }
+}
+
+function getval(doc_name,PROVIDER_ID,type){
+ if(type == 1){
+   $('#doctor_name').val(doc_name);
+   $('#provider_id').val(PROVIDER_ID);
+ }else if(type == 2){
+   $('#doctor_name_update').val(doc_name);
+   $('#provider_id_update').val(PROVIDER_ID);
+ }else if(type == 3){
+  $('#search_doctor').val(doc_name);
+  $("input[name='docname']:checked").each(function() {
+    var idVal = $(this).attr("id");
+    var txt = $("label[for='"+idVal+"']").text();
+    $('#provider_details').val(txt);
+  });
+  $('#search_provider_id').val(PROVIDER_ID);
+  $('#btnSave').show();
+}
+}
+
+function get_desease_type(value) {
+  //alert(value);
+  if(value == 10){
+    $('#discharge_date').show();
+    $('#deseaseType').hide();
+    $('#diagnosisCode').hide();
+    //$('#diagnosisDesc').hide();
+    //$('#physician').hide();
+  }else{
+    $('#discharge_date').hide();
+    $('#deseaseType').show();
+    $('#diagnosisCode').show();
+    //$('#diagnosisDesc').show();
+    //$('#physician').show();
+  }
+
+  $("#p_code").html('');
+
+  $.ajax({
+   type: "POST",
+   url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_desease_type/',
+   data: {value: value} ,
+   async: false ,
+ })
+  .success(function (data, textStatus, xhr){
+      //console.log(data);
+      $("#desease_type").empty();
+      $("#desease_type").append("<option value=''>SELECT DISEASE</option>");
+      for (i = 0; i < data.length; i++)
+      {
+        $("#desease_type").append("<option value="+data[i]['id']+" >"+data[i]['name']+"</option>");
+      }
+
+    })
+  .fail(function (jqXHR, textStatus, errorThrown){
+    alert("Action Result Not found.");
+  });
+}
+
+function getcode(value) {
+    //alert(value);
+    $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_desease_code/',
+     data: {value: value} ,
+     async: false ,
+   })
+    .success(function (data, textStatus, xhr){
+      //console.log(data);
+      $("#p_code").empty();
+      for (i = 0; i < data.length; i++)
+      {
+        $("#p_code").append(data[i]['code']+", ");
+      }
+      $("#code_description").val($("#desease_type option:selected").text());
+    })
+    .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Action Result Not found.");
+   });
+  }
+
+  function getkpi(id) {
+    //alert(id);
+    $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/getkpi/',
+     data: {id: id} ,
+     async: false ,
+   }).done(function (data, textStatus, xhr){
+      console.log(data);
+      $("#claim_kpi").empty();
+      $("#claim_kpi").append("<option value=''>SELECT KPI</option>");
+      for (i = 0; i < data.length; i++)
+      {
+        $("#claim_kpi").append("<option value="+data[i]['id']+">"+data[i]['category']+"</option>");
+      }
+    })
+    .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Result Not found.");
+   });
+  }
+
+
+  function get_action_log(medicaid_id) {
+    $.ajax({
+     type: "POST",
+     url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_action_log/',
+     data: {medicaid_id: medicaid_id} ,
+     async: false ,
+   })
+    .success(function (data, textStatus, xhr){
+      //console.log(data);
+      $("#log_data").empty();
+      for (i = 0; i < data.length; i++)
+      {
+        if(data[i]['log_name'] == null){
+          data[i]['log_name'] = '';
+        }
+
+        if(data[i]['action_type'] == null){
+          data[i]['action_type'] = '';
+        }
+
+        if(data[i]['log_status'] == null){
+          data[i]['log_status'] = '';
+        }
+
+        if(data[i]['initial'] == null){
+          data[i]['initial'] = '';
+        }
+
+        if(data[i]['action_date']){
+          var mydate = new Date(data[i]['action_date']);
+        }else{
+          var mydate = new Date(data[i]['add_date']);
+
+        }
+        var curr_date = mydate.getDate();
+          var curr_month = mydate.getMonth() + 1; //Months are zero based
+          var curr_year = mydate.getFullYear();
+          var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+          $("#log_data").append("<tr><td>"+data[i]['log_name']+"</td><td>"+data[i]['action_type']+"</td><td>"+data[i]['log_status']+"</td><td>"+data[i]['log_details']+"</td><td>"+data[i]['initial']+"</td><td>"+end_date+"</td></tr>");
+        }
+
+      })
+    .fail(function (jqXHR, textStatus, errorThrown){
+     alert("Action Result Not found.");
+   });
+  }
+
+  function get_language_name(){
+    var alt_language = $('#alt_language :selected').text();
+    $('#alt_language_name').val(alt_language);
+  }
+
+  function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      var intlCode = (match[1] ? '+1 ' : '');
+      var str = [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+     //alert(str);
+     $('#alt_phone_no').val(str);
+   }else{
+    //alert(phoneNumberString);
+    $('#alt_phone_no').val(phoneNumberString);
+  }
+}
+
+function getUpdate(alert_list_id,alert_id,alert_type_id,alert_status_id,assign_user_id,created_date,alert_note,due_date){
+
+    //alert(alert_list_id+","+alert_id+","+alert_type_id+","+alert_status_id+","+assign_user_id);
+    get_alert_type(alert_id);
+    $('#alert_id').val(alert_id);
+    $('#alert_list_id').val(alert_list_id);
+    var alertid = $('#alert_id :selected').text();
+    $('#alert_name').val(alertid);
+     //alert(alert_note);
+     $('#alert_note').val(alert_note);
+     $('#created_date').val(dt_convert(created_date));
+     $('#due_date').val(dt_convert(due_date));
+     $('#alert_type_id').val(alert_type_id);
+     $('#alert_status_id').val(alert_status_id);
+     get_assign_to_user(alert_status_id,assign_user_id);
+
+   }
+   function add_alert() {
+     $('#alert_id').val('');
+     $('#alert_type_id').val('');
+     $('#alert_status_id').val('');
+     $('#alert_note').val('');
+     $('#created_date').val('');
+     $('#due_date').val('');
+      get_alert_type('');
+
+     /*$.ajax({
+       type: "POST",
+       url: 'http://localhost/prismKarmaindex.php/api/Scheduled_api/get_alert_typeList/',
+       data: { alert_id: ''} ,
+       async: false ,
+     })
+     .success(function (data, textStatus, xhr){
+         //console.log(data.length);
+         var html='';
+         if(data.length > 0){
+          for(var a=0; a<data.length; a++){
+            html+= '<option value="'+data[a].id+'">'+data[a].alert+'</option>';
+          }
+        }else{
+          html+= '<option value="">SELECT TYPE</option>';
+        }
+
+        $('#alert_type_id').html(html);
+
+      })
+     .fail(function (jqXHR, textStatus, errorThrown){
+       alert("Not found.");
+     });*/
+   }
+
+   function dt_convert(date){
+    var newdate = date.replace('T',' ');
+    var newdate = newdate.replace('.000Z',' ');
+    var mydate = new Date(newdate);
+    //alert(mydate);
+    var day = mydate.getDate();
+    var month = mydate.getMonth()+1;
+    var year = mydate.getFullYear();
+    if(day.toString().length == 1){
+      day = '0'+day;
+    }
+    if(month.toString().length == 1){
+      month = '0'+month;
+    }
+    return month+'/'+day+'/'+year;
+  }
+
+  function get_alert_type(alert_id) {
+    var alertid = $('#alert_id :selected').text();
+    $('#alert_name').val(alertid);
+    var alert_status_id = $('#alert_status_id :selected').text();
+    $('#alert_status_txt').val(alert_status_id);
+      if(alert_id){
+            $.ajax({
+             type: "POST",
+             url: 'http://localhost/prismKarma/AlertApi/get_alert_typeList',
+             data: {alert_id: alert_id} ,
+             async: false ,
+           }).done(function (data, textStatus, xhr){
+
+               var html='';
+               if(data.length > 0){
+                for(var a=0; a<data.length; a++){
+                  html+= '<option value="'+data[a].id+'">'+data[a].alert+'</option>';
+                }
+              }else{
+                html+= '<option value="">SELECT TYPE</option>';
+              }
+//console.log(html);
+              $('#alert_type_id').html(html);
+              var alert_type_id = $('#alert_type_id :selected').text();
+              $('#alert_type_txt').val(alert_type_id);
+             // alert($('#alert_type_txt').val());
+
+          }).fail(function (jqXHR, textStatus, errorThrown){
+             alert("Action Result Not found.");
+           });
+      }else{
+        var html='';
+         html+= '<option value="">SELECT TYPE</option>';
+         $('#alert_type_id').html(html);
+      }
+
+  }
+
+  function get_assign_to_user(id,assign_user_id){
+
+    var alert_type_id = $('#alert_type_id :selected').text();
+    $('#alert_type_txt').val(alert_type_id);
+
+    var alert_status_id = $('#alert_status_id :selected').text();
+    $('#alert_status_txt').val(alert_status_id);
+
+    if(id==3){
+      $('#assign_user_id_field').show();
+      $('#assign_user_id').val(assign_user_id);
+    }else{
+      $('#assign_user_id_field').hide();
+      $('#assign_user_id').val('');
+    }
+  }
+
+  function set_rsvp_appointment_schedule_type(scheduled_type){
+    var appointment_action = $('#rsvp_appointment_action_id :selected').text();
+    $('#rsvp_appointment_action_name').val(appointment_action);
+  //alert(scheduled_type);
+  if(scheduled_type == '1'){
+    $('#appointment_schedule_type').hide();
+    $('#vendor_tab').show();
+    $('#doctor_id_update').show();
+  }else if(scheduled_type == '6'){
+    $('#appointment_schedule_type').hide();
+    $('#rsvp_appointment_schedule_type').hide();
+    $('#rsvp_clinic_days_provider_list').show();
+    $('#rsvp_appointment_action_time_div_id').hide();
+    $('#rsvp_clinic_days_time_div_id').show();
+
+    $('#rsvp_place_of_appointment').hide();
+    $('#rsvp_location_of_event').hide();
+
+  }else{
+   $('#rsvp_place_of_appointment').show();
+   $('#rsvp_location_of_event').show();
+
+
+   $('#rsvp_appointment_action_time_div_id').show();
+   $('#rsvp_appointment_schedule_type').show();
+   $('#rsvp_clinic_days_time_div_id').hide();
+   $('#rsvp_clinic_days_provider_list').hide();
+
+   $('#rsvp_vendor_tab').hide();
+   $('#rsvp_doctor_id').hide();
+   $("#rsvp_vendor_replace_id").hide();
+
+   $('#rsvp_doctor_id_update').hide();
+   $("#rsvp_replace_id_update").hide();
+
+ }
+
+ if(scheduled_type != '6'){
+
+  $.ajax({
+   type: "POST",
+   url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_appointment_schedule_type/',
+   data: {  scheduled_type: scheduled_type} ,
+   async: false ,
+ })
+  .success(function (data, textStatus, xhr){
+    $("#rsvp_appointment_schedule_type").empty();
+    for (i = 0; i < data.length; i++)
+    {
+      if(scheduled_type==2 || scheduled_type==5 || scheduled_type==6 || scheduled_type==8){
+        var mydate = new Date(data[0]['start_date']);
+        var curr_date = mydate.getDate();
+                        var curr_month = mydate.getMonth() + 1; //Months are zero based
+                        var curr_year = mydate.getFullYear();
+                        var start_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+                        var mydate = new Date(data[0]['end_date']);
+                        var curr_date = mydate.getDate();
+                        var curr_month = mydate.getMonth() + 1; //Months are zero based
+                        var curr_year = mydate.getFullYear();
+                        var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
+
+                        if (data[i]['location'] == null){
+                          data[i]['location'] = '';
+                        }
+
+                        $("#rsvp_appointment_schedule_type").append("<option value='"+data[i]['id']+"'>"+data[i]['class_name']+"  ("+data[i]['location']+" "+start_date+" to "+end_date+" "+data[i]['start_time']+" to "+data[i]['end_time']+")</option>")
+                      }else{
+                        $("#rsvp_appointment_schedule_type").append("<option value='"+data[i]['id']+"'>"+data[i]['schedule_type']+"</option>")
+                      }
+                    }
+
+
+                  })
+  .fail(function (jqXHR, textStatus, errorThrown){
+   alert(" Result Not found.");
+
+
+ });
+}
+get_appointment_status_by_id(scheduled_type,'');
+}
+
+function get_appointment_status_by_id(scheduled_type,type=''){
+
+//alert(scheduled_type);
+$.ajax({
+ type: "POST",
+ url: 'http://localhost/prismKarmaindex.php/api/scheduled_api/get_appointment_type/',
+ data: {scheduled_type: scheduled_type} ,
+ async: false ,
+})
+.success(function (data, textStatus, xhr){
+  $("#rsvp_appointment_action").empty();
+  $("#rsvp_appointment_action_update").empty();
+  for (i = 0; i < data.length; i++)
+  {
+    if(type == 'update'){
+     $("#rsvp_appointment_action_update").append("<option value='"+data[i]['id']+"'>"+data[i]['action_result']+"</option>");
+
+   }else{
+     $("#rsvp_appointment_action").append("<option value='"+data[i]['id']+"'>"+data[i]['action_result']+"</option>");
+   }
+ }
+
+})
+.fail(function (jqXHR, textStatus, errorThrown){
+ alert("Action Result Not found.");
+});
+
+}
+
+function getdata(type) {
+
+ $.ajax({
+       type: "POST",
+       url: 'http://localhost/prismKarma/api/get_result_outcome_by_type',
+       data: {type: type} ,
+       async: false ,
+     })
+     .done(function (data, textStatus, xhr){
+        //console.log(data);
+        $('#prism_action_outcome').empty();
+
+        $("#prism_action_outcome").append("<option value=''>Action Outcome</option>");
+        for(var a=0; a<data.length; a++){
+          $("#prism_action_outcome").append("<option value='"+data[a]['id']+"'>"+data[a]['result']+"</option>");
+        }
+
+        var prism_action_type = $('#prism_action_type :selected').text();
+        $('#prism_action_type_txt').val(prism_action_type);
+
+     })
+     .fail(function (jqXHR, textStatus, errorThrown){
+       //alert("Record Not found.");
+     });
+}
+
+function getoutcometxt() {
+    var prism_action_outcome = $('#prism_action_outcome :selected').text();
+    $('#prism_action_outcome_txt').val(prism_action_outcome);
+}
+
+    function cross(id) {
+    //alert(id);
+    $('#'+id).modal('hide');
+  }
+
+function dt_convert(date){
+  var mydate = new Date(date);
+  var curr_date = mydate.getDate();
+  var curr_month = mydate.getMonth() + 1; //Months are zero based
+  var curr_year = mydate.getFullYear();
+  var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
+  return end_date;
+}
+</script>
+
+{% endblock %}

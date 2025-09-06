@@ -1,15 +1,116 @@
 {% load static %}
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="copyright">
+    &copy; Copyright <strong><span>Prism</span></strong>. All Rights Reserved
+  </div>
+  <div class="credits">
 
-<div class="mt-5 mb-2" align="center">
-        <div><img src="{% static '/images/h-logo.svg' %}">  </div>
-        <div class="small_text fw-bold">Copyright © 2025 Henry Schein, Inc. All rights reserved.</div>
-        <div class="small_text mt-1">
-            <div data-bs-toggle="modal" data-bs-target="#infoModal">
-               <a href="#" class="fbot text-decoration-none">
-            Need help? Contact us for Support
-                </a>
-            </div>
-        </div>
-        <div>
-        </div>
-    </div>
+    Designed by <a href="http://karmastrategies.in/" target="_blank">Karma Strategies.in</a>
+  </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!-- Vendor JS Files -->
+<script src="{% static '/vendor/apexcharts/apexcharts.min.js' %}"></script>
+<script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static '/vendor/chart.js/chart.umd.js' %}"></script>
+<script src="{% static '/vendor/echarts/echarts.min.js' %}"></script>
+<script src="{% static '/vendor/quill/quill.min.js' %}"></script>
+<script src="{% static '/vendor/tinymce/tinymce.min.js' %}"></script>
+<script src="{% static '/vendor/php-email-form/validate.js' %}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static '/js/main.js' %}"></script>
+
+<script type="text/javascript">
+  var jq = $.noConflict();
+  jq(document).ready(function(){
+    /*jshint browser: true, strict: true, undef: true */
+    /*global define: false */
+    ( function( window ) {
+      'use strict';
+      function classReg( className ) {
+        return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+      }
+      var hasClass, addClass, removeClass;
+
+      if ( 'classList' in document.documentElement ) {
+        hasClass = function( elem, c ) {
+          return elem.classList.contains( c );
+        };
+        addClass = function( elem, c ) {
+          elem.classList.add( c );
+        };
+        removeClass = function( elem, c ) {
+          elem.classList.remove( c );
+        };
+      }
+      else {
+        hasClass = function( elem, c ) {
+          return classReg( c ).test( elem.className );
+        };
+        addClass = function( elem, c ) {
+          if ( !hasClass( elem, c ) ) {
+            elem.className = elem.className + ' ' + c;
+          }
+        };
+        removeClass = function( elem, c ) {
+          elem.className = elem.className.replace( classReg( c ), ' ' );
+        };
+      }
+
+      function toggleClass( elem, c ) {
+        var fn = hasClass( elem, c ) ? removeClass : addClass;
+        fn( elem, c );
+      }
+      var classie = {
+        hasClass: hasClass,
+        addClass: addClass,
+        removeClass: removeClass,
+        toggleClass: toggleClass,
+        has: hasClass,
+        add: addClass,
+        remove: removeClass,
+        toggle: toggleClass
+      };
+      if ( typeof define === 'function' && define.amd ) {
+        define( classie );
+      } else {
+        window.classie = classie;
+      }
+    })( window );
+    var $ = function(selector){
+      return document.querySelector(selector);
+    }
+
+    var accordion = $('.accordion');
+    accordion.addEventListener("click",function(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      if(e.target && e.target.nodeName == "A") {
+        var classes = e.target.className.split(" ");
+        if(classes) {
+          for(var x = 0; x < classes.length; x++) {
+            if(classes[x] == "accordionTitle") {
+              var title = e.target;
+              var content = e.target.parentNode.nextElementSibling;
+              classie.toggle(title, 'accordionTitleActive');
+              if(classie.has(content, 'accordionItemCollapsed')) {
+                if(classie.has(content, 'animateOut')){
+                  classie.remove(content, 'animateOut');
+                }
+                classie.add(content, 'animateIn');
+              }else{
+               classie.remove(content, 'animateIn');
+               classie.add(content, 'animateOut');
+             }
+             classie.toggle(content, 'accordionItemCollapsed');
+           }
+         }
+       }
+     }
+   });
+  });
+
+</script>
