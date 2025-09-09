@@ -17,6 +17,11 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def home(request):
     return HttpResponse("Hello, World!")
 
+def api_call(params, funName):
+    api_url = settings.API_URL + funName
+    response = requests.post(api_url, json=params)
+    return response.json()
+
 def login(request):
     #print('login')
     if request.method == "POST":
@@ -92,9 +97,18 @@ def logoutuser(request):
     logout(request)
     return redirect('/login')
 
-
-def memberdetails(request):
-    if not request.session.get('is_logged_in', False):  # Check session value
+def memberdetails(request, medicaid_id):
+    if not request.session.get('is_logged_in', False):
         return render(request, 'login.html')
-    else:
-        return render(request, 'memberdetails.html')
+
+    ## create a api call
+    params = {"medicaid_id": medicaid_id}
+    member_details = api_call(params,"prismMemberAllDetails")
+
+    return render(request, 'memberdetails.html', {
+        "sel_panel_list": member_details['data']['prismMemberAction'],
+        "sel_panel_type": member_details['data']['prismMemberActionType'],
+        "medicaid_id": medicaid_id,
+        "member_details": member_details,
+    })
+
