@@ -208,8 +208,8 @@
 
                         <div class="tab-content">
                             <div id="tab1" class="tab-pane fade in active">
-                                <form action="/add_action/" name="add_action" role="form" id="add_action" autocomplete="off" onsubmit="return fileValidation();" enctype="multipart/form-data" method="post" accept-charset="utf-8">
-
+                                <form action="/add_action/" name="add_action" id="add_action"  enctype="multipart/form-data" method="post" >
+                                    {% csrf_token %}
                                     <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
                                     <input type="hidden" name="medicaid_id" value="{{medicaid_id}}" >
                                     <input type="hidden" name="visit_alertname" id="visit_alertname">
@@ -284,11 +284,12 @@
 
                             </div>
                             <div id="tab2" class="tab-pane fade">
-                                <form action="/appoinmentment_add_action/" name="appoinmentment_add_action" role="form" id="app_add_action" enctype="multipart/form-data" method="post" accept-charset="utf-8" autocomplete="off">
+                                <form action="/appointment_add_action/" name="appointment_add_action"  enctype="multipart/form-data" method="post" >
                                     <input type="hidden" name="provider_id" id="provider_id">
                                     <input type="hidden" name="vendor_id" id="vendor_id">
                                     <input type="hidden" name="appointment_medicaid_id" value="{{medicaid_id}}">
                                     <input type="hidden" name="app_alertname" id="app_alertname">
+                                    {% csrf_token %}
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
@@ -379,23 +380,33 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
+                                            {% if member_last_alert %}
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();" >
-                                                            <option value=""> SELECT ALERT</option>
-                                                            <option value="4/20399"  >GAPS-IN-CARE([AAP-20 to 44] -04/08/2025)                          </option>
-                                                            <option value="7/20409"  >ER(Emergency presentation-06/25/2025)                          </option>
-                                                            <option value="84/20395"  >High BP(High BP-04/09/2025)                          </option>
+                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
+                                                            <option value="">SELECT ALERT</option>
+                                                            {% for value in member_last_alert %}
+                                                            <option value="{{ value.alert_id }}/{{ value.id }}">
+                                                                {{ value.alert }} ({{ value.alert_type }} - {{ value.created_date }})
+                                                            </option>
+                                                            {% endfor %}
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_status_id" >
-                                                            <option value="5" > Completed </option>
+                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_status_id">
+                                                            {% for alertStatus in alert_statusList %}
+                                                             {% if alertStatus.id|stringformat:"s" == "5" %}
+                                                            <option value="{{ alertStatus.id }}">
+                                                                {{ alertStatus.alert_status }}
+                                                            </option>
+                                                            {% endif %}
+                                                            {% endfor %}
                                                         </select>
                                                     </td>
                                                 </tr>
                                             </table>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -2070,11 +2081,10 @@
                 scheduled_type: scheduled_type
             },
             success: function (data) {
-            console.log(data)
                 $("#action_result_id").empty();
-                for (let i = 0; i < data.data.length; i++) {
+                for (let i = 0; i < data.length; i++) {
                     $("#action_result_id").append(
-                        "<option value='" + data.data[i].id + "'>" + data.data[i].action_result + "</option>"
+                        "<option value='" + data[i].id + "'>" + data[i].action_result + "</option>"
                     );
                 }
 
@@ -2090,7 +2100,7 @@
      if($('#vendor_name').val()){
        var vendor_name = $('#vendor_name').val();
      }
-     alert(vendor_name);
+
 
      $.ajax({
        type: "POST",
@@ -2115,6 +2125,82 @@
      alert("Vendor Not found.");
    });
   }
+    function get_doctor_list(){
+
+     if($('#vendor_id').val()){
+       var vendor_id = $('#vendor_id').val();
+     }
+
+     if($('#doctor_name').val()){
+       var doctor_name = $('#doctor_name').val();
+     }
+
+
+  $.ajax({
+   type: "POST",
+   url: "{% url 'get_doctor_list' %}",  // Django reverse URL
+   data: {doctor_name: doctor_name,vendor_id: vendor_id} ,
+   async: false ,
+ })
+  .done(function (data, textStatus, xhr){
+    $("#replace_id").show();
+    $("#replace_id").empty();
+    $('#doc_lebel').show();
+    var html = '';
+    for (i = 0; i < data.length; i++)
+    {
+      $("#replace_id").append('<div style="border:1px solid #e9ebec;padding: 5px;"><span><input type="radio" name="docname" style="width: 40px;height: 15px;" onclick="getval(\'' + data[i]['NAME'] + '\','+data[i]['PROVIDER_ID']+',1);"></span>'+data[i]['NAME']+', ('+data[i]['P_S_FLAG']+' : '+data[i]['SPEC_DESC']+'), NPI : '+data[i]['NPI_NUM']+' ('+data[i]['PRIMARY_BUSINESS_ADDR1']+','+data[i]['PRIMARY_BUSINESS_STATE']+','+data[i]['PRIMARY_BUSINESS_CITY']+','+data[i]['PRIMARY_BUSINESS_ZIP']+')</div>');
+    }
+  }).fail(function (jqXHR, textStatus, errorThrown){
+   alert("Doctor Not found.");
+ });
+
+}
+
+function get_alert_name() {
+  var app_alert_id = $('#app_alert_id :selected').text();
+  $('#app_alertname').val(app_alert_id);
+}
+
+function get_vendor_name(vendor_name,vendor_id,type){
+
+   if(type == 1){
+    $('#vendor_name').val(vendor_name);
+    $('#vendor_id').val(vendor_id);
+    $('#doctor_id').show();
+  }else if(type == 2){
+    $('#vendor_name_update').val(vendor_name);
+    $('#vendor_id_update').val(vendor_id);
+    $('#doctor_id').show();
+  }else if(type == 3){
+    $('#search_vendor').val(vendor_name);
+    $('#vendor_id_search').val(vendor_id);
+    $('#search_doctor_id').show();
+  }
+}
+    function getval(doc_name,PROVIDER_ID,type){
+ if(type == 1){
+   $('#doctor_name').val(doc_name);
+   $('#provider_id').val(PROVIDER_ID);
+ }else if(type == 2){
+   $('#doctor_name_update').val(doc_name);
+   $('#provider_id_update').val(PROVIDER_ID);
+ }else if(type == 3){
+  $('#search_doctor').val(doc_name);
+  $("input[name='docname']:checked").each(function() {
+    var idVal = $(this).attr("id");
+    var txt = $("label[for='"+idVal+"']").text();
+    $('#provider_details').val(txt);
+  });
+  $('#search_provider_id').val(PROVIDER_ID);
+  $('#btnSave').show();
+}
+}
+
+function get_alert_name() {
+  var app_alert_id = $('#app_alert_id :selected').text();
+  $('#app_alertname').val(app_alert_id);
+}
 </script>
 
 

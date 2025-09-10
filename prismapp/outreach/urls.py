@@ -6,9 +6,8 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('logout/', views.logoutuser, name='logout'),
     path('memberdetails/<int:medicaid_id>/', views.memberdetails, name='memberdetails'),
-    #path('resetpassword/<str:token>/', views.resetpassword, name='resetpassword'),
-    # path('logoutadmin/', views.logoutadmin, name='logoutadmin'),
-    # path('your_score/', views.your_score, name='your_score'),
+    path('add_action/', views.add_action, name='add_action'),
+    path('appointment_add_action/', views.appointment_add_action, name='appointment_add_action'),
     # path('manager_score/', views.manager_score, name='manager_score'),
     # path('register/', views.register, name='register'),
     # path('point_by_region/', views.point_by_region, name='point_by_region'),
@@ -30,6 +29,7 @@ urlpatterns = [
 
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
-    path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list")
+    path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
+    path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list")
 
 ]

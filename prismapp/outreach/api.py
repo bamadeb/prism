@@ -22,7 +22,7 @@ def get_scheduled_action_status(request):
         scheduled_type = request.POST.get("scheduled_type")
         params = {"scheduled_type": scheduled_type}
         resultfollowupResponse = api_call(params, "prismActionresultfollowup")
-        return JsonResponse(resultfollowupResponse, safe=False)
+        return JsonResponse(resultfollowupResponse['data'], safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -32,6 +32,17 @@ def get_vendor_list(request):
         vendor_name = request.POST.get("vendor_name")
         params = {"vendor_name": vendor_name}
         vendorApi = api_call(params, "prismVendorlist")
-        return JsonResponse(vendorApi, safe=False)
+        return JsonResponse(vendorApi['data'], safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@csrf_exempt
+def get_doctor_list(request):
+    if request.method == "POST":
+        doctor_name = request.POST.get("doctor_name")
+        vendor_id = request.POST.get("vendor_id")
+        params = {"vendor_id": vendor_id,"doctor_name": doctor_name}
+        vendorApi = api_call(params, "prismProviderlist")
+        return JsonResponse(vendorApi['data'], safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
