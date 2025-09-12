@@ -46,3 +46,12 @@ def get_doctor_list(request):
         return JsonResponse(vendorApi['data'], safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+@csrf_exempt
+def get_call_history(request):
+    if request.method == "POST":
+        medicaid_id = request.POST.get("medicaid_id")
+        params = {"medicaid_id": medicaid_id}
+        resultcallHistoryResponse = api_call(params, "prismGetcallhistory")
+        return JsonResponse(resultcallHistoryResponse, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

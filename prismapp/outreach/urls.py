@@ -8,6 +8,7 @@ urlpatterns = [
     path('memberdetails/<int:medicaid_id>/', views.memberdetails, name='memberdetails'),
     path('add_action/', views.add_action, name='add_action'),
     path('appointment_add_action/', views.appointment_add_action, name='appointment_add_action'),
+    path('history/<int:medicaid_id>', views.memberhistory, name='history'),
     # path('manager_score/', views.manager_score, name='manager_score'),
     # path('register/', views.register, name='register'),
     # path('point_by_region/', views.point_by_region, name='point_by_region'),
@@ -30,6 +31,8 @@ urlpatterns = [
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
-    path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list")
+    path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list"),
+    # APIs URL
+    path('api/get_call_history/', api.get_call_history, name='get_call_history')
 
 ]

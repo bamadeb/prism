@@ -89,10 +89,127 @@ def login(request):
 
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def mywork(request):
-        if not request.session.get('is_logged_in', False):  # Check session value
-            return render(request, 'login.html')
-        else:
-            return render(request, 'mywork.html')
+    if not request.session.get('is_logged_in', False):  # Check session value
+        return render(request, 'login.html')
+    else:
+        # print(request.session.get('user_data'))
+        user_data = request.session.get('user_data')
+        if user_data:  # make sure it exists
+            user_id = user_data.get('ID')
+        data = {
+            "user_id": user_id
+        }
+        try:
+            response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
+            myWorkSpaceResult = response.json()  # Decode the JSON response
+        except requests.exceptions.RequestException as e:
+            return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
+        myWorkAllSpace = myWorkSpaceResult['data']
+        from datetime import datetime, date
+
+        today = date.today()
+        task_list = myWorkAllSpace['taskList']
+
+        for task in task_list:
+            ad = task.get("action_date")
+            if isinstance(ad, str):
+                try:
+                    # Parse ISO 8601 string
+                    task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
+                except ValueError:
+                    task["action_date"] = None
+            action_date = task.get("action_date")
+
+            if action_date:
+                # If it's a string, convert it to date
+                if isinstance(action_date, str):
+                    try:
+                        # Adjust format depending on your actual data (YYYY-MM-DD assumed here)
+                        action_date = datetime.strptime(action_date, "%Y-%m-%d").date()
+                        task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
+                    except ValueError:
+                        # Skip if invalid format
+                        task["color"] = "#fff"
+                        continue
+
+                # Now safe to compare
+                if action_date < today and task.get("status") not in ["Successful", "Close", "N/A"]:
+                    task["color"] = "red"
+                else:
+                    task["color"] = "#fff"
+            else:
+                task["color"] = "#fff"
+
+        members_list = myWorkAllSpace['members']
+        alertListMember = myWorkAllSpace['alertList']
+        curdate = datetime.now().date()  # current date without time
+        for member in members_list:
+            #print(member)
+            alertCount = 0
+            for memberAlert in alertListMember:
+                due_date = datetime.fromisoformat(memberAlert["due_date"].replace("Z", "+00:00")).date()
+                if member["medicaid_id"] == memberAlert["medicaid_id"] and curdate <= due_date:
+                    alertCount += 1
+            member["alertCount"] = alertCount
+            elig_exp_dt = member.get("ELIG_EXP_DT")
+            if elig_exp_dt:
+                member["ELIG_EXP_DT"] = datetime.fromisoformat(elig_exp_dt.replace("Z", "+00:00")).date()
+            else:
+                member["ELIG_EXP_DT"] = None
+            third_last_action_date = member.get("third_last_action_date")
+            if third_last_action_date:
+                member["third_last_action_date"] = datetime.fromisoformat(
+                    third_last_action_date.replace("Z", "+00:00")).date()
+            else:
+                member["third_last_action_date"] = None
+            second_last_action_date = member.get("second_last_action_date")
+            if second_last_action_date:
+                member["second_last_action_date"] = datetime.fromisoformat(
+                    second_last_action_date.replace("Z", "+00:00")).date()
+            else:
+                member["second_last_action_date"] = None
+            last_action_date = member.get("last_action_date")
+            if last_action_date:
+                member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
+            else:
+                member["last_action_date"] = None
+            recentActivity = myWorkAllSpace['recentActivity']
+            for activity in recentActivity:
+                #print(activity)
+                add_date = activity.get("add_date")
+                if isinstance(add_date, str):
+                    activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
+
+        alertList = myWorkAllSpace['alertList']
+        for alert in alertList:
+            #print(activity)
+            due_date = alert.get("due_date")
+            if isinstance(due_date, str) and due_date:
+                # Convert ISO string to datetime
+                dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
+                alert["due_date"] = dt  # keep as datetime object
+        print(members_list)
+        context = {
+            'members': members_list,
+            'pageTitle': "My Work",
+            'alertCount': 1,
+            'today': date.today(),
+            'alert_count': myWorkAllSpace['alertCount'],
+            'alertList': alertList,
+            'kpis_data': myWorkAllSpace['kpisData'],
+            'task_list': task_list,
+            'refared_member_list': myWorkAllSpace['referrerList'],
+            'sel_panel_list': myWorkAllSpace['prismMemberAction'],
+            'sel_panel_type': myWorkAllSpace['prismMemberActionType'],
+            'roleList': myWorkAllSpace['prismRoleList'],
+            'plan_list': myWorkAllSpace['prismPlanlist'],
+            'all_3day_transport_list': myWorkAllSpace['transportList'],
+            'recent_activity': recentActivity,
+            'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi']
+        }
+    #print(myWorkAllSpace)
+    # print(request.session.get('user_data', {}).get('ID'))
+    return render(request, 'mywork.html', context)
 
 def logoutuser(request):
     logout(request)
@@ -277,4 +394,53 @@ def appointment_add_action(request):
         return HttpResponse(str(e), status=500)
 
     return redirect("memberdetails", medicaid_id=request.POST.get("appointment_medicaid_id"))
+def memberhistory(request, medicaid_id):
+    if not request.session.get('is_logged_in', False):
+        return render(request, 'login.html')
+
+    ## create a api call
+    params = {"medicaid_id": medicaid_id}
+    historyResponse = api_call(params,"prismMemberhistory")
+    #print(historyResponse)
+    roadmap_data = []
+    roadmap_data_str = ''
+    for roadmap in historyResponse.get("data", {}).get("roadmap_member_log", []):
+
+        try:
+            #print(roadmap["add_date"])
+            add_date = datetime.strptime(roadmap["add_date"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            add_date = add_date - timedelta(days=30)
+
+        except Exception as e:
+            #print("Error message:", e)  # Only the error message
+            #print("Error type:", type(e))  # The type of error
+            #print("Full details:", repr(e))  # Full exception representation
+            continue
+
+        roadmap_data.append(
+            f"""{{
+                x: Date.UTC({add_date.year}, {add_date.month - 1}, {add_date.day}),
+                name: '{roadmap["log_name"]}',
+                label: '',
+                description: '{roadmap["log_details"]}'
+            }}"""
+        )
+        roadmap_data_str = ",".join(roadmap_data)
+    member_log = historyResponse['data']['roadmap_member_log']
+    for activity in member_log:
+        # print(activity)
+        add_date = activity.get("add_date")
+        if isinstance(add_date, str):
+            activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
+
+    #print(historyResponse['data']['roadmap_member_log'])
+    return render(request, 'memberhistory.html', {
+        "member_details": historyResponse['data']['member_details'],
+        'pageTitle': "MEMBER HISTORY",
+        "claim_details": historyResponse['data']['claim_details'],
+        "log_type_list": historyResponse['data']['log_type_list'],
+        "medicaid_id": medicaid_id,
+        "roadmap_member_log": member_log,
+        "roadmap_data_str": roadmap_data_str,
+    })
 

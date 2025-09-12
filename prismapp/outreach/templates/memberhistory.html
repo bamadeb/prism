@@ -1,0 +1,190 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: MEMBER HISTORY {% endblock %}
+{% load static %}
+{% block body %}
+
+<main id="main" class="main">
+  <section class="section dashboard">
+    <div class="accordion">
+
+      <div class="d-flex align-items-center justify-content-center py-1 border-primary">
+        <a class="accordionTitle col-2" href="#" style="padding:10px;"></a>
+        <div class="col-8" style="text-align:center; font-weight:500;">
+          <h5 style="text-transform:uppercase;">
+            (#{{ medicaid_id }})
+            <!-- - KNEE REPLACEMENT | plan: {PLUS OPEN ACCESS}-->
+          </h5>
+        </div>
+        <div class="col-2"></div>
+        <div style="clear:both"></div>
+      </div>
+
+<!--      <div class="accordionItem animateIn accordionItemCollapsed">-->
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px 0px 0px 29px;">
+            <table class="table table-sm">
+              <tr>
+                <td>Gender: {{ member_details.0.SEX }}</td>
+                <td>Phone: {{ member_details.0.HOME_PHONE }}</td>
+                <td>DOB: {{ member_details.0.BIRTH|date:"M d, Y" }}</td>
+                <td>Member No: {{ member_details.0.MEM_NO }}</td>
+                <td>Language: {{ member_details.0.LANGUAGE_DESC }}</td>
+                <td>Address: {{ member_details.0.ADDR1 }}, {{ member_details.0.CITY }}, {{ member_details.0.ZIP }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+<!--      </div>-->
+
+
+
+    <div class="row wrapper white-bg page-heading">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-2">
+        <div class="card">
+          <div class="card-body"></div>
+          <div id="member_timeline"></div>
+        </div>
+      </div>
+
+      <!-- CLAIM DETAILS -->
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 mt-2">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Claim Details</h5>
+            <div style="overflow-x: scroll;height: 250px;">
+              <table class="table table-sm">
+                <tr>
+                  <th>#</th>
+                  <th>DOS</th>
+                  <th>Code</th>
+                  <th>Provider</th>
+                </tr>
+
+                {% for claim in claim_details %}
+                  {% if claim.PRIMARY_DIAGNOSIS == "E08-E13" %}
+                    {% with claim.PRIMARY_DIAGNOSIS|add:" (<a href='javascript:void(0);' data-bs-toggle='modal' data-bs-target='#basicModal'>130</a>)" as primary_diag %}
+                      {% with "#e10000" as color %}
+                        <tr style="color:{{ color }};">
+                          <td>{{ claim.DOCUMENT }}</td>
+                          <td>{{ claim.FIRST_DOS }}</td>
+                          <td>{{ primary_diag|safe }}</td>
+                          <td>{{ claim.Provider }}</td>
+                        </tr>
+                      {% endwith %}
+                    {% endwith %}
+                  {% else %}
+                    <tr>
+                      <td>{{ claim.DOCUMENT }}</td>
+                      <td>{{ claim.FIRST_DOS }}</td>
+                      <td>{{ claim.PRIMARY_DIAGNOSIS }}</td>
+                      <td>{{ claim.Provider }}</td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="col-lg-6 col-md-2 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">History</h5>
+            <table class="table table-sm">
+              <tr>
+                <th width="20%" >Date</th>
+                <th width="20%">Type</th>
+                <th width="20%">Name</th>
+                <th width="40%">Details</th>
+
+              </tr>
+              {% for log in roadmap_member_log %}
+                <tr>
+                  <td>{{ log.add_date|date:"m/d/Y" }}</td>
+                  <td>{{ log.action_type }}</td>
+                  <td>{{ log.log_name }}</td>
+                  <td>{{ log.log_details }}</td>
+
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+    </div><script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/timeline.js"></script>
+</main><!-- End #main -->
+
+<!-- End #main -->
+
+
+<!--========================= MODAL START ========================== -->
+
+
+
+
+{% endblock %}
+
+{% block js %}
+
+<script>
+Highcharts.chart('member_timeline', {
+    chart: {
+        zoomType: 'x',
+        type: 'timeline'
+    },
+    xAxis: {
+        type: 'datetime',
+        visible: false
+    },
+    credits: {
+      enabled: false
+    },
+
+    yAxis: {
+        gridLineWidth: 1,
+        title: null,
+        labels: {
+            enabled: false
+        }
+    },
+    legend: {
+        enabled: true
+    },
+    title: {
+        text: 'Member Timeline History'
+    },
+    subtitle: {
+        text: ''
+    },
+    tooltip: {
+        style: {
+            width: 300
+        }
+    },
+    series: [{
+        //showInLegend: true,
+        dataLabels: {
+            allowOverlap: false,
+            format: '<span style="color:{point.color}">● </span><span style="font-weight: bold;" > ' +
+                '{point.x:%d %b %Y}</span><br/>{point.label}<br/>{point.description}'
+        },
+        marker: {
+            symbol: 'circle'
+        },
+        data: [
+        {{ roadmap_data_str|safe }}
+        ]
+    }]
+});
+
+</script>
+
+
+{% endblock %}
