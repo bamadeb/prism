@@ -8,16 +8,16 @@ urlpatterns = [
     path('memberdetails/<int:medicaid_id>/', views.memberdetails, name='memberdetails'),
     path('add_action/', views.add_action, name='add_action'),
     path('appointment_add_action/', views.appointment_add_action, name='appointment_add_action'),
-    # path('manager_score/', views.manager_score, name='manager_score'),
-    # path('register/', views.register, name='register'),
-    # path('point_by_region/', views.point_by_region, name='point_by_region'),
-    # path('your_current_rank/', views.your_current_rank, name='your_current_rank'),
-    # path('prize/', views.prize, name='prize'),
-    # path('score_history/', views.score_history, name='score_history'),
+    path('member_add_update_alert/', views.member_add_update_alert, name='member_add_update_alert'),
+    path('add_member_alt_address/', views.add_member_alt_address, name='add_member_alt_address'),
+    path('add_member_alt_pnone/', views.add_member_alt_pnone, name='add_member_alt_pnone'),
+    path('add_member_alt_language/', views.add_member_alt_language, name='add_member_alt_language'),
+    path('add_prisim_claim/', views.add_prisim_claim, name='add_prisim_claim'),
+    path('add_rx_claim/', views.add_rx_claim, name='add_rx_claim'),
     # path('score_history/<int:employee_id>/<int:region_id>/', views.score_history, name='score_history'),
     # path('fscbyregion/<int:region_id>/', views.fscbyregion, name='fscbyregion'),
-    # path('fscbyregion/', views.fscbyregion, name='fscbyregion'),
-    # path('care_credit/', views.care_credit, name='care_credit'),
+    path('update_member_indicator/', views.update_member_indicator, name='update_member_indicator'),
+    path('update_member_info/', views.update_member_info, name='update_member_info'),
     # path('contact_us/', views.contact_us, name='contact_us'),
     # path('admin_login/', views.admin_login, name='admin_login'),
     # path('leaderboard/', views.leaderboard, name='leaderboard'),
@@ -30,6 +30,7 @@ urlpatterns = [
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
-    path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list")
+    path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list"),
+    path("api/get_alert_typeList/", api.get_alert_typeList, name="get_alert_typeList"),
 
 ]

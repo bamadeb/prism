@@ -2,13 +2,17 @@
 {% block title%} PRISM  :: MEMBER DETAILS {% endblock %}
 {% load static %}
 {% block body %}
-
+<style>
+    .ui-datepicker-title{
+    color:#000 !Important;
+    }
+</style>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
         <div class="d-flex align-items-center justify-content-center py-1 border-primary">
             <a class="col-2" href="#" style="padding:10px;" ></a>
             <div class="col-8" style="text-align:center; font-weight:500; font-size:16px;">
-                <i class="fa fa-info-circle" aria-hidden="true"></i> | CRIS BONI - #1 | ENROLLEE NO - 9000*1 | CASE NO - #2345  | GENDER - F | DOB - 09/02/2005 |<br>
+                <i class="fa fa-info-circle" aria-hidden="true"></i> |{{ member_details.0.FIRST_NAME }} {{ member_details.0.LAST_NAME }} - #{{ member_details.0.medicaid_id }} | ENROLLEE NO - {{ member_details.0.MEM_NO }} | CASE NO - #2345  | GENDER - {{ member_details.0.SEX }} | DOB - {{ birth_date }} |<br>
                 <h5 style="font-size:16px; font-weight:500 !important;">| HEDIS: <span style="color:#56c729;">100%</span> | P4P: <span style="color:#56c729;">100%</span> | HCC: <span style="color:#56c729;">40%</span> | CLAIMS: <span style="color:#0d6efd;">333</span> |</h5>
             </div>
             <div class="col-2">
@@ -178,9 +182,101 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
+        <div class="row mt-5">
+            <div class="col-lg-6">
+                <div class="card" id="alert_box">
+                    <div class="card-body">
+
+                        <h4 align="center">ACTION LOG</h4>
+                        <div class="box_height">
+                            <div class="tbl_scorll">
+                                <table class="table table-sm" style="font-size:14px;">
+                                    <thead>
+                                    <tr>
+                                        <th>LOG NAME</th>
+                                        <th>DETAILS</th>
+                                        <th width="15%">LOG BY</th>
+                                        <th width="22%">DATE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for log in log_details %}
+                                    <tr>
+                                        <td>{{ log.log_name }}</td>
+                                        <td>{{ log.action_type }}</td>
+                                        <td>{{ log.name }}</td>
+                                        <td>{{ log.add_date|date:"m/d/Y H:i" }}</td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
+                        <a class="add_btn" data-toggle="modal" data-target="#add_alert" onclick="add_alert();">+Add</a>
+                        <h4 align="center">ALERTS</h4>
+                        <div class="box_height">
+                            <div class="tbl_scorll">
+                                <table class="table table-sm" style="font-size:14px;">
+                                    <thead>
+                                        <tr>
+                                            <th>ALERT</th>
+                                            <th>TYPE</th>
+                                            <th>STATUS</th>
+                                            <th style="text-align:center;">DUE DATE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for value in member_alertList %}
+                                            <tr>
+                                              <td>
+                                                <a style="cursor: pointer;text-decoration: underline;"
+                                                   data-toggle="modal"
+                                                   data-target="#add_alert"
+                                                   onclick="getUpdate('{{ value.id }}',
+                                                                      '{{ value.alert_id }}',
+                                                                      '{{ value.alert_type_id }}',
+                                                                      '{{ value.alert_status_id }}',
+                                                                      '{{ value.alert_assign_user }}',
+                                                                      '{{ value.created_date }}',
+                                                                      '{{ value.alert_note }}',
+                                                                      '{{ value.due_date|date:'m/d/Y' }}');">
+                                                  {{ value.alert }}
+                                                </a>
+                                              </td>
+
+                                              <td>{{ value.alert_type }}</td>
+
+                                              <td style="text-transform: uppercase;">
+                                                {{ value.alert_status }}
+                                                {% if value.alert_status_id == 3 %}
+                                                  to {{ value.FistName }} ({{ value.member_role }})
+                                                {% endif %}
+                                              </td>
+
+                                              <td align="center">{{ value.due_date|date:"m/d/Y" }}</td>
+                                            </tr>
+                                            {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </section>
 </main>
 <!-- End #main -->
@@ -291,7 +387,7 @@
                                     <input type="hidden" name="app_alertname" id="app_alertname">
                                     {% csrf_token %}
 
-                                    <div class="row mb-3">  
+                                    <div class="row mb-3">
                                         <div class="col-sm-12">
                                             <div id="vendor_tab" >
                                                 <table width="100%">
@@ -396,7 +492,7 @@
                                                     <td>
                                                         <select class="form-control" style="text-transform: uppercase;" name="app_alert_status_id">
                                                             {% for alertStatus in alert_statusList %}
-                                                             {% if alertStatus.id|stringformat:"s" == "5" %}
+                                                            {% if alertStatus.id|stringformat:"s" == "5" %}
                                                             <option value="{{ alertStatus.id }}">
                                                                 {{ alertStatus.alert_status }}
                                                             </option>
@@ -437,74 +533,89 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">DEMOGRAPHIC</h5>
+                <h4 class="modal-title">DEMOGRAPHIC</h4>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="http://localhost/prismKarma/update_member_info" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+            <form action="/update_member_info/" method="post">
+                 {% csrf_token %}
                 <div class="modal-body">
-                    <input type="hidden" name="medicaid_id" value="1">
+                    <input type="hidden" name="medicaid_id" value="{{medicaid_id}}">
                     <div class="row">
                         <div class="col-lg-4 mt-3">
                             <label for="address"><strong>ADDRESS</strong></label>
-                            <input name="address" id="address" type="text" class="form-control" readonly autocomplete="address" >
+                            <input name="address" id="address" type="text" class="form-control" readonly value="{{ member_details.0.OTHER_ADDR1 }}">
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="latest_alt_address"><strong><a>ALT ADDRESS</a></strong></label>
-                            <input name="alt_number" id="latest_alt_address" type="text" class="form-control"  readonly  value="">
+                            <input name="alt_number" id="latest_alt_address" type="text" class="form-control"  readonly value="{{ member_details.0.alt_address }}{% if member_details.0.alt_address and member_details.0.alt_city %}, {% endif %}{{ member_details.0.alt_city }} {{ member_details.0.alt_state }}, {{ member_details.0.alt_zip }}">
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="phone_number"><strong>PHONE NUMBER</strong></label>
-                            <input name="phone_number" id="phone_number" type="text" class="form-control" readonly  value="">
+                            <input name="phone_number" id="phone_number" type="text" class="form-control" readonly  value="{{ member_details.0.OTHER_PHONE }}">
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="latest_alt_phone"><strong><a >ALT. PHONE</a></strong>
                             </label>
-                            <input name="alt_number" id="latest_alt_phone" type="text" class="form-control" readonly  value="">
+                            <input name="alt_number" id="latest_alt_phone" type="text" class="form-control" readonly  value="{{ member_details.0.alt_phone_no }}">
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="city">ROSTER / ALT LANGUAGE</label>
                             <div >
-                                N/A
+                                {% if member_details.0.language == "01" %}
+                                  ENGLISH
+                                {% else %}
+                                  N/A
+                                {% endif %}
                                 <span id="latest_alt_language">
+                                    {% if member_details.0.alt_language %}
+                                      / {{ member_details.0.alt_language }}
+                                    {% else %}
+                                      / N/A
+                                    {% endif %}
                               </span>
                             </div>
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="city">CITY</label>
-                            <input name="city" id="city" type="text" class="form-control" readonly value="" >
+                            <input name="city" id="city" type="text" class="form-control" readonly value="{{ member_details.0.OTHER_CITY }}" >
                         </div>
                         <div class="col-lg-4 mt-3" >
                             <label for="state">STATE</label>
-                            <input name="state" id="state" type="text" class="form-control" readonly  value="">
+                            <input name="state" id="state" type="text" class="form-control" readonly  value="{{ member_details.0.OTHER_STATE }}">
                         </div>
                         <div class="col-lg-4 mt-3" >
                             <label for="zip_code"><strong>ZIP CODE</strong></label>
-                            <input name="zip_code" id="zip_code" type="text" class="form-control" readonly value="">
+                            <input name="zip_code" id="zip_code" type="text" class="form-control" readonly value="{{ member_details.0.OTHER_ZIP }}">
                         </div>
                         <div class="col-lg-4 mt-3" >
-                            <label for="assign_to11"><strong>ASSIGNED TO</strong></label>
-                            <select id="assign_to11" name="assign_to"  class="form-select">
+                            <label for="assign_to"><strong>ASSIGNED TO</strong></label>
+                            <select id="assign_to" name="assign_to"  class="form-control form-select">
                                 <option value="">SELECT</option>
-                                <option value="41" selected>Jacob Smith</option>
-                                <option value="42" >John Doe</option>
-                                <option value="44" >Mark Williamson</option>
-                                <option value="46" >Padmalochan Pradhan</option>
-                                <option value="45" >Parsuram Samal</option>
-                                <option value="43" >user One</option>
+                                {% for user in assign_to_user %}
+                                    <option value="{{ user.ID }}"
+                                        {% if member_details.0.Care_Coordinator_id == user.ID %}selected{% endif %}>
+                                        {{ user.FistName }} {{ user.LastName }}
+                                    </option>
+                                {% endfor %}
+
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3"  >
                             <label for="preferred_call_time" ><strong>PREFERRED CALL TIME</strong></label>
-                            <input name="preferred_call_time" id="preferred_call_time" type="text" class="form-control "  value="">
+                            <input name="preferred_call_time" id="preferred_call_time" type="text" class="form-control "  value="{{ member_details.0.preferred_call_time }}">
                         </div>
                         <div class="col-lg-8 mt-3" >
                             <label  for="Provider_Name" ><strong>PCP NAME,ADDRESS</strong></label>
-                            <input name="Provider_Name" id="Provider_Name" type="text" class="form-control"   readonly  value="PROVIDER MARCY, (null : null), NPI : null (null,null,null,null)" >
+                           <input name="Provider_Name" id="Provider_Name" type="text" class="form-control"  readonly
+                                  value="{% if member_details.0.Provider_Name %}{{ member_details.0.Provider_Name }}
+                                       {% elif member_details.0.PHYSICIAN.0 and member_details.0.PRIMARY_BUSINESS_ADDR1 %}
+                                           {{ member_details.0.PHYSICIAN.0 }}, {{ member_details.0.PRIMARY_BUSINESS_ADDR1 }}
+                                       {% else %}N/A{% endif %}">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">SAVE CHANGES</button>
                 </div>
             </form>
         </div>
@@ -520,18 +631,18 @@
                 <h5 class="modal-title">MANAGE MEMBER INDICATORS</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="http://localhost/prismKarma/Member_manage_new/update_member_indicatirs" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+            <form action="/update_member_indicator/" method="post">
+                {% csrf_token %}
                 <div class="modal-body">
-                    <input type="hidden" name="medicaid_id" value="1">
+                    <input type="hidden" name="medicaid_id" value="{{medicaid_id}}">
                     <div class="row">
                         <div class="col-lg-4 mt-3">
                             <label for="HIGH_DRUG_USE"><strong>HIGH DRUG USE</strong></label>
-
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <select   name="HIGH_DRUG_USE" id="HIGH_DRUG_USE"  class="form-select">
-                                <option value="0" selected>No</option>
-                                <option value="1" >Yes</option>
+                            <select   name="HIGH_DRUG_USE" id="HIGH_DRUG_USE"  class="form-control form-select">
+                                <option value="0" {% if member_details.0.HIGH_DRUG_USE == "0" %}selected{% endif %}>NO</option>
+                                <option value="1" {% if member_details.0.HIGH_DRUG_USE == "1" %}selected{% endif %}>YES</option>
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3">
@@ -541,21 +652,20 @@
 
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <select   name="HOMELESS" id="HOMELESS"  class="form-select">
-                                <option value="0" selected>No</option>
-                                <option value="1" >Yes</option>
+                            <select   name="HOMELESS" id="HOMELESS"  class="form-control form-select">
+                                <option value="0" {% if member_details.0.HOMELESS == "0" %}selected{% endif %}>NO</option>
+                                <option value="1" {% if member_details.0.HOMELESS == "1" %}selected{% endif %}>YES</option>
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3">
                         </div>
                         <div class="col-lg-4 mt-3">
                             <label for="SUBSTANCE_ABUSE"><strong>SUBSTANCE ABUSE</strong></label>
-
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <select   name="SUBSTANCE_ABUSE" id="SUBSTANCE_ABUSE" class="form-select">
-                                <option value="0" selected>No</option>
-                                <option value="1" >Yes</option>
+                            <select   name="SUBSTANCE_ABUSE" id="SUBSTANCE_ABUSE" class="form-control form-select">
+                                <option value="0" {% if member_details.0.SUBSTANCE_ABUSE == "0" %}selected{% endif %}>NO</option>
+                                <option value="1" {% if member_details.0.SUBSTANCE_ABUSE == "1" %}selected{% endif %}>YES</option>
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3">
@@ -565,7 +675,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">SAVE CHANGES</button>
                 </div>
             </form>
         </div>
@@ -602,72 +712,7 @@
     </div>
 </div>
 <!-- END ACTION LOG MODAL --->
-<!-- START ADD Prisim Claim MODAL --->
-<div class="modal fade" id="add_claim" tabindex="-1" data-backdrop="false">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
 
-                <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Claim</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="http://localhost/prismKarma/Member_manage_new/add_prisim_claim" name="addPrisimClaim" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
-
-                    <div class="row">
-
-                        <input type="hidden" name="alert_name"  id="alert_name1" >
-                        <input type="hidden" name="alert_status_txt"  id="alert_status_txt1" >
-                        <input type="hidden" name="alert_type_txt"  id="alert_type_txt1" >
-
-                        <input type="hidden" name="member_id"  id="member_id1" value="1">
-
-                        <div class="col-lg-4  mt-3">
-                            <input type="text" id="txt_claim_number" name="txt_claim_number" placeholder="Claim Number" class="form-control" required>
-
-                        </div>
-                        <div class="col-lg-4  mt-3">
-
-                            <input type="text" id="txt_primary_diagnosos" name="txt_primary_diagnosos" placeholder="Primary Diagnosis" class="form-control" required>
-
-                        </div>
-                        <div class="col-lg-4  mt-3">
-
-                            <input type="text" id="txt_code_desc" name="txt_code_desc" placeholder="Description" class="form-control" required>
-
-                        </div>
-
-                        <div class="col-lg-4  mt-3">
-                            <select class="form-select"  id="select_type" name="select_claim_type"  required>
-                                <option value="">Type</option>
-                                <option value="IP">IP</option>
-                                <option value="OP">OP</option>
-                                <option value="ER">ER</option>
-
-                            </select>
-                        </div>
-                        <div class="col-lg-4 mt-3">
-                            <input type="text" id="txt_Physician" name="txt_Physician" placeholder="Physician" class="form-control" required>
-
-
-                        </div>
-                        <div class="col-lg-4  mt-3">
-                            <input type='text' class="form-control datepicker" name="date_dos" id="date_dos" placeholder="DOS" required>
-                        </div>
-                        <div class="col-lg-4 mt-3 mb-3">
-                            <textarea id="textarea_claim_note1" class="form-control" name="textarea_claim_note"  placeholder="Add note"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input class="btn btn-primary" type="submit" value="Save">
-                    </div>
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END ADD Prisim Claim modal MODAL --->
 <!-- START ADD ALERT MODAL --->
 <div class="modal fade" id="add_alert" tabindex="-1" data-backdrop="false">
     <div class="modal-dialog modal-lg">
@@ -677,65 +722,62 @@
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="http://localhost/prismKarma/member_add_update_alert" name="Newappeals" role="form" class="form-inline" autocomplete="off" method="post" accept-charset="utf-8">
+                <form action="/member_add_update_alert/" method="post">
+                    {% csrf_token %}
                     <div class="row">
                         <input type="hidden" name="alert_name"  id="alert_name" >
                         <input type="hidden" name="alert_status_txt"  id="alert_status_txt" >
                         <input type="hidden" name="alert_type_txt"  id="alert_type_txt" >
                         <input type="hidden" name="alert_list_id"  id="alert_list_id" >
-                        <input type="hidden" name="member_id"  id="member_id" value="1">
+                        <input type="hidden" name="member_id"  id="member_id" value="{{medicaid_id}}">
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-select" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
+                            <select class="form-control form-select" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
                                 <option value="">SELECT ALERT</option>
-                                <option value="7">ER</option>
-                                <option value="4">GAPS-IN-CARE</option>
-                                <option value="84">High BP</option>
-                                <option value="76">IP</option>
-                                <option value="3">RECERT</option>
-                                <option value="72">Reminder</option>
+                                {% for alert in alertList %}
+                                  <option value="{{ alert.id }}">{{ alert.alert }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-lg-4  mt-3">
-                            <select class="form-select" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
+                            <select class="form-control form-select" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
                                 <option value="">SELECT TYPE</option>
                             </select>
                         </div>
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-select" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
+                            <select class="form-control form-select" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
                                 <option value="">SELECT STATUS</option>
-                                <option value="1" >Open</option>
-                                <option value="2" >In-Process</option>
-                                <option value="3" >Transferred</option>
-                                <option value="4" >Cancel</option>
-                                <option value="5" >Completed</option>
-                                <option value="28" >Visited</option>
+                                 {% for alertStatus in alert_statusList %}
+                                  <option value="{{ alertStatus.id }}">
+                                    {{ alertStatus.alert_status }}
+                                  </option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3" style="display:none;" id="assign_user_id_field">
-                            <select class="form-select"  name="assign_user_id" id="assign_user_id">
+                            <select class="form-control form-select"  name="assign_user_id" id="assign_user_id">
                                 <option value="">SELECT USER</option>
-                                <option value="41">Jacob ()</option>
-                                <option value="42">John ()</option>
-                                <option value="44">Mark ()</option>
-                                <option value="46">Padmalochan ()</option>
-                                <option value="45">Parsuram ()</option>
-                                <option value="43">user ()</option>
+                                {% for assign in assign_to_user %}
+                                  <option value="{{ assign.ID }}">
+                                    {{ assign.FistName }} ({{ assign.member_role }})
+                                  </option>
+                                {% endfor %}
                             </select>
                         </div>
-                        <div class="col-lg-4  mt-3">
-                            <input type='text' class="form-control datepicker" name="created_date" id="created_date" placeholder="Created Date" required>Alert Date
+                        <div class="col-lg-12 mt-3">
+                            <textarea id="alert_note" class="form-control" name="alert_note"  placeholder="NOTE"></textarea>
                         </div>
                         <div class="col-lg-4  mt-3">
-                            <input type='text' class="form-control datepicker" name="due_date" id="due_date" placeholder="Due Date" >Due Date
+                            <input type='text' class="form-control datepicker" name="created_date" id="created_date" placeholder="CREATED DATE" required>
                         </div>
-                        <div class="col-lg-4 mt-3 mb-3">
-                            <textarea id="alert_note" class="form-control" name="alert_note"  placeholder="Add note"></textarea>
+                        <div class="col-lg-4  mt-3">
+                            <input type='text' class="form-control datepicker" name="due_date" id="due_date" placeholder="DUE DATE" >
                         </div>
+
                     </div>
                     <div class="modal-footer">
-                        <input class="btn btn-primary" type="submit" value="Save">
+                        <input class="btn btn-primary" type="submit" value="SAVE">
                     </div>
                 </form>
 
@@ -756,27 +798,27 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-5">
-                        <form action="http://localhost/prismKarma/add_member_alt_address" name="alt_address_fom" id="alt_address_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
-
-                            <input type="hidden" name="medicaid_id"  value="1">
+                        <form action="/add_member_alt_address/" name="alt_address_fom" id="alt_address_fom" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">
                             <div class="col-lg-12  mt-3">
-                                <input type="text" id="alt_address" name="alt_address" placeholder="Alternate Address" class="form-control" required>
+                                <input type="text" id="alt_address" name="alt_address" placeholder="Alternate Address" class="form-control" required style="text-transform:uppercase;">
                             </div>
                             <div class="col-lg-12  mt-3">
-                                <input type="text" id="alt_city" name="alt_city" placeholder="Alternate City" class="form-control" required>
+                                <input type="text" id="alt_city" name="alt_city" placeholder="Alternate City" class="form-control" required style="text-transform:uppercase;">
                             </div>
                             <div class="col-lg-12  mt-3">
-                                <input type="text" id="alt_state" name="alt_state" placeholder="Alternate State" class="form-control" required>
+                                <input type="text" id="alt_state" name="alt_state" placeholder="Alternate State" class="form-control" required style="text-transform:uppercase;">
+                            </div>
+                            <div class="col-lg-12  mt-3">
+                                <input type="text" id="alt_zip" name="alt_zip" placeholder="Alternate Zip" class="form-control" required style="text-transform:uppercase;">
                             </div>
                             <div class="col-lg-12  mt-3 mb-3">
-                                <input type="text" id="alt_zip" name="alt_zip" placeholder="Alternate Zip" class="form-control" required>
-                            </div>
-                            <div class="col-lg-12  mt-3 mb-3">
-                                <input type='text' class="form-control datepicker" name="created_date" placeholder="Added Date" >
+                                <input type='text' class="form-control datepicker" name="created_date" placeholder="Added Date" style="text-transform:uppercase;">
                             </div>
 
                             <div class="modal-footer">
-                                <input class="btn btn-primary" type="submit" value="Save">
+                                <input class="btn btn-primary" type="submit" value="SAVE">
                             </div>
                         </form>
                     </div>
@@ -785,13 +827,26 @@
                             <table class="table table-sm" style="font-size:14px;" >
                                 <thead>
                                 <tr>
-                                    <th>Address</th>
-                                    <th>Added Date</th>
-                                    <th width="20%">Added By</th>
+                                    <th>ADDRESS</th>
+                                    <th>ADDED DATE</th>
+                                    <th width="22%">ADDED BY</th>
                                 </tr>
                                 </thead>
                                 <tbody >
-                                <tr><td colspan='3' align='center'>No record found.</td></tr>
+                                {% if alt_address %}
+                                    {% for value in alt_address %}
+                                        <tr>
+                                            <td>{{ value.alt_address }}, {{ value.alt_city }}, {{ value.alt_state }}, {{ value.alt_zip }}</td>
+                                            <td>{{ value.add_date }}</td>
+                                            <td>{{ value.initial }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" align="center">No record found.</td>
+                                    </tr>
+                                {% endif %}
+
                                 </tbody>
                             </table>
                         </div>
@@ -818,14 +873,14 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-4">
-                        <form action="http://localhost/prismKarma/add_member_alt_pnone" name="alt_phone_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
-
-                            <input type="hidden" name="medicaid_id"  value="1">
+                        <form action="/add_member_alt_pnone/" name="alt_phone_fom" method="post" >
+                            {% csrf_token %}
+                            <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">
                             <div class="col-lg-12  mt-3">
-                                <input type="text"  placeholder="Alternate Phone No"   name="alt_phone_no" id="alt_phone_no" class="form-control" onkeyup="formatPhoneNumber(this.value);" maxlength="10" required>
+                                <input type="text"  placeholder="Alternate Phone No"   name="alt_phone_no" id="alt_phone_no" class="form-control" onkeyup="formatPhoneNumber(this.value);" maxlength="10" pattern="\(\d{3}\) \d{3}-\d{4}" title="Enter phone number in format: (123) 456-7890"  inputmode="numeric" required style="text-transform:uppercase;">
                             </div>
                             <div class="col-lg-12  mt-3" align="right">
-                                <input class="btn btn-primary" type="submit" value="Save">
+                                <input class="btn btn-primary" type="submit" value="SAVE">
                             </div>
 
                         </form>
@@ -835,13 +890,25 @@
                             <table class="table table-sm" id="alt_phone_table" style="font-size:14px;">
                                 <thead>
                                 <tr>
-                                    <th>Alternative Phone No</th>
-                                    <th>Added By (INITIAL)</th>
-                                    <th>Added Date</th>
+                                    <th style="text-transform:uppercase;">Alt Phone No</th>
+                                    <th style="text-transform:uppercase;">Added By (INITIAL)</th>
+                                    <th style="text-transform:uppercase;">Added Date</th>
                                 </tr>
                                 </thead>
                                 <tbody id="alt_phone_table_body">
-                                <tr id="no_phone"><td colspan='3' align="center" >No alt phone found. </td></tr>
+                                {% if member_alt_phone_details %}
+                                    {% for member_alt_phone in member_alt_phone_details %}
+                                        <tr>
+                                            <td>{{ member_alt_phone.alt_phone_no }}</td>
+                                            <td style="text-align: center;">{{ member_alt_phone.initial }}</td>
+                                            <td>{{ member_alt_phone.add_date }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr id="no_phone">
+                                        <td colspan="3" align="center">No alt phone found.</td>
+                                    </tr>
+                                {% endif %}
 
                                 </tbody>
                             </table>
@@ -868,96 +935,22 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-4">
-                        <form action="http://localhost/prismKarma/add_member_alt_language" name="alt_phone_fom" role="form" autocomplete="off" method="post" accept-charset="utf-8">
-
-                            <input type="hidden" name="medicaid_id"  value="1">
+                        <form action="/add_member_alt_language/" name="alt_phone_fom" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">
                             <input type="hidden" name="alt_language_name" id="alt_language_name">
                             <div class="col-lg-12  mt-3">
-                                <select name="alt_language" id="alt_language" class="form-select" onchange="get_language_name();">
-                                    <option value="55">AF MAAY</option>
-                                    <option value="70">AFRIKAAN</option>
-                                    <option value="10">ALBANIAN</option>
-                                    <option value="11">AMHARIC</option>
-                                    <option value="12">ARABIC</option>
-                                    <option value="13">ARMENIAN</option>
-                                    <option value="56">AZERBAIJANI</option>
-                                    <option value="71">BASQUE</option>
-                                    <option value="14">BENGALI</option>
-                                    <option value="15">BOSNIAN/SERBO CROAT</option>
-                                    <option value="72">BULGARIAN</option>
-                                    <option value="57">BURMESE</option>
-                                    <option value="73">BURMESE</option>
-                                    <option value="04">CAMBODIAN/KHMER</option>
-                                    <option value="16">CANTONESE CHINESE</option>
-                                    <option value="74">CHINESE</option>
-                                    <option value="18">CREOLE HAITI FR</option>
-                                    <option value="19">CROATION</option>
-                                    <option value="20">CZECH</option>
-                                    <option value="75">DANISH</option>
-                                    <option value="76">DUTCH</option>
-                                    <option value="01">ENGLISH</option>
-                                    <option value="77">ESTONIAN</option>
-                                    <option value="21">FARSI/PERSIAN</option>
-                                    <option value="78">FINNISH</option>
-                                    <option value="79">FLEMISH</option>
-                                    <option value="08">FRENCH</option>
-                                    <option value="80">FRENCH-CREOLE</option>
-                                    <option value="22">GERMAN</option>
-                                    <option value="23">GREEK</option>
-                                    <option value="24">GUJARATI INDIA</option>
-                                    <option value="25">HEBREW</option>
-                                    <option value="26">HINDI INDIA</option>
-                                    <option value="27">HMONG</option>
-                                    <option value="28">HUNGARIAN</option>
-                                    <option value="29">IBO</option>
-                                    <option value="82">INDIC</option>
-                                    <option value="30">INDONESIAN</option>
-                                    <option value="83">IRANIAN</option>
-                                    <option value="81">ISLANDIC</option>
-                                    <option value="31">ITALIAN</option>
-                                    <option value="32">JAPANESE</option>
-                                    <option value="61">KHMER</option>
-                                    <option value="33">KOREAN</option>
-                                    <option value="34">LATVIAN</option>
-                                    <option value="35">LITHUANIAN</option>
-                                    <option value="36">MALAY</option>
-                                    <option value="37">MALAYALAM INDIA</option>
-                                    <option value="17">MANDARIAN CHINESE</option>
-                                    <option value="84">MON-KHMER</option>
-                                    <option value="85">NORWEGIAN</option>
-                                    <option value="99">OTHER</option>
-                                    <option value="86">PAKISTAN</option>
-                                    <option value="38">PASHTO/PUSHTU</option>
-                                    <option value="59">PERSIAN</option>
-                                    <option value="39">PORTUGUESE</option>
-                                    <option value="87">PORTUGUESE-CREOLE</option>
-                                    <option value="40">PUNJABI/PANJABI</option>
-                                    <option value="41">ROMANIAN</option>
-                                    <option value="05">RUSSIAN</option>
-                                    <option value="42">SERBIAN</option>
-                                    <option value="43">SIGN LANGUAGE</option>
-                                    <option value="44">SLOVAK</option>
-                                    <option value="45">SLOVENE</option>
-                                    <option value="46">SOMALI</option>
-                                    <option value="02">SPANISH</option>
-                                    <option value="47">SWAHILI</option>
-                                    <option value="89">SWEDISH</option>
-                                    <option value="48">TAGALOG PHILIPPINES</option>
-                                    <option value="49">TAMIL</option>
-                                    <option value="50">THAI</option>
-                                    <option value="90">TIGENYA</option>
-                                    <option value="51">TURKISH</option>
-                                    <option value="53">UKRAINIAN</option>
-                                    <option value="91">UNKNOWN</option>
-                                    <option value="52">URDU</option>
-                                    <option value="60">UZBEK</option>
-                                    <option value="03">VIETNAMESE</option>
-                                    <option value="54">YORUBA</option>
+                                <select name="alt_language" id="alt_language" class="form-control form-select" onchange="get_language_name();" required>
+                                     <option value="">SELECT</option>
+                                    {% for language in all_language_master_list %}
+                                        <option value="{{ language.LANGUAGE_CD }}">{{ language.LANGUAGE_DESC }}</option>
+                                    {% endfor %}
+
 
                                 </select>
                             </div>
                             <div class="col-lg-12  mt-3" align="right">
-                                <input class="btn btn-primary" type="submit" value="Save">
+                                <input class="btn btn-primary" type="submit" value="SAVE">
                             </div>
 
                         </form>
@@ -967,13 +960,26 @@
                             <table class="table table-sm" style="font-size:14px;" id="alt_phone_table1">
                                 <thead>
                                 <tr>
-                                    <th>Alternative Language</th>
-                                    <th>Added By (INITIAL)</th>
-                                    <th>Added Date</th>
+                                    <th style="text-transform:uppercase;">Alt Language</th>
+                                    <th style="text-transform:uppercase;">Added By (INITIAL)</th>
+                                    <th style="text-transform:uppercase;">Added Date</th>
                                 </tr>
                                 </thead>
                                 <tbody id="alt_language_table_body">
-                                <tr  ><td colspan='3' align="center" >No alt language found. </td></tr>
+                                {% if member_alt_language_details %}
+                                    {% for member_alt_language in member_alt_language_details %}
+                                        <tr>
+                                            <td>{{ member_alt_language.alt_language }}</td>
+                                            <td style="text-align: center;">{{ member_alt_language.initial }}</td>
+                                            <td>{{ member_alt_language.add_date }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="3" align="center">No alt language found.</td>
+                                    </tr>
+                                {% endif %}
+
 
                                 </tbody>
                             </table>
@@ -989,69 +995,65 @@
 
 <!-- START MEDICAL CLAIM MODAL --->
 <div class="modal fade" id="medical_claim" tabindex="-1" data-backdrop="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style="width:60%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">MEDICAL CLAIM</h5>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+<!--                <form action="/add_claim/"  method="post">-->
+<!--                    {% csrf_token %}-->
+<!--                    <div class="row">-->
+<!--                        <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">-->
+<!--                        <input type="hidden" name="MEM_NO"  value="">-->
+<!--                        <div class="col-lg-2">-->
+<!--                            <input type="text" class="form-control"   placeholder="CLAIM NUMBER" name="prism_claim_number" id="prism_claim_number" readonly>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-2">-->
+<!--                            <input type="text" name="DOS" id="DOS1" placeholder="DATE OF SERVICE"  class="form-control datepicker" required>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-2">-->
+<!--                            <select class="form-control" name="claim_category" style="text-transform: uppercase;"   required>-->
+<!--                                <option value="1">Clinical Events</option>-->
+<!--                                <option value="2">Care Outcomes</option>-->
+<!--                                <option value="3">Care Access</option>-->
+<!--                                <option value="4">Patient Experience</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-2">-->
+<!--                            <select class="form-control" name="claim_kpi" id="claim_kpi1"  required style="text-transform: uppercase;">-->
+<!--                                <option value="">SELECT KPI</option>-->
+<!--                                <option value="5">Infections</option>-->
+<!--                                <option value="6">Procedures</option>-->
+<!--                                <option value="7">Errors in medication</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
 
+<!--                        <div class="col-lg-2" id="discharge_date1" style="display: none;">-->
+<!--                            <input type="text" name="discharge_date"  placeholder="DISCHARGE DATE" value="09/06/2025" class="form-control datepicker" >-->
+<!--                        </div>-->
 
-                <form action="http://localhost/prismKarma/add_claim" role="form" autocomplete="off" method="post" accept-charset="utf-8">
-                    <div class="row">
-                        <input type="hidden" name="medicaid_id"  value="1">
-                        <input type="hidden" name="MEM_NO"  value="9000*1">
-                        <div class="col-lg-2  ">
-                            <input type="text" class="form-control"   placeholder="CLAIM NUMBER" name="prism_claim_number" id="prism_claim_number" readonly>
-                        </div>
-                        <div class="col-lg-2">
-                            <input type="text" name="DOS" id="DOS1" placeholder="DATE OF SERVICE" value="06/06/2025" class="form-control datepicker" required>
-                        </div>
-                        <div class="col-lg-2">
-                            <select class="form-control" name="claim_category" style="text-transform: uppercase;"   required>
-                                <option value="1">Clinical Events</option>
-                                <option value="2">Care Outcomes</option>
-                                <option value="3">Care Access</option>
-                                <option value="4">Patient Experience</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2">
-                            <select class="form-control" name="claim_kpi" id="claim_kpi1"  required style="text-transform: uppercase;">
-                                <option value="">SELECT KPI</option>
-                                <option value="5">Infections</option>
-                                <option value="6">Procedures</option>
-                                <option value="7">Errors in medication</option>
-                            </select>
-                        </div>
+<!--                        <div class="col-lg-2" id="deseaseType1">-->
+<!--                            <select class="form-control" name="desease_type" id="desease_type1"    style="text-transform: uppercase;">-->
+<!--                                <option value="">SELECT DISEASE</option><option value="4">Bacteraemia/sepsis†</option><option value="5">Cellulitis/soft-tissue infections</option><option value="3">Meningitis/encephalitis</option><option value="1">Pneumonia-primary definition</option><option value="2">Pneumonia-secondary definition</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
 
-                        <div class="col-lg-2" id="discharge_date1" style="display: none;">
-                            <input type="text" name="discharge_date"  placeholder="DISCHARGE DATE" value="09/06/2025" class="form-control datepicker" >
-                        </div>
-
-                        <div class="col-lg-2" id="deseaseType1">
-                            <select class="form-control" name="desease_type" id="desease_type1"    style="text-transform: uppercase;">
-                                <option value="">SELECT DISEASE</option><option value="4">Bacteraemia/sepsis†</option><option value="5">Cellulitis/soft-tissue infections</option><option value="3">Meningitis/encephalitis</option><option value="1">Pneumonia-primary definition</option><option value="2">Pneumonia-secondary definition</option>
-                            </select>
-                        </div>
-
-                        <div class="col-lg-2" id="diagnosisCode">
-                            <input type="text" placeholder="038.x, 790.7, 995.91, 995.92" name="primary_diagnosis" id="primary_diagnosis1" class="form-control" >
-                        </div>
-                        <div class="col-lg-12" align="right">
-                            <!-- <div id="p_code"></div> -->
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Create</button>
-                            </div>
-                        </div>
-
-
-
-                    </div>
-                </form>
+<!--                        <div class="col-lg-2" id="diagnosisCode">-->
+<!--                            <input type="text" placeholder="038.x, 790.7, 995.91, 995.92" name="primary_diagnosis" id="primary_diagnosis1" class="form-control" >-->
+<!--                        </div>-->
+<!--                        <div class="col-lg-12" align="right">-->
+<!--                            &lt;!&ndash; <div id="p_code"></div> &ndash;&gt;-->
+<!--                            <div class="modal-footer">-->
+<!--                                <button type="submit" class="btn btn-primary">Create</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
 
 
+<!--                    </div>-->
+<!--                </form>-->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -1065,7 +1067,16 @@
                                 <th>DOS</th>
                             </tr>
                             </thead>
-                            <tbody >
+                            <tbody style="height:200px; overflow:scroll;">
+                            {% for claim in medical_claim_details %}
+                                <tr>
+                                    <td>{{ claim.DOCUMENT }}</td>
+                                    <td>{{ claim.PRIMARY_DIAGNOSIS }}</td>
+                                    <td>{{ claim.CodeDesc }}</td>
+                                    <td>{{ claim.doctor_name }}</td>
+                                    <td>{{ claim.FIRST_DOS }}</td>
+                                </tr>
+                            {% endfor %}
 
                             </tbody>
                         </table>
@@ -1084,12 +1095,45 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">PRISM CLAIM</h5>
-                &nbsp;  &nbsp;
-                <a class="add_btn" data-toggle="modal" data-target="#add_claim" onclick="add_claim();">+Add</a>
-
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <form action="/add_prisim_claim/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="member_id" value="{{medicaid_id}}">
+                    <div class="row">
+                        <div class="col-lg-4  mt-3">
+                            <input type="text" id="txt_claim_number" name="txt_claim_number" placeholder="CLAIM NUMBER" class="form-control" required>
+                        </div>
+                        <div class="col-lg-4  mt-3">
+                            <input type="text" id="txt_primary_diagnosos" name="txt_primary_diagnosos" placeholder="PRIMARY DIAGNOSIS" class="form-control" required>
+                        </div>
+                        <div class="col-lg-4  mt-3">
+                            <input type="text" id="txt_code_desc" name="txt_code_desc" placeholder="DESCRIPTION" class="form-control" required>
+                        </div>
+                        <div class="col-lg-4  mt-3">
+                            <select class="form-control form-select"  id="select_type" name="select_claim_type"  required>
+                                <option value="">TYPE</option>
+                                <option value="IP">IP</option>
+                                <option value="OP">OP</option>
+                                <option value="ER">ER</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 mt-3">
+                            <input type="text" id="txt_Physician" name="txt_Physician" placeholder="PHYSICIAN" class="form-control" required>
+                        </div>
+                        <div class="col-lg-4  mt-3">
+                            <input type='text' class="form-control datepicker" name="date_dos" id="date_dos" placeholder="DOS" required>
+                        </div>
+                        <div class="col-lg-12 mt-3">
+                            <textarea class="form-control" name="textarea_claim_note"  placeholder="ADD NOTE"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-primary" type="submit" value="SAVE">
+                    </div>
+                </form>
+
                 <table class="table table-sm" >
                     <thead>
                     <tr>
@@ -1103,8 +1147,23 @@
                     </tr>
                     </thead>
                     <tbody id="prisim_claim_details_list">
-                    <tr  ><td colspan='8' align="center" >No record found. </td></tr>
-
+                        {% if prism_claim_details %}
+                            {% for pclaim in prism_claim_details %}
+                              <tr>
+                                <td>{{ pclaim.DOCUMENT }}</td>
+                                <td>{{ pclaim.PRIMARY_DIAGNOSIS }} ({{ pclaim.CodeDesc }})</td>
+                                <td>{{ pclaim.CLM_TYPE }}</td>
+                                <td>{{ pclaim.PHYSICIAN }}</td>
+                                <td>{{ pclaim.claim_note }}</td>
+                                <td>{{ pclaim.FIRST_DOS }}</td>
+                                <td>{{ pclaim.FistName }}</td>
+                              </tr>
+                            {% endfor %}
+                          {% else %}
+                            <tr>
+                              <td colspan="8" align="center">No record found.</td>
+                            </tr>
+                          {% endif %}
 
                     </tbody>
                 </table>
@@ -1151,18 +1210,17 @@
 
 <!-- START Rx CLAIM MODAL --->
 <div class="modal fade" id="rx_claim" tabindex="-1" data-backdrop="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style="width:100%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Rx CLAIM</h5>
-
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                <form action="http://localhost/prismKarma/add_rx_claim" role="form" autocomplete="off" method="post" accept-charset="utf-8">
-
-                    <input type="hidden" name="medicaid_id"  value="1">
+                <form action="/add_rx_claim/"  method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">
                     <div class="row">
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2">
                             <input type="text" class="form-control" name="rx_number" id="rx_number" placeholder="RX NUMBER"   required />
@@ -1180,7 +1238,7 @@
                             <input type="text" class="form-control datepicker" name="service_date" id="service_date" placeholder="SERVICE DATE"   required />
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 mt-2" align="right">
-                            <button type="submit" id="btnsubmit" class="btn btn-primary">Submit</button>
+                            <button type="submit" id="btnsubmit" class="btn btn-primary">SUBMIT</button>
                         </div>
                     </div>
                 </form>
@@ -1199,7 +1257,15 @@
                             </tr>
                             </thead>
                             <tbody >
-
+                                {% for risk in rx_claim_details %}
+                                <tr>
+                                  <td>{{ risk.Rx_number }}</td>
+                                  <td>{{ risk.NDC }}</td>
+                                  <td>{{ risk.Drug_name }}</td>
+                                  <td>{{ risk.Store_Name }} ({{ risk.Pharmacy_NPI_Num }})</td>
+                                  <td>{{ risk.Service_Date|date:"m/d/Y" }}</td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -1213,7 +1279,7 @@
 
 <!-- START GAPS-IN-CARE MODAL --->
 <div class="modal fade" id="hedis_measure" tabindex="-1" data-backdrop="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style="width:100%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">GAPS-IN-CARE</h5>
@@ -1221,97 +1287,27 @@
             </div>
             <div class="modal-body">
                 <table class="table">
-                    <thead><tr>
-
-                        <th>Year</th>
-
-                        <th>Month</th>
+                  <thead>
+                    <tr>
+                    {% for hediskey in hedis_key_array %}
+                      {% if forloop.counter == 3 %}
                         <th># Non-Compliant</th>
-
-                        <th>AAP-45 to 64</th>
-
-                        <th>AAP-Total</th>
-
-                        <th>BCS</th>
-
-                        <th>CCS</th>
-
-                        <th># Measures</th>
-
-                        <th>ActionStatus</th>
-
+                      {% endif %}
+                      <th>{{ hediskey }}</th>
+                    {% endfor %}
                     </tr>
-                    </thead>
+                  </thead>
                     <tbody id="hedis_details_table_body_id">
-
-                    <tr>
-
-                        <td >2019</td>
-
-                        <td >5</td>
-
-                        <td style='color: #FF0000;'>4</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td >4</td>
-
-                        <td ></td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td >2019</td>
-
-                        <td >4</td>
-
-                        <td style='color: #FF0000;'>4</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td >4</td>
-
-                        <td >Open</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td >2019</td>
-
-                        <td >3</td>
-
-                        <td style='color: #FF0000;'>4</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td style='color: #FF0000;'>Non-Compliant</td>
-
-                        <td >4</td>
-
-                        <td ></td>
-
-                    </tr>
+                      {% for row in hedis_rows %}
+                        <tr>
+                          {% for col in row %}
+                            <td style="{{ col.color }}">{{ col.value }}</td>
+                          {% endfor %}
+                        </tr>
+                      {% endfor %}
                     </tbody>
-
                 </table>
+
 
             </div>
         </div>
@@ -1335,7 +1331,21 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr><td colspan='3' align="center" >No Record Available. </td></tr>
+                    {% if pcp_list %}
+                        {% for pcp in pcp_list %}
+                            <tr>
+                                <td>
+                                    {{ pcp.FIRST_NAME }} {{ pcp.LAST_NAME }}
+                                    ({{ pcp.P_S_FLAG }} : {{ pcp.SPEC_DESC }}), NPI : {{ pcp.NPI_NUM }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" align="center">No Record Available.</td>
+                        </tr>
+                    {% endif %}
+
 
                     </tbody>
                 </table>
@@ -1363,10 +1373,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td> In-crisis</td>
-                        <td> Checking for membership </td>
-                    </tr>
+                        {% if risk_details|length == 0 %}
+                        <tr><td colspan="3" align="center">No log found.</td></tr>
+                        {% else %}
+                          {% for value in risk_details %}
+                          <tr>
+                            <td>{{ value.risk }}</td>
+                            <td>{{ value.note }}</td>
+                          </tr>
+                          {% endfor %}
+                        {% endif %}
+
                     </tbody>
                 </table>
 
@@ -1386,49 +1403,6 @@
             </div>
             <div class="modal-body">
 
-                <!-- Default Tabs -->
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="home-tab1" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Active</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab1" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" tabindex="-1">All</button>
-                    </li>
-
-                </ul>
-                <div class="tab-content pt-2" id="myTabContent">
-                    <div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <form method="post" enctype="multipart/form-data" action="http://localhost/prismKarma/Member_details/add_meber_item_note" autocomplete="off">
-                            <table class="table table-sm">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>PLAN NAME</th>
-                                    <th>ASSIGNED TO</th>
-                                    <!-- <th>ASSIGNED BY</th> -->
-                                    <th>ASSIGNED DATE</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-
-                                <tr>
-                                    <td colspan="4">
-                                        <textarea class="form-control" name="note" id="note" placeholder="Enter some note..." cols="6" rows="2"></textarea>
-                                        <input type="hidden" name="medicaid_id" value="1" >
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary" type="submit">Complete</button>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </form>
-
-                    </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <table class="table table-sm">
                             <thead>
                             <tr>
@@ -1446,8 +1420,7 @@
 
                             </tbody>
                         </table>
-                    </div>
-                </div><!-- End Default Tabs -->
+
             </div>
         </div>
     </div>
@@ -1456,7 +1429,7 @@
 
 <!-- START PLAN DETAILS MODAL --->
 <div class="modal fade" id="encounters" tabindex="-1" data-backdrop="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl" style="width:100%;">
         <div class="modal-content"  >
             <div class="modal-header">
                 <h5 class="modal-title" ><div style="text-align:center;">Summarization of Episode Note (Oct 27, 2023 04:52:01)</div></h5>
@@ -1464,8 +1437,6 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-
-
 
                     <div class="col-lg-12">
                         <div class="card">
@@ -1476,8 +1447,7 @@
                                     <tr>
                                         <th>Type</th>
                                         <th>Condition</th>
-                                        <th>ICD9-CM Code</th>
-                                        <th>ICD10-CM Code</th>
+
                                         <th>Onset Dates</th>
                                         <th>Condition Status</th>
                                         <th>W/U Status</th>
@@ -1487,6 +1457,23 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    {% for problem in problem_list %}
+                                        <tr>
+                                          <td>{{ problem.Type }}</td>
+                                          <td>{{ problem.Condition }}</td>
+
+                                          <td>{{ problem.OnsetDates }}</td>
+                                          <td>{{ problem.OnsetDates }}</td>
+                                          <td>{{ problem.ConditionStatus }}</td>
+                                          <td>{{ problem.Risk }}</td>
+                                          <td>{{ problem.SNOMEDCode }}</td>
+                                          <td>{{ problem.Notes }}</td>
+                                        </tr>
+                                      {% empty %}
+                                        <tr>
+                                          <td colspan="10" align="center">No Record Available.</td>
+                                        </tr>
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -1538,7 +1525,19 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
+                                        {% for value in encounters %}
+                                            <tr>
+                                              <td>{{ value.Encounter }}</td>
+                                              <td>{{ value.Location }}</td>
+                                              <td>{{ value.Date }}</td>
+                                              <td>{{ value.Provider }}</td>
+                                              <td>{{ value.Diagnosis }}</td>
+                                            </tr>
+                                          {% empty %}
+                                            <tr>
+                                              <td colspan="5" align="center">No Record Available.</td>
+                                            </tr>
+                                          {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -1563,7 +1562,18 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
+                                          {% for immunize in immunizations %}
+                                            <tr>
+                                              <td>{{ immunize.Vaccine }}</td>
+                                              <td>{{ immunize.Route }}</td>
+                                              <td>{{ immunize.AdministrationDate }}</td>
+                                              <td>{{ immunize.Status }}</td>
+                                            </tr>
+                                          {% empty %}
+                                            <tr>
+                                              <td colspan="4" align="center">No Record Available.</td>
+                                            </tr>
+                                          {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -1668,7 +1678,31 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                        {% for med in medications %}
+                                            <tr>
+                                              <td>{{ med.Medication }}</td>
+                                              <td>{{ med.SIG }}</td>
+                                              <td>{{ med.Notes }}</td>
 
+                                              <td>
+                                                {% if med.StartDate and med.StartDate|stringformat:"s" != "1900-01-01" %}
+                                                  {{ med.StartDate }}
+                                                {% endif %}
+                                              </td>
+
+                                              <td>
+                                                {% if med.EndDate and med.EndDate|stringformat:"s" != "1900-01-01" %}
+                                                  {{ med.EndDate }}
+                                                {% endif %}
+                                              </td>
+
+                                              <td>{{ med.Status }}</td>
+                                            </tr>
+                                          {% empty %}
+                                            <tr>
+                                              <td colspan="6" align="center">No Record Available.</td>
+                                            </tr>
+                                          {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -1915,9 +1949,34 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                        {% for insurance in insurance_provider %}
+                                            <tr>
+                                              <td>{{ insurance.PayerName }}</td>
+                                              <td>{{ insurance.PayerAddress }}</td>
+                                              <td>{{ insurance.PayerPhone }}</td>
+                                              <td>{{ insurance.InsuredName }}</td>
+                                              <td>{{ insurance.PatientRelationshiptoInsured }}</td>
 
+                                              <td>
+                                                {% if insurance.CoverageStartDate and insurance.CoverageStartDate|stringformat:"s" != "1900-01-01" %}
+                                                  {{ insurance.CoverageStartDate }}
+                                                {% endif %}
+                                              </td>
 
+                                              <td>
+                                                {% if insurance.CoverageEndDate and insurance.CoverageEndDate|stringformat:"s" != "1900-01-01" %}
+                                                  {{ insurance.CoverageEndDate }}
+                                                {% endif %}
+                                              </td>
 
+                                              <td>{{ insurance.SubscriberNumber }}</td>
+                                              <td>{{ insurance.GroupNumber }}</td>
+                                            </tr>
+                                          {% empty %}
+                                            <tr>
+                                              <td colspan="9" align="center">No Record Available.</td>
+                                            </tr>
+                                          {% endfor %}
 
                                     </tbody>
                                 </table>
@@ -1984,7 +2043,20 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr><td colspan='5' align="center" >No Record Available. </td></tr>
+                        {% if gift_details|length == 0 %}
+                            <tr><td colspan="5" align="center">No Record Available.</td></tr>
+                            {% else %}
+                              {% for gift in gift_details %}
+                              <tr>
+                                <td>{{ gift.GIFT_CARD_NO }}</td>
+                                <td>{{ gift.GIFT_CARD_TYPE }}</td>
+                                <td>{{ gift.COMPLETED_ACTIVITY }}</td>
+                                <td>{{ gift.INCENTIVE_AMOUNT_FOR_EVENT }}</td>
+                                <td>{{ gift.DATE_OF_SERVICE|date:"m/d/Y" }}</td>
+                              </tr>
+                              {% endfor %}
+                            {% endif %}
+
                     </tbody>
                 </table>
 
@@ -2201,6 +2273,103 @@ function get_alert_name() {
   var app_alert_id = $('#app_alert_id :selected').text();
   $('#app_alertname').val(app_alert_id);
 }
+
+function add_alert() {
+     $('#alert_id').val('');
+     $('#alert_type_id').val('');
+     $('#alert_status_id').val('');
+     $('#alert_note').val('');
+     $('#created_date').val('');
+     $('#due_date').val('');
+     get_alert_type('');
+}
+
+function getUpdate(alert_list_id,alert_id,alert_type_id,alert_status_id,assign_user_id,created_date,alert_note,due_date){
+     //alert(alert_list_id+","+alert_id+","+alert_type_id+","+alert_status_id+","+assign_user_id+","+created_date+","+alert_note+","+due_date);
+     get_alert_type(alert_id);
+     $('#alert_id').val(alert_id);
+     $('#alert_list_id').val(alert_list_id);
+     var alertid = $('#alert_id :selected').text();
+     $('#alert_name').val(alertid);
+     $('#alert_note').val(alert_note);
+     $('#created_date').val(dt_convert(created_date));
+     $('#due_date').val(dt_convert(due_date));
+     $('#alert_type_id').val(alert_type_id);
+     $('#alert_status_id').val(alert_status_id);
+     get_assign_to_user(alert_status_id,assign_user_id);
+}
+function get_assign_to_user(id,assign_user_id){
+    var alert_type_id = $('#alert_type_id :selected').text();
+    $('#alert_type_txt').val(alert_type_id);
+    var alert_status_id = $('#alert_status_id :selected').text();
+    $('#alert_status_txt').val(alert_status_id);
+    if(id==3){
+      $('#assign_user_id_field').show();
+      $('#assign_user_id').val(assign_user_id);
+    }else{
+      $('#assign_user_id_field').hide();
+      $('#assign_user_id').val('');
+    }
+  }
+
+function get_alert_type(alert_id) {
+    //alert(alert_id)
+    var alertid = $('#alert_id :selected').text();
+    $('#alert_name').val(alertid);
+    var alert_status_id = $('#alert_status_id :selected').text();
+    $('#alert_status_txt').val(alert_status_id);
+      if(alert_id){
+            $.ajax({
+             type: "POST",
+             url: "{% url 'get_alert_typeList' %}",  // Django reverse URL
+             data: {alert_id: alert_id} ,
+             async: false ,
+           }).done(function (data, textStatus, xhr){
+               var html='';
+               if(data.length > 0){
+                for(var a=0; a<data.length; a++){
+                  html+= '<option value="'+data[a].id+'">'+data[a].alert+'</option>';
+                }
+              }else{
+                html+= '<option value="">SELECT TYPE</option>';
+              }
+              $('#alert_type_id').html(html);
+              var alert_type_id = $('#alert_type_id :selected').text();
+              $('#alert_type_txt').val(alert_type_id);
+
+          }).fail(function (jqXHR, textStatus, errorThrown){
+             alert("Action Result Not found.");
+           });
+      }else{
+         var html='';
+         html+= '<option value="">SELECT TYPE</option>';
+         $('#alert_type_id').html(html);
+      }
+
+  }
+
+function formatPhoneNumber(phoneNumberString) {
+    var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+    var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      var intlCode = (match[1] ? '+1 ' : '');
+      var str = [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+     //alert(str);
+     $('#alt_phone_no').val(str);
+   }else{
+    //alert(phoneNumberString);
+    $('#alt_phone_no').val(phoneNumberString);
+  }
+}
+
+function get_language_name(){
+    var alt_language = $('#alt_language :selected').text();
+    //alert(alt_language);
+    $('#alt_language_name').val(alt_language);
+}
+function addclaim() {
+      $('#prism_claim_number').val(Date.now());
+    }
 </script>
 
 
