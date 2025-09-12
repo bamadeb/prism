@@ -188,10 +188,10 @@ def mywork(request):
                 # Convert ISO string to datetime
                 dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
                 alert["due_date"] = dt  # keep as datetime object
-        print(members_list)
+        #print(members_list)
         context = {
             'members': members_list,
-            'pageTitle': "My Work",
+            'pageTitle': "MY WORKSPACE",
             'alertCount': 1,
             'today': date.today(),
             'alert_count': myWorkAllSpace['alertCount'],
@@ -224,6 +224,7 @@ def memberdetails(request, medicaid_id):
     member_details = api_call(params,"prismMemberAllDetails")
     #print(member_details)
     return render(request, 'memberdetails.html', {
+        'pageTitle': "MEMBER DETAILS",
         "sel_panel_list": member_details['data']['prismMemberAction'],
         "sel_panel_type": member_details['data']['prismMemberActionType'],
         "member_last_alert": member_details['data']['prismMemberlastalert'],
