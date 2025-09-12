@@ -4,13 +4,6 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-# Example dummy data (later replace with DB query)
-ACTION_RESULTS = [
-    {"id": 1, "action_result": "Pending"},
-    {"id": 2, "action_result": "Completed"},
-    {"id": 3, "action_result": "Failed"},
-]
-
 def api_call(params, funName):
     api_url = settings.API_URL + funName
     response = requests.post(api_url, json=params)
@@ -31,8 +24,8 @@ def get_vendor_list(request):
     if request.method == "POST":
         vendor_name = request.POST.get("vendor_name")
         params = {"vendor_name": vendor_name}
-        response = api_call(params, "prismVendorlist")
-        return JsonResponse(response['data'], safe=False)
+        vendorApi = api_call(params, "prismVendorlist")
+        return JsonResponse(vendorApi['data'], safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -42,8 +35,17 @@ def get_doctor_list(request):
         doctor_name = request.POST.get("doctor_name")
         vendor_id = request.POST.get("vendor_id")
         params = {"vendor_id": vendor_id,"doctor_name": doctor_name}
-        response = api_call(params, "prismProviderlist")
-        return JsonResponse(response['data'], safe=False)
+        vendorApi = api_call(params, "prismProviderlist")
+        return JsonResponse(vendorApi['data'], safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+@csrf_exempt
+def get_call_history(request):
+    if request.method == "POST":
+        medicaid_id = request.POST.get("medicaid_id")
+        params = {"medicaid_id": medicaid_id}
+        resultcallHistoryResponse = api_call(params, "prismGetcallhistory")
+        return JsonResponse(resultcallHistoryResponse, safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -56,3 +58,5 @@ def get_alert_typeList(request):
         return JsonResponse(response['data'], safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+

@@ -13,7 +13,7 @@
       <div class="text-white">
         <div class="d-flex justify-content-center">
           <div class="bar1"></div>
-          <div class="divider-heading align-items-center">MEMBER DETAILS</div>
+          <div class="divider-heading align-items-center">{{ pageTitle }}</div>
           <div class="bar1"></div>
         </div>
       </div>
@@ -175,7 +175,7 @@
 
        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile blue-border-font">
         <li class="dropdown-header">
-          <h6> {{request.session.user_data.first_name}} {{request.session.user_data.last_name}}</h6>
+          <h6> {{request.session.user_data.FistName}} {{request.session.user_data.LastName}}</h6>
         </li>
         <li>
           <hr class="dropdown-divider">

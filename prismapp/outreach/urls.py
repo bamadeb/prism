@@ -32,5 +32,6 @@ urlpatterns = [
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
     path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list"),
     path("api/get_alert_typeList/", api.get_alert_typeList, name="get_alert_typeList"),
+    path('api/get_call_history/', api.get_call_history, name='get_call_history')
 
 ]
