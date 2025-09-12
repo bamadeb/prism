@@ -472,6 +472,282 @@
   </div>
 </div>
 <!-- Call list modal end -->
+<!-- Add Action Modal Start -->
+<div class="modal " id="largeModal" tabindex="-1" data-bs-backdrop="false">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Action</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body">
+
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab">To-Do</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab">Appointment</button>
+              </li>
+            </ul>
+
+            <div class="tab-content pt-2" id="borderedTabContent">
+
+              <!-- ================= To-Do Tab ================= -->
+              <div class="tab-pane  show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                <form method="post" enctype="multipart/form-data" id="add_action" onsubmit="return fileValidation();">
+                  {% csrf_token %}
+                  <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
+                  <input type="hidden" name="medicaid_id" id="medicaid_id">
+                  <input type="hidden" name="number_of_attempt" value="">
+                  <input type="hidden" name="visit_alertname" id="visit_alertname">
+                  <input type="hidden" name="action_type_name" id="action_type_name">
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_id" id="action_id" required onchange="set_scheduled_action_status(this.value);">
+                        <option value="">Activity Category</option>
+                        {% for region in sel_panel_list %}
+                          <option value="{{ region.id }}">{{ region.Panel_Name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="panel_id" id="panel_id" required>
+                        <option value="">Activity Type</option>
+                        {% for type in sel_panel_type %}
+                          <option value="{{ type.id }}">{{ type.action_type }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input placeholder="Action Date" type="text" name="action_date" id="action_date" class="form-control datepicker" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_result_id" id="action_result_id" required>
+                        <option value="">Status</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-select" name="action_status" id="action_status" required>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Success">Success</option>
+                        <option value="Failure">Failure</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note"></textarea>
+                    </div>
+                  </div>
+
+                  {% if member_need_visit %}
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <table width="100%">
+                        <tr>
+                          <td>
+                            <select class="form-select" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
+                              <option value="">SELECT ALERT</option>
+                              {% for visit in member_need_visit %}
+                                <option value="{{ visit.alert_id }}/{{ visit.id }}">
+                                  {{ visit.alert }} ({{ visit.alert_type }} - {{ visit.created_date }})
+                                </option>
+                              {% endfor %}
+                            </select>
+                          </td>
+                          <td>
+                            <select class="form-select" name="visit_alert_status_id">
+                              {% for alertStatus in alert_statusList %}
+                                {% if alertStatus.id == 28 %}
+                                  <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
+                                {% endif %}
+                              {% endfor %}
+                            </select>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input class="form-control" type="file" name="file_visit_update" accept="application/pdf" disabled>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12" align="right">
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!-- ================= Appointment Tab ================= -->
+              <div class="tab-pane " id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
+                <form method="post" enctype="multipart/form-data" id="appoinmentment_add_action">
+                  {% csrf_token %}
+                  <input type="hidden" name="provider_id" id="provider_id">
+                  <input type="hidden" name="vendor_id" id="vendor_id">
+                  <input type="hidden" name="appointment_medicaid_id" id="appointment_medicaid_id">
+                  <input type="hidden" name="app_alertname" id="app_alertname">
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <div id="vendor_tab">
+                        <table width="100%">
+                          <tr>
+                            <td width="90%">
+                              <input type='text' class="form-control" name="vendor_name" id="vendor_name" placeholder="Search Vendor">
+                            </td>
+                            <td width="10%">
+                              <input type="button" class="btn btn-primary" value="Search" onclick="get_vendor_list();" style="margin-left: 10px;">
+                            </td>
+                          </tr>
+                        </table>
+                        <div style="float: left;display: none;" id="vendor_lebel"><b>Vendor List</b></div>
+                        <div style="clear:both;"></div>
+                      </div>
+                      <div id="vendor_replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <div id="doctor_id" style="display: none;">
+                        <table width="100%">
+                          <tr>
+                            <td width="90%">
+                              <input type='text' class="form-control" name="doctor_name" id="doctor_name" placeholder="Search Doctor">
+                            </td>
+                            <td width="10%">
+                              <input type="button" class="btn btn-primary" value="Search" onclick="get_doctor_list();" style="margin-left: 10px;">
+                            </td>
+                          </tr>
+                        </table>
+                        <div style="float: left;display: none;" id="doc_lebel"><b>Doctor List</b></div>
+                        <div style="clear:both;"></div>
+                      </div>
+                      <div id="replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input type='text' class="form-control datepicker" name="appointment_action_date" id="appointment_action_date" placeholder="Appointment Date" required>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input type='time' class="form-control" name="appointment_action_time" id="appointment_action_time" placeholder="Appointment Time">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input type="text" name="place_of_appointment" id="place_of_appointment" class="form-control" placeholder="Place of Appointment">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-control" name="transportation_needed" id="transportation_needed" required>
+                        <option value="">Transportation Needed</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <select class="form-control" name="appointment_action" id="appointment_action" required>
+                        <option value="Failure">Appointment Failure</option>
+                        <option value="Rescheduled">Appointment Rescheduled</option>
+                        <option value="Scheduled" selected>Appointment Scheduled</option>
+                        <option value="Success">Appointment Success</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <textarea class="form-control" name="appointment_action_note" id="appointment_action_note" required placeholder="Note"></textarea>
+                    </div>
+                  </div>
+
+                  {% if member_last_alert %}
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <table width="100%">
+                        <tr>
+                          <td>
+                            <select class="form-control" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
+                              <option value="">SELECT ALERT</option>
+                              {% for value in member_last_alert %}
+                                <option value="{{ value.alert_id }}/{{ value.id }}">
+                                  {{ value.alert }} ({{ value.alert_type }} - {{ value.created_date }})
+                                </option>
+                              {% endfor %}
+                            </select>
+                          </td>
+                          <td>
+                            <select class="form-control" name="app_alert_status_id">
+                              {% for alertStatus in alert_statusList %}
+                                {% if alertStatus.id == 5 %}
+                                  <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
+                                {% endif %}
+                              {% endfor %}
+                            </select>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12">
+                      <input class="form-control" type="file" name="file_appointment" id="file_appointment" accept="application/pdf">
+                    </div>
+                  </div>
+
+                  <div class="row mb-3">
+                    <div class="col-sm-12" align="right">
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Add Action Modal -->
 
 
 <script type="text/javascript">
