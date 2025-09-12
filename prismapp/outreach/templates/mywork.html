@@ -476,21 +476,12 @@
 
 <script type="text/javascript">
   $('#members').DataTable({
-    aaSorting: [[5, 'desc'], [10,'desc'], [12,'desc'], [14,'desc']],
+    order: [[3, 'asc']],  // default sort on 4th column (index 3)
     columnDefs: [{
-      target: 5,
-      visible: false
-    },{
-      target: 10,
-      visible: false
-    },{
-      target: 12,
-      visible: false
-    },{
-      target: 14,
+      targets: [5, 10, 12, 14],  // hide multiple columns
       visible: false
     }]
-  });
+});
   $('#tasks').DataTable();
   $('#transferList').DataTable();
   $('#transportation_prior_list_table_id').DataTable();
@@ -543,6 +534,17 @@ function showCallList(medicaid_id) {
     });
   }
 }
+   function addAction(medicaid_id) {
+      //alert(medicaid_id);
+      $('#action_id').val(5);
+      $('#panel_id').val(2);
+      $('#action_date').val('');
+      $('#medicaid_id').val(medicaid_id)
+      $('#appointment_medicaid_id').val(medicaid_id)
+      $('#rsvp_appointment_medicaid_id').val(medicaid_id)
+      //$('#medicaid_id').val(medicaid_id)
+      $("#largeModal").modal('show');
+    }
 
 </script>
 {% endblock %}
