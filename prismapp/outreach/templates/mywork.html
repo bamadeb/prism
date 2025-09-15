@@ -48,7 +48,7 @@
                                 <div> <h3 style="margin-top:10px">ENGAGED</h3> </div>
                                 <div> : </div>
                                 <div> <h3 style="margin-top:10px">{{ kpis_data.0.engagedCnt }}</h3></div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -482,12 +482,12 @@
                 <table class="table table-sm">
                     <thead>
                     <tr>
-                        <th>DIAG SOURCE</th>
-                        <th>DIAG CODE</th>
-                        <th>DIAG DESC</th>
+                        <th>RELEVANT DATE</th>
                         <th>HCC CATEGORY</th>
                         <th>HCC MODEL</th>
                         <th>STATUS</th>
+                        <th>DIAG CODE</th>
+                        <th>DIAG DESC</th>
                     </tr>
                     </thead>
                     <tbody id="gapList_table_body">
@@ -867,10 +867,11 @@
               $("#gapList_table_body").append(
                 "<tr><td>" + (i + 1) + "</td>" +
                 "<td>" + action_date + "</td>" +
+                "<td>" + HCC_CATEGORY + "</td>" +
+                "<td>" + HCC_MODEL + "</td>" +
+                "<td>" + STATUS + "</td></tr>"+
                 "<td>" + DIAG_CODE + "</td>" +
                 "<td>" + DIAG_DESC + "</td>" +
-                "<td>" + HCC_CATEGORY + "</td>" +
-                "<td>" + STATUS + "</td></tr>"
               );
             });
           } else {
