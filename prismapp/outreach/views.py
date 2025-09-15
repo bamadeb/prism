@@ -224,13 +224,15 @@ def memberdetails(request, medicaid_id):
 
     ## create a api call
     params = {"medicaid_id": medicaid_id}
+    birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
     #print(member_details)
     log_details = []
-    for log in member_details['data']['logDetails']:
-        # Convert string to datetime
-        log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
-        log_details.append(log)
+    if len(member_details) > 0:
+        for log in member_details['data']['logDetails']:
+            # Convert string to datetime
+            log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
+            log_details.append(log)
 
     member_alertList = []
     for member in member_details['data']['alertList']:
@@ -260,6 +262,7 @@ def memberdetails(request, medicaid_id):
 
     hedis_key_array = []
     hedis_non_complant_count_array = {}
+    hedis_rows = []
 
     for member_hedis in member_details['data']['hedisDetails']:
         non_complant_count = 0
@@ -278,7 +281,7 @@ def memberdetails(request, medicaid_id):
             hedis_non_complant_count_array[year] = {}
         hedis_non_complant_count_array[year][month] = non_complant_count
 
-        hedis_rows = []
+
 
         for member in member_details['data']['hedisDetails']:
             row = []

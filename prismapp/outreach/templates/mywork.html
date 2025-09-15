@@ -35,26 +35,20 @@
                 <div class="row" >
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
-                            <div class="card-body py-2">
-                                <div class="row" style="margin-top:.5 rem;">
-                                    <div class="col-6"> <h3 align="center">ENROLLED</h3> </div>
-                                    <div class="col-1" > : </div>
-                                    <div class="col-5"> <h3 align="center">{{ kpis_data.0.enrolledCnt }}</h3></div>
-
-                                </div>
+                            <div class="card-body d-flex justify-content-around align-items-center">
+                                <div> <h3 style="margin-top:10px">ENROLLED</h3> </div>
+                                <div> : </div>
+                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.enrolledCnt }}</h3></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
-                            <div class="card-body py-2">
-                                <div class="row" style="margin-top:.5 rem;">
-                                    <div class="col-6"> <h3 align="center">ENGAGED</h3> </div>
-                                    <div class="col-1"> : </div>
-                                    <div class="col-5"> <h3 align="center">{{ kpis_data.0.engagedCnt }}</h3></div>
-                                </div>
-
-                            </div>
+                             <div class="card-body d-flex justify-content-around align-items-center">
+                                <div> <h3 style="margin-top:10px">ENGAGED</h3> </div>
+                                <div> : </div>
+                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.engagedCnt }}</h3></div>
+                            </div>  
                         </div>
                     </div>
                 </div>
@@ -147,16 +141,16 @@
                                                 <th>ALERT</th>
                                                 <th>#CALL</th>
                                                 <th></th>
-<!--                                                <th>ELIGIBILITY</th>-->
+                                                <!--                                                <th>ELIGIBILITY</th>-->
                                                 <th>RISK GAP</th>
                                                 <!--                                                <th>3RD CALL</th>-->
                                                 <!--                                                <th>2ND CALL</th>-->
                                                 <!--                                                <th>LAST CALL</th>-->
-<!--                                                <th>NEXT ACTIVITY</th>-->
+                                                <!--                                                <th>NEXT ACTIVITY</th>-->
 
-<!--                                                <th>APP. DATE</th>-->
+                                                <!--                                                <th>APP. DATE</th>-->
 
-<!--                                                <th>EVENT DATE</th>-->
+                                                <!--                                                <th>EVENT DATE</th>-->
 
                                                 <th align="right">ACTION</th>
                                             </tr>
@@ -173,20 +167,20 @@
                       <span class="badge alert_bg1 wrapper">
 
                                                 <!--  {# Count alerts first #}-->
-                                                  <!--  {% with 0 as alertCount %}-->
-                                                  <!--    {% for alert in alertList %}-->
+                          <!--  {% with 0 as alertCount %}-->
+                          <!--    {% for alert in alertList %}-->
 
-                                                  <!--      {% if member.medicaid_id == alert.medicaid_id %}-->
+                          <!--      {% if member.medicaid_id == alert.medicaid_id %}-->
 
-                                                  <!--        {% widthratio 1 1 1 as inc %} {# a trick to add numbers #}-->
+                          <!--        {% widthratio 1 1 1 as inc %} {# a trick to add numbers #}-->
 
-                                                  <!--        {% with alertCount|add:inc as alertCount %}{% endwith %}-->
+                          <!--        {% with alertCount|add:inc as alertCount %}{% endwith %}-->
 
-                                                  <!--      {% endif %}-->
+                          <!--      {% endif %}-->
 
-                                                  <!--    {% endfor %}-->
+                          <!--    {% endfor %}-->
 
-                                                  <!--  {% endwith %}-->
+                          <!--  {% endwith %}-->
 
                                                       {# Show notification bell if member.alertCount > 0 #}
                                                       {% if member.alertCount > 0 %}
@@ -244,42 +238,42 @@
                                                 </td>
                                                 <td></td>
                                                 <!-- Eligibility trst -->
-<!--                                                <td>-->
-<!--                                                    {% if member.ELIG_EXP_DT %}-->
-<!--                                                    {% if member.ELIG_EXP_DT < today %}-->
-<!--                                                    <div align="center">-->
-<!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-danger"></div>-->
-<!--                                                    </div>-->
-<!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
-<!--                                                    {% elif member.ELIG_EXP_DT <= today|add:"30 days" %}-->
-<!--                                                    <div align="center">-->
-<!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-warning"></div>-->
-<!--                                                    </div>-->
-<!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
-<!--                                                    {% endif %}-->
+                                                <!--                                                <td>-->
+                                                <!--                                                    {% if member.ELIG_EXP_DT %}-->
+                                                <!--                                                    {% if member.ELIG_EXP_DT < today %}-->
+                                                <!--                                                    <div align="center">-->
+                                                <!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-danger"></div>-->
+                                                <!--                                                    </div>-->
+                                                <!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
+                                                <!--                                                    {% elif member.ELIG_EXP_DT <= today|add:"30 days" %}-->
+                                                <!--                                                    <div align="center">-->
+                                                <!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-warning"></div>-->
+                                                <!--                                                    </div>-->
+                                                <!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
+                                                <!--                                                    {% endif %}-->
 
-<!--                                                    {% endif %}-->
-<!--                                                </td>-->
+                                                <!--                                                    {% endif %}-->
+                                                <!--                                                </td>-->
                                                 <td>
                                                     <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}');">
                                                         {{ member.risk_gap_count }}
                                                     </a>
                                                 </td>
-<!--                                                <td>{% if member.third_last_action_date %}-->
-<!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
-<!--                                                    {% endif %}</td>-->
-<!--                                                <td>{% if member.second_last_action_date %}-->
-<!--                                                    {{ member.second_last_action_date|date:"m/d/Y" }}-->
-<!--                                                    {% endif %}</td>-->
-<!--                                                <td>{% if member.last_action_date %}-->
-<!--                                                    {{ member.last_action_date|date:"m/d/Y" }}-->
-<!--                                                    {% endif %}</td>-->
-<!--                                                <td></td>-->
+                                                <!--                                                <td>{% if member.third_last_action_date %}-->
+                                                <!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
+                                                <!--                                                    {% endif %}</td>-->
+                                                <!--                                                <td>{% if member.second_last_action_date %}-->
+                                                <!--                                                    {{ member.second_last_action_date|date:"m/d/Y" }}-->
+                                                <!--                                                    {% endif %}</td>-->
+                                                <!--                                                <td>{% if member.last_action_date %}-->
+                                                <!--                                                    {{ member.last_action_date|date:"m/d/Y" }}-->
+                                                <!--                                                    {% endif %}</td>-->
+                                                <!--                                                <td></td>-->
 
                                                 <!-- Appointment -->
-<!--                                                <td>{% if member.appointment_date %}{{ member.appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
+                                                <!--                                                <td>{% if member.appointment_date %}{{ member.appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
                                                 <!-- RSVP -->
-<!--                                                <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
+                                                <!--                                                <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
                                                 <!-- Actions -->
                                                 <td >
                                                     <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
@@ -287,9 +281,9 @@
                                                     </a>&nbsp;&nbsp;
                                                     <a target="_blank" href="{% url 'history' member.medicaid_id %}">
                                                         <i title="Member History" class="fa fa-history"></i>
-<!--                                                    </a>&nbsp;&nbsp;-->
-<!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
-<!--                                               -->
+                                                        <!--                                                    </a>&nbsp;&nbsp;-->
+                                                        <!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
+                                                        <!--                                               -->
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -368,17 +362,17 @@
             <div class="col-lg-6">
                 <!-- Recent Activity -->
                 <div class="card">
-<!--                    <div class="filter">-->
-<!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-<!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-<!--                            <li class="dropdown-header text-start">-->
-<!--                                <h6>Filter</h6>-->
-<!--                            </li>-->
-<!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+                    <!--                    <div class="filter">-->
+                    <!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
+                    <!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
+                    <!--                            <li class="dropdown-header text-start">-->
+                    <!--                                <h6>Filter</h6>-->
+                    <!--                            </li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
 
                     <div class="card-body">
                         <h5 class="card-title">Recent Activity <span>| Today</span></h5>
@@ -407,17 +401,17 @@
 
                 <!-- Alerts -->
                 <div class="card">
-<!--                    <div class="filter">-->
-<!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-<!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-<!--                            <li class="dropdown-header text-start">-->
-<!--                                <h6>Filter</h6>-->
-<!--                            </li>-->
-<!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
-<!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+                    <!--                    <div class="filter">-->
+                    <!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
+                    <!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
+                    <!--                            <li class="dropdown-header text-start">-->
+                    <!--                                <h6>Filter</h6>-->
+                    <!--                            </li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
+                    <!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
                     <div class="card-body">
                         <h5 class="card-title">Alerts <span>| Today</span></h5>
                         <div class="activity">
