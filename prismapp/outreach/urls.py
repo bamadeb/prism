@@ -27,6 +27,8 @@ urlpatterns = [
     # path('thank_you/', views.thank_you, name='thank_you'),
      path('mywork/', views.mywork, name='mywork'),
     # path('region_manager_score/', views.region_manager_score, name='region_manager_score'),
+    path('processmember/', views.processmember, name='processmember'),
+    path('processriskgap/', views.processriskgap, name='processriskgap'),
 
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
