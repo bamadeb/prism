@@ -104,6 +104,7 @@ def mywork(request):
         try:
             response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
             myWorkSpaceResult = response.json()  # Decode the JSON response
+            #print(myWorkSpaceResult)
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
         myWorkAllSpace = myWorkSpaceResult['data']
@@ -175,12 +176,12 @@ def mywork(request):
                 member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
             else:
                 member["last_action_date"] = None
-            recentActivity = myWorkAllSpace['recentActivity']
-            for activity in recentActivity:
-                #print(activity)
-                add_date = activity.get("add_date")
-                if isinstance(add_date, str):
-                    activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
+        recentActivity = myWorkAllSpace['recentActivity']
+        for activity in recentActivity:
+            #print(activity)
+            add_date = activity.get("add_date")
+            if isinstance(add_date, str):
+                activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
 
         alertList = myWorkAllSpace['alertList']
         for alert in alertList:

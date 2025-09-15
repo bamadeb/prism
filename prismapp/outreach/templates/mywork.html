@@ -3,824 +3,909 @@
 {% load static %}
 {% block body %}
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
-   <section class="section dashboard">
-      <div class="row">
-         <!-- Left side columns -->
-         <div class="col-lg-12">
-            <div class="row">
-               {% for item in prismWorkspacekpi %}
-               <div class="col-xl-4 col-sm-4 mb-xl-0">
-                  <div class="card">
-                     <div class="card-body">
-                        <div class="row">
-                           <div class="col-12"> <h3 align="center">{{ item.period }}</h3> </div>
-                           <div class="col-4">
-                              <h4 align="center" style="color:red;">CALLED</h4> <br>
-                              <div align="center"><h5>{{ item.called }}</h5></div>
-                           </div>
-                           <div class="col-4"> <h4 align="center" style="color:blue;">REACHED</h4><br>
-                              <div align="center"><h5>{{ item.reached }}</h5></div> </div>
-                           <div class="col-4"> <h4 align="center" style="color:green;">ENGAGED</h4><br>
-                              <div align="center"><h5>{{ item.engaged }}</h5></div> </div>
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="row">
+                    {% for item in prismWorkspacekpi %}
+                    <div class="col-xl-4 col-sm-4 mb-xl-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-12"> <h3 align="center">{{ item.period }}</h3> </div>
+                                    <div class="col-4">
+                                        <h4 align="center" style="color:red;">CALLED</h4> <br>
+                                        <div align="center"><h3>{{ item.called }}</h3></div>
+                                    </div>
+                                    <div class="col-4"> <h4 align="center" style="color:blue;">REACHED</h4><br>
+                                        <div align="center"><h3>{{ item.reached }}</h3></div> </div>
+                                    <div class="col-4"> <h4 align="center" style="color:green;">ENGAGED</h4><br>
+                                        <div align="center"><h3>{{ item.engaged }}</h3></div> </div>
 
 
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               {% endfor %}
-            </div>
-
-
-            <div class="row">
-               <div class="col-xl-6 col-sm-6 mb-xl-0">
-                  <div class="card">
-                     <div class="card-body">
-                        <div class="row">
-                           <div class="col-6"> <h3 align="center">ENROLLED</h3> </div>
-                           <div class="col-1"> : </div>
-                           <div class="col-5"> <h3 align="center">{{ kpis_data.0.enrolledCnt }}</h3></div>
-
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-xl-6 col-sm-6 mb-xl-0">
-                  <div class="card">
-                     <div class="card-body">
-                        <div class="row">
-                           <div class="col-6"> <h3 align="center">ENGAGED</h3> </div>
-                           <div class="col-1"> : </div>
-                           <div class="col-5"> <h3 align="center">{{ kpis_data.0.engagedCnt }}</h3></div>
-                        </div>
-
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-
-            <div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-
-        <!-- Nav Tabs -->
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>
-  </li>
-</ul>
-<!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
-<!--          <li class="nav-item" role="presentation">-->
-<!--            <button class="nav-link active" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>-->
-<!--          </li>-->
-<!--          <li class="nav-item" role="presentation">-->
-<!--            <button class="nav-link" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>-->
-<!--          </li>-->
-<!--          <li class="nav-item" role="presentation">-->
-<!--            <button class="nav-link" id="referred-tab" data-toggle="tab" data-target="#referred" type="button" role="tab" aria-controls="referred" aria-selected="false">TRANSFERRED LIST</button>-->
-<!--          </li>-->
-<!--          <li class="nav-item" role="presentation">-->
-<!--            <button class="nav-link" id="transportation-tab" data-toggle="tab" data-target="#transportation" type="button" role="tab" aria-controls="transportation" aria-selected="false">TRANSPORTATION LIST</button>-->
-<!--          </li>-->
-<!--        </ul>-->
-
-        <div class="tab-content pt-2" id="myTabContent">
-
-          <!-- TASKS TAB -->
-          <div class="tab-pane " id="home" role="tabpanel" aria-labelledby="home-tab">
-            <table class="table table-borderless" id="tasks">
-              <thead>
-                <tr>
-                  <th width="5%"></th>
-                  <th>DATE</th>
-                  <th>STATUS</th>
-                  <th>ASSIGN TO</th>
-                  <th>ADDED BY</th>
-                  <th style="text-align:center;">COMPLETED DATE</th>
-                  <th align="center">ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for task in task_list %}
-
-
-                  <tr class="gradeX trbg">
-                    <td align="center">
-  <div style="border-radius:50%;
-              background-color:{{ task.color }};
-              width:14px;height:14px;">
-  </div>
-</td>
-
-                    <td>{% if task.action_date %}{{ task.action_date|date:"m/d/Y" }}{% endif %}</td>
-                    <td><a href="javascript:void(0);">{{ task.status }}</a></td>
-                    <td>{{ task.FistName }} {{ task.LastName }}</td>
-                    <td align="center">{{ task.initial }}</td>
-                    <td align="center">{{ task.completed_date }}</td>
-                    <td>
-                      {% if task.status != "Successful" and task.status != "Close" %}
-                        <a style="cursor:pointer;" title="Action Change" data-toggle="modal" data-backdrop="static" data-target="#action_change"
-                           onclick="action_change('Update','{{ task.action_date|date:'m/d/Y' }}','{{ task.id }}','{{ task.status }}','{{ task.action_note }}','{{ task.assign_to }}','{{ task.medicaid_id }}');">
-                          <i class="bi bi-pencil" aria-hidden="true"></i>
-                        </a>
-                      {% endif %}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-          <!-- MEMBERS TAB -->
-          <div class="tab-pane show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <table class="table table-sm table-borderless" id="members">
-              <thead>
-                <tr>
-                  <th>#MEMBER ID</th>
-                  <th>NAME</th>
-                  <th>PHONE</th>
-                  <th>ALERT</th>
-                  <th>#CALL</th>
-                  <th></th>
-                  <th>ELIGIBILITY</th>
-                  <th>3RD CALL</th>
-                  <th>2ND CALL</th>
-                  <th>LAST CALL</th>
-                  <th>NEXT ACTIVITY</th>
-                  <th></th>
-                  <th>APP. DATE</th>
-                  <th></th>
-                  <th>EVENT DATE</th>
-                  <th></th>
-                  <th align="right">ACTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for member in members %}
-                  <tr>
-                    <th><a class="text-primary">#{{ member.medicaid_id }}</a></th>
-                    <td><a class="text-primary">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}</a></td>
-                    <td><a class="text-primary">{{ member.HOME_PHONE|default:'' }}</a></td>
-
-                    <!-- Alerts -->
-                    <td>
-                      <span class="badge alert_bg1 wrapper">
-
-<!--  {# Count alerts first #}-->
-<!--  {% with 0 as alertCount %}-->
-<!--    {% for alert in alertList %}-->
-
-<!--      {% if member.medicaid_id == alert.medicaid_id %}-->
-
-<!--        {% widthratio 1 1 1 as inc %} {# a trick to add numbers #}-->
-
-<!--        {% with alertCount|add:inc as alertCount %}{% endwith %}-->
-
-<!--      {% endif %}-->
-
-<!--    {% endfor %}-->
-
-<!--  {% endwith %}-->
-
-  {# Show notification bell if member.alertCount > 0 #}
-  {% if member.alertCount > 0 %}
-    <div style="position:absolute;margin-left: 21px;margin-top: -15px;">
-      <img src="{% static 'images/notification.png' %}" width="16">
-    </div>
-  {% endif %}
-
-  <div class="">{{ member.alertCount }}
-    <div class="tooltip">
-      <div style="overflow-y:scroll; height: 180px !important;">
-        <table class="table table-sm" style="font-size:12px;">
-          {% if member.alertCount == 0 %}
-            <tr><td colspan="2" align="center">No alert found</td></tr>
-          {% else %}
-            {% for alert in alertList %}
-              {% if member.medicaid_id == alert.medicaid_id and today|date:"U" <= alert.due_date|date:"U" %}
-                <tr>
-                  <td>
-                    {{ alert.alert }} - {{ alert.alert_type }}<br>
-
-                    {% if today|date:"U" > alert.due_date|date:"U" %}
-                        {{ alert.due_date|date:"m/d/y" }}  {# expired -> highlight #}
-                        {% with "#e63b3b !important" as color %}
-                        {% endwith %}
-                    {% else %}
-                        {{ alert.due_date|date:"m/d/y" }}  {# still valid #}
-                        {% with "" as color %}
-                        {% endwith %}
-                    {% endif %}
-                  </td>
-                  <td>
-                    <span style="background-color:{{ color }}" class="badge alert_bg tooltipbox">
-                      {{ alert.alert_status }}
-                    </span>
-                  </td>
-                </tr>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </table>
-      </div>
-    </div>
-  </div>
-
-</span>
-
-                    </td>
-
-                    <!-- Call Count -->
-                    <td>
-                      <a class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}');">
-                        {{ member.Call_count }}
-                      </a>
-                    </td>
-                     <td></td>
-                    <!-- Eligibility trst -->
-                    <td>
-                      {% if member.ELIG_EXP_DT %}
-                        {% if member.ELIG_EXP_DT < today %}
-                          <div align="center">
-                            <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-danger"></div>
-                          </div>
-                            {{ member.ELIG_EXP_DT|date:"m/d/Y" }}
-                        {% elif member.ELIG_EXP_DT <= today|add:"30 days" %}
-                          <div align="center">
-                            <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-warning"></div>
-                          </div>
-                            {{ member.ELIG_EXP_DT|date:"m/d/Y" }}
-                        {% endif %}
-
-                      {% endif %}
-                    </td>
-                     <td>{% if member.third_last_action_date %}
-                         {{ member.third_last_action_date|date:"m/d/Y" }}
-                        {% endif %}</td>
-                     <td>{% if member.second_last_action_date %}
-                         {{ member.second_last_action_date|date:"m/d/Y" }}
-                        {% endif %}</td>
-                     <td>{% if member.last_action_date %}
-                         {{ member.last_action_date|date:"m/d/Y" }}
-                        {% endif %}</td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                    <!-- Appointment -->
-                    <td>{% if member.appointment_date %}{{ member.appointment_date|date:"m/d/Y" }}{% endif %}</td>
-
-                    <!-- RSVP -->
-                    <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>
-
-                    <!-- Actions -->
-                    <td align="right">
-                      <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
-                        <i title="Member Details" class="fa fa-eye"></i>
-                      </a>
-                      <a target="_blank" href="{% url 'history' member.medicaid_id %}">
-                        <i title="Member History" class="fa fa-history"></i>
-                      </a>
-                      <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-          <!-- REFERRED LIST TAB -->
-          <div class="tab-pane " id="referred" role="tabpanel" aria-labelledby="referred-tab">
-            <table class="table table-borderless" id="transferList">
-              <thead>
-                <tr>
-                  <th>#MEMBER ID</th>
-                  <th>TRANSFERRED BY</th>
-                  <th>TRANSFERRED TO</th>
-                  <th>TRANSFER DATE</th>
-                  <th>TRANSFER REASON</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for ref in refared_member_list %}
-                  <tr>
-                    <td><a href="javascript:void(0);">#{{ ref.medicaid_id }}</a></td>
-                    <td>{{ ref.user_name }}</td>
-                    <td>{{ ref.medical_user }}</td>
-                    <td>{% if ref.add_date %}{{ ref.add_date|date:"m/d/Y" }}{% endif %}</td>
-                    <td>{{ ref.referring_reason }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-          <!-- TRANSPORTATION TAB -->
-          <div class="tab-pane " id="transportation" role="tabpanel" aria-labelledby="transportation-tab">
-            <table class="table table-striped table-bordered" id="transportation_prior_list_table_id">
-              <thead>
-                <tr>
-                  <th>MEMBER ID</th>
-                  <th>FIRST NAME</th>
-                  <th>LAST NAME</th>
-                  <th>PHONE</th>
-                  <th>ADDRESS</th>
-                  <th>DATE & TIME</th>
-                  <th>VENDOR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for transport in all_3day_transport_list %}
-                  <tr>
-                    <td>{{ transport.medicaid_id }}</td>
-                    <td>{{ transport.FIRST_NAME }}</td>
-                    <td>{{ transport.LAST_NAME }}</td>
-                    <td>{{ transport.HOME_PHONE }}</td>
-                    <td>{{ transport.ADDR1 }}</td>
-                    <td>
-                      {% if transport.action_date %}{{ transport.action_date|date:"m/d/Y" }}{% endif %}
-                      ({{ transport.action_time }})
-                    </td>
-                    <td>{{ transport.schedule_type }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-
-        </div><!-- End tab-content -->
-      </div>
-    </div>
-  </div>
-</div>
-
-         </div><!-- End Left side columns -->
-
-
-         <div class="col-lg-6">
-            <!-- Recent Activity -->
-            <div class="card">
-               <div class="filter">
-                  <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                     <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                     </li>
-                     <li><a class="dropdown-item" href="#">Today</a></li>
-                     <li><a class="dropdown-item" href="#">This Month</a></li>
-                     <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-               </div>
-
-                           <div class="card-body">
-              <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-              <div class="activity">
-                {% for recent in recent_activity %}
-
-                  <div class="activity-item row">
-                    <div class="activite-label col-lg-4">
-                      {{ recent.add_date|date:"M d Y H:i" }}
                     </div>
-                    <div class="col-lg-1">
-                      <i class="bi bi-circle-fill activity-badge text-primary align-self-start"></i>
-                    </div>
-                    <div class="activity-content col-lg-7">
-                      #{{ recent.medicaid_id }}: {{ recent.log_name }}, {{ recent.log_details }}
-                    </div>
-                  </div> <!-- End activity item-->
-                {% endfor %}
-              </div>
-            </div>
-            </div><!-- End Recent Activity -->
-         </div>
-
-         <!-- Right side columns -->
-         <div class="col-lg-6">
-
-            <!-- Alerts -->
-            <div class="card">
-               <div class="filter">
-                  <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                     <li class="dropdown-header text-start">
-                        <h6>Filter</h6>
-                     </li>
-                     <li><a class="dropdown-item" href="#">Today</a></li>
-                     <li><a class="dropdown-item" href="#">This Month</a></li>
-                     <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-               </div>
-                <div class="card-body">
-                  <h5 class="card-title">Alerts <span>| Today</span></h5>
-                  <div class="activity">
-                    <div class="row">
-                      {% for alert in alert_count %}
-                        <div class="col-lg-4 mt-2 mb-3" style="border-bottom: 1px solid #ccc;">
-                          {{ alert.alert }}
-                        </div>
-                        <div class="col-lg-2 mb-3" style="border-bottom: 1px solid #ccc;">
-                          <span class="badge alert_bg1">{{ alert.alert_count }}</span>
-                        </div>
-                      {% endfor %}
-
-                      {# If odd number of alerts, add blank columns #}
-                      {% if alert_count|length|divisibleby:2 == False %}
-                        <div class="col-lg-4 mt-2 mb-3" style="border-bottom: 1px solid #ccc;"></div>
-                        <div class="col-lg-2 mb-3" style="border-bottom: 1px solid #ccc;"></div>
-                      {% endif %}
-                    </div>
-                  </div>
+                    {% endfor %}
                 </div>
 
 
-            </div><!-- End Recent Activity -->
-         </div><!-- End Right side columns -->
+                <div class="row" >
+                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="card">
+                            <div class="card-body py-2">
+                                <div class="row" style="margin-top:.5 rem;">
+                                    <div class="col-6"> <h3 align="center">ENROLLED</h3> </div>
+                                    <div class="col-1" > : </div>
+                                    <div class="col-5"> <h3 align="center">{{ kpis_data.0.enrolledCnt }}</h3></div>
 
-      </div>
-   </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="card">
+                            <div class="card-body py-2">
+                                <div class="row" style="margin-top:.5 rem;">
+                                    <div class="col-6"> <h3 align="center">ENGAGED</h3> </div>
+                                    <div class="col-1"> : </div>
+                                    <div class="col-5"> <h3 align="center">{{ kpis_data.0.engagedCnt }}</h3></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <!-- Nav Tabs -->
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>
+                                    </li>
+                                </ul>
+                                <!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+                                <!--          <li class="nav-item" role="presentation">-->
+                                <!--            <button class="nav-link active" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>-->
+                                <!--          </li>-->
+                                <!--          <li class="nav-item" role="presentation">-->
+                                <!--            <button class="nav-link" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>-->
+                                <!--          </li>-->
+                                <!--          <li class="nav-item" role="presentation">-->
+                                <!--            <button class="nav-link" id="referred-tab" data-toggle="tab" data-target="#referred" type="button" role="tab" aria-controls="referred" aria-selected="false">TRANSFERRED LIST</button>-->
+                                <!--          </li>-->
+                                <!--          <li class="nav-item" role="presentation">-->
+                                <!--            <button class="nav-link" id="transportation-tab" data-toggle="tab" data-target="#transportation" type="button" role="tab" aria-controls="transportation" aria-selected="false">TRANSPORTATION LIST</button>-->
+                                <!--          </li>-->
+                                <!--        </ul>-->
+
+                                <div class="tab-content pt-2" id="myTabContent">
+
+                                    <!-- TASKS TAB -->
+                                    <div class="tab-pane " id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <table class="table table-borderless" id="tasks">
+                                            <thead>
+                                            <tr>
+                                                <th width="5%"></th>
+                                                <th>DATE</th>
+                                                <th>STATUS</th>
+                                                <th>ASSIGN TO</th>
+                                                <th>ADDED BY</th>
+                                                <th style="text-align:center;">COMPLETED DATE</th>
+                                                <th align="center">ACTION</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for task in task_list %}
+
+
+                                            <tr class="gradeX trbg">
+                                                <td align="center">
+                                                    <div style="border-radius:50%;
+              background-color:{{ task.color }};
+              width:14px;height:14px;">
+                                                    </div>
+                                                </td>
+
+                                                <td>{% if task.action_date %}{{ task.action_date|date:"m/d/Y" }}{% endif %}</td>
+                                                <td><a href="javascript:void(0);">{{ task.status }}</a></td>
+                                                <td>{{ task.FistName }} {{ task.LastName }}</td>
+                                                <td align="center">{{ task.initial }}</td>
+                                                <td align="center">{{ task.completed_date }}</td>
+                                                <td>
+                                                    {% if task.status != "Successful" and task.status != "Close" %}
+                                                    <a style="cursor:pointer;" title="Action Change" data-toggle="modal" data-backdrop="static" data-target="#action_change"
+                                                       onclick="action_change('Update','{{ task.action_date|date:'m/d/Y' }}','{{ task.id }}','{{ task.status }}','{{ task.action_note }}','{{ task.assign_to }}','{{ task.medicaid_id }}');">
+                                                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                                                    </a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- MEMBERS TAB -->
+                                    <div class="tab-pane show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                        <table class="table table-sm table-borderless" id="members">
+                                            <thead>
+                                            <tr>
+                                                <th>#MEMBER ID</th>
+                                                <th>NAME</th>
+                                                <th>PHONE</th>
+                                                <th>ALERT</th>
+                                                <th>#CALL</th>
+                                                <th></th>
+<!--                                                <th>ELIGIBILITY</th>-->
+                                                <th>RISK GAP</th>
+                                                <!--                                                <th>3RD CALL</th>-->
+                                                <!--                                                <th>2ND CALL</th>-->
+                                                <!--                                                <th>LAST CALL</th>-->
+<!--                                                <th>NEXT ACTIVITY</th>-->
+
+<!--                                                <th>APP. DATE</th>-->
+
+<!--                                                <th>EVENT DATE</th>-->
+
+                                                <th align="right">ACTION</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for member in members %}
+                                            <tr>
+                                                <th class="text-primary"> #{{ member.medicaid_id }}</th>
+                                                <td class="text-primary" style="text-transform:uppercase;">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}</td>
+                                                <td><a class="text-primary">{{ member.OTHER_PHONE|default:'' }}</a></td>
+
+                                                <!-- Alerts -->
+                                                <td>
+                      <span class="badge alert_bg1 wrapper">
+
+                                                <!--  {# Count alerts first #}-->
+                                                  <!--  {% with 0 as alertCount %}-->
+                                                  <!--    {% for alert in alertList %}-->
+
+                                                  <!--      {% if member.medicaid_id == alert.medicaid_id %}-->
+
+                                                  <!--        {% widthratio 1 1 1 as inc %} {# a trick to add numbers #}-->
+
+                                                  <!--        {% with alertCount|add:inc as alertCount %}{% endwith %}-->
+
+                                                  <!--      {% endif %}-->
+
+                                                  <!--    {% endfor %}-->
+
+                                                  <!--  {% endwith %}-->
+
+                                                      {# Show notification bell if member.alertCount > 0 #}
+                                                      {% if member.alertCount > 0 %}
+                                                        <div style="position:absolute;margin-left: 21px;margin-top: -15px;">
+                                                          <img src="{% static 'images/notification.png' %}" width="16">
+                                                        </div>
+                                                      {% endif %}
+
+                                                      <div style="line-height:25px;">{{ member.alertCount }}
+                                                        <div class="tooltip">
+                                                          <div style="overflow-y:scroll; height: 180px !important;">
+                                                            <table class="table table-sm" style="font-size:12px;">
+                                                              {% if member.alertCount == 0 %}
+                                                                <tr><td colspan="2" align="center">No alert found</td></tr>
+                                                              {% else %}
+                                                                {% for alert in alertList %}
+                                                                  {% if member.medicaid_id == alert.medicaid_id and today|date:"U" <= alert.due_date|date:"U" %}
+                                                                    <tr>
+                                                                      <td>
+                                                                        {{ alert.alert }} - {{ alert.alert_type }}<br>
+
+                                                                        {% if today|date:"U" > alert.due_date|date:"U" %}
+                                                                            {{ alert.due_date|date:"m/d/y" }}  {# expired -> highlight #}
+                                                                            {% with "#e63b3b !important" as color %}
+                                                                            {% endwith %}
+                                                                        {% else %}
+                                                                            {{ alert.due_date|date:"m/d/y" }}  {# still valid #}
+                                                                            {% with "" as color %}
+                                                                            {% endwith %}
+                                                                        {% endif %}
+                                                                      </td>
+                                                                      <td>
+                                                                        <span style="background-color:{{ color }}" class="badge alert_bg tooltipbox">
+                                                                          {{ alert.alert_status }}
+                                                                        </span>
+                                                                      </td>
+                                                                    </tr>
+                                                                  {% endif %}
+                                                                {% endfor %}
+                                                              {% endif %}
+                                                            </table>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+
+                                                    </span>
+
+                                                </td>
+
+                                                <!-- Call Count -->
+                                                <td>
+                                                    <a title="Call List" class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}');">
+                                                        {{ member.Call_count }}
+                                                    </a>
+                                                </td>
+                                                <td></td>
+                                                <!-- Eligibility trst -->
+<!--                                                <td>-->
+<!--                                                    {% if member.ELIG_EXP_DT %}-->
+<!--                                                    {% if member.ELIG_EXP_DT < today %}-->
+<!--                                                    <div align="center">-->
+<!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-danger"></div>-->
+<!--                                                    </div>-->
+<!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
+<!--                                                    {% elif member.ELIG_EXP_DT <= today|add:"30 days" %}-->
+<!--                                                    <div align="center">-->
+<!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-warning"></div>-->
+<!--                                                    </div>-->
+<!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
+<!--                                                    {% endif %}-->
+
+<!--                                                    {% endif %}-->
+<!--                                                </td>-->
+                                                <td>
+                                                    <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}');">
+                                                        {{ member.risk_gap_count }}
+                                                    </a>
+                                                </td>
+<!--                                                <td>{% if member.third_last_action_date %}-->
+<!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
+<!--                                                    {% endif %}</td>-->
+<!--                                                <td>{% if member.second_last_action_date %}-->
+<!--                                                    {{ member.second_last_action_date|date:"m/d/Y" }}-->
+<!--                                                    {% endif %}</td>-->
+<!--                                                <td>{% if member.last_action_date %}-->
+<!--                                                    {{ member.last_action_date|date:"m/d/Y" }}-->
+<!--                                                    {% endif %}</td>-->
+<!--                                                <td></td>-->
+
+                                                <!-- Appointment -->
+<!--                                                <td>{% if member.appointment_date %}{{ member.appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
+                                                <!-- RSVP -->
+<!--                                                <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
+                                                <!-- Actions -->
+                                                <td >
+                                                    <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
+                                                        <i title="Member Details" class="fa fa-eye"></i>
+                                                    </a>&nbsp;&nbsp;
+                                                    <a target="_blank" href="{% url 'history' member.medicaid_id %}">
+                                                        <i title="Member History" class="fa fa-history"></i>
+<!--                                                    </a>&nbsp;&nbsp;-->
+<!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
+<!--                                               -->
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- REFERRED LIST TAB -->
+                                    <div class="tab-pane " id="referred" role="tabpanel" aria-labelledby="referred-tab">
+                                        <table class="table table-borderless" id="transferList">
+                                            <thead>
+                                            <tr>
+                                                <th>#MEMBER ID</th>
+                                                <th>TRANSFERRED BY</th>
+                                                <th>TRANSFERRED TO</th>
+                                                <th>TRANSFER DATE</th>
+                                                <th>TRANSFER REASON</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for ref in refared_member_list %}
+                                            <tr>
+                                                <td><a href="javascript:void(0);">#{{ ref.medicaid_id }}</a></td>
+                                                <td>{{ ref.user_name }}</td>
+                                                <td>{{ ref.medical_user }}</td>
+                                                <td>{% if ref.add_date %}{{ ref.add_date|date:"m/d/Y" }}{% endif %}</td>
+                                                <td>{{ ref.referring_reason }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- TRANSPORTATION TAB -->
+                                    <div class="tab-pane " id="transportation" role="tabpanel" aria-labelledby="transportation-tab">
+                                        <table class="table table-striped table-bordered" id="transportation_prior_list_table_id">
+                                            <thead>
+                                            <tr>
+                                                <th>MEMBER ID</th>
+                                                <th>FIRST NAME</th>
+                                                <th>LAST NAME</th>
+                                                <th>PHONE</th>
+                                                <th>ADDRESS</th>
+                                                <th>DATE & TIME</th>
+                                                <th>VENDOR</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for transport in all_3day_transport_list %}
+                                            <tr>
+                                                <td>{{ transport.medicaid_id }}</td>
+                                                <td>{{ transport.FIRST_NAME }}</td>
+                                                <td>{{ transport.LAST_NAME }}</td>
+                                                <td>{{ transport.HOME_PHONE }}</td>
+                                                <td>{{ transport.ADDR1 }}</td>
+                                                <td>
+                                                    {% if transport.action_date %}{{ transport.action_date|date:"m/d/Y" }}{% endif %}
+                                                    ({{ transport.action_time }})
+                                                </td>
+                                                <td>{{ transport.schedule_type }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div><!-- End tab-content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- End Left side columns -->
+
+
+            <div class="col-lg-6">
+                <!-- Recent Activity -->
+                <div class="card">
+<!--                    <div class="filter">-->
+<!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
+<!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
+<!--                            <li class="dropdown-header text-start">-->
+<!--                                <h6>Filter</h6>-->
+<!--                            </li>-->
+<!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+
+                    <div class="card-body">
+                        <h5 class="card-title">Recent Activity <span>| Today</span></h5>
+                        <div class="activity">
+                            {% for recent in recent_activity %}
+
+                            <div class="activity-item row">
+                                <div class="activite-label col-lg-4">
+                                    {{ recent.add_date|date:"M d Y H:i" }}
+                                </div>
+                                <div class="col-lg-1">
+                                    <i class="bi bi-circle-fill activity-badge text-primary align-self-start"></i>
+                                </div>
+                                <div class="activity-content col-lg-7">
+                                    #{{ recent.medicaid_id }}: {{ recent.log_name }}, {{ recent.log_details }}
+                                </div>
+                            </div> <!-- End activity item-->
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div><!-- End Recent Activity -->
+            </div>
+
+            <!-- Right side columns -->
+            <div class="col-lg-6">
+
+                <!-- Alerts -->
+                <div class="card">
+<!--                    <div class="filter">-->
+<!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
+<!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
+<!--                            <li class="dropdown-header text-start">-->
+<!--                                <h6>Filter</h6>-->
+<!--                            </li>-->
+<!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                    <div class="card-body">
+                        <h5 class="card-title">Alerts <span>| Today</span></h5>
+                        <div class="activity">
+                            <div class="row">
+                                {% for alert in alert_count %}
+                                <div class="col-lg-4 mt-2 py-3" style="border-bottom: 1px solid #ccc;">
+                                    {{ alert.alert }}
+                                </div>
+                                <div class="col-lg-2 mb-3" style="border-bottom: 1px solid #ccc;">
+                                    <span class="badge alert_bg1">{{ alert.alert_count }}</span>
+                                </div>
+                                {% endfor %}
+
+                                {# If odd number of alerts, add blank columns #}
+                                {% if alert_count|length|divisibleby:2 == False %}
+                                <div class="col-lg-4 mt-2 mb-3" style="border-bottom: 1px solid #ccc;"></div>
+                                <div class="col-lg-2 mb-3" style="border-bottom: 1px solid #ccc;"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div><!-- End Recent Activity -->
+            </div><!-- End Right side columns -->
+
+        </div>
+    </section>
 </main>
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><span></span> Engagement List</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-sm">
-          <thead>
-            <tr>
-              <th>Sl.No</th>
-              <th>DATE</th>
-              <th>ACTION</th>
-              <th>OUTCOME</th>
-              <th>NOTE</th>
-            </tr>
-          </thead>
-          <tbody id="callList_table_body">
-            <!-- dynamically injected rows -->
-          </tbody>
-        </table>
-      </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><span></span> CALL LIST</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>DATE</th>
+                        <th>ACTION</th>
+                        <th>OUTCOME</th>
+                        <th>NOTE</th>
+                    </tr>
+                    </thead>
+                    <tbody id="callList_table_body">
+                    <!-- dynamically injected rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <!-- Call list modal end -->
+
+<!-- Gap list modal start -->
+<div class="modal " id="gapList" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><span></span> GAP LIST</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th>DIAG SOURCE</th>
+                        <th>DIAG CODE</th>
+                        <th>DIAG DESC</th>
+                        <th>HCC CATEGORY</th>
+                        <th>HCC MODEL</th>
+                        <th>STATUS</th>
+                    </tr>
+                    </thead>
+                    <tbody id="gapList_table_body">
+                    <!-- dynamically injected rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Call list modal end -->
+
 <!-- Add Action Modal Start -->
 <div class="modal " id="largeModal" tabindex="-1" data-bs-backdrop="false">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Action</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="card">
-          <div class="card-body">
-
-            <!-- Bordered Tabs -->
-            <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab">To-Do</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab">Appointment</button>
-              </li>
-            </ul>
-
-            <div class="tab-content pt-2" id="borderedTabContent">
-
-              <!-- ================= To-Do Tab ================= -->
-              <div class="tab-pane  show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
-                <form method="post" enctype="multipart/form-data" id="add_action" onsubmit="return fileValidation();">
-                  {% csrf_token %}
-                  <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
-                  <input type="hidden" name="medicaid_id" id="medicaid_id">
-                  <input type="hidden" name="number_of_attempt" value="">
-                  <input type="hidden" name="visit_alertname" id="visit_alertname">
-                  <input type="hidden" name="action_type_name" id="action_type_name">
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-select" name="action_id" id="action_id" required onchange="set_scheduled_action_status(this.value);">
-                        <option value="">Activity Category</option>
-                        {% for region in sel_panel_list %}
-                          <option value="{{ region.id }}">{{ region.Panel_Name }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-select" name="panel_id" id="panel_id" required>
-                        <option value="">Activity Type</option>
-                        {% for type in sel_panel_type %}
-                          <option value="{{ type.id }}">{{ type.action_type }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input placeholder="Action Date" type="text" name="action_date" id="action_date" class="form-control datepicker" required>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-select" name="action_result_id" id="action_result_id" required>
-                        <option value="">Status</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-select" name="action_status" id="action_status" required>
-                        <option value="Scheduled">Scheduled</option>
-                        <option value="Success">Success</option>
-                        <option value="Failure">Failure</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note"></textarea>
-                    </div>
-                  </div>
-
-                  {% if member_need_visit %}
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <table width="100%">
-                        <tr>
-                          <td>
-                            <select class="form-select" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
-                              <option value="">SELECT ALERT</option>
-                              {% for visit in member_need_visit %}
-                                <option value="{{ visit.alert_id }}/{{ visit.id }}">
-                                  {{ visit.alert }} ({{ visit.alert_type }} - {{ visit.created_date }})
-                                </option>
-                              {% endfor %}
-                            </select>
-                          </td>
-                          <td>
-                            <select class="form-select" name="visit_alert_status_id">
-                              {% for alertStatus in alert_statusList %}
-                                {% if alertStatus.id == 28 %}
-                                  <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
-                                {% endif %}
-                              {% endfor %}
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                  {% endif %}
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input class="form-control" type="file" name="file_visit_update" accept="application/pdf" disabled>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12" align="right">
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <!-- ================= Appointment Tab ================= -->
-              <div class="tab-pane " id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
-                <form method="post" enctype="multipart/form-data" id="appoinmentment_add_action">
-                  {% csrf_token %}
-                  <input type="hidden" name="provider_id" id="provider_id">
-                  <input type="hidden" name="vendor_id" id="vendor_id">
-                  <input type="hidden" name="appointment_medicaid_id" id="appointment_medicaid_id">
-                  <input type="hidden" name="app_alertname" id="app_alertname">
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <div id="vendor_tab">
-                        <table width="100%">
-                          <tr>
-                            <td width="90%">
-                              <input type='text' class="form-control" name="vendor_name" id="vendor_name" placeholder="Search Vendor">
-                            </td>
-                            <td width="10%">
-                              <input type="button" class="btn btn-primary" value="Search" onclick="get_vendor_list();" style="margin-left: 10px;">
-                            </td>
-                          </tr>
-                        </table>
-                        <div style="float: left;display: none;" id="vendor_lebel"><b>Vendor List</b></div>
-                        <div style="clear:both;"></div>
-                      </div>
-                      <div id="vendor_replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <div id="doctor_id" style="display: none;">
-                        <table width="100%">
-                          <tr>
-                            <td width="90%">
-                              <input type='text' class="form-control" name="doctor_name" id="doctor_name" placeholder="Search Doctor">
-                            </td>
-                            <td width="10%">
-                              <input type="button" class="btn btn-primary" value="Search" onclick="get_doctor_list();" style="margin-left: 10px;">
-                            </td>
-                          </tr>
-                        </table>
-                        <div style="float: left;display: none;" id="doc_lebel"><b>Doctor List</b></div>
-                        <div style="clear:both;"></div>
-                      </div>
-                      <div id="replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input type='text' class="form-control datepicker" name="appointment_action_date" id="appointment_action_date" placeholder="Appointment Date" required>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input type='time' class="form-control" name="appointment_action_time" id="appointment_action_time" placeholder="Appointment Time">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input type="text" name="place_of_appointment" id="place_of_appointment" class="form-control" placeholder="Place of Appointment">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-control" name="transportation_needed" id="transportation_needed" required>
-                        <option value="">Transportation Needed</option>
-                        <option value="No">No</option>
-                        <option value="Yes">Yes</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <select class="form-control" name="appointment_action" id="appointment_action" required>
-                        <option value="Failure">Appointment Failure</option>
-                        <option value="Rescheduled">Appointment Rescheduled</option>
-                        <option value="Scheduled" selected>Appointment Scheduled</option>
-                        <option value="Success">Appointment Success</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <textarea class="form-control" name="appointment_action_note" id="appointment_action_note" required placeholder="Note"></textarea>
-                    </div>
-                  </div>
-
-                  {% if member_last_alert %}
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <table width="100%">
-                        <tr>
-                          <td>
-                            <select class="form-control" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
-                              <option value="">SELECT ALERT</option>
-                              {% for value in member_last_alert %}
-                                <option value="{{ value.alert_id }}/{{ value.id }}">
-                                  {{ value.alert }} ({{ value.alert_type }} - {{ value.created_date }})
-                                </option>
-                              {% endfor %}
-                            </select>
-                          </td>
-                          <td>
-                            <select class="form-control" name="app_alert_status_id">
-                              {% for alertStatus in alert_statusList %}
-                                {% if alertStatus.id == 5 %}
-                                  <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
-                                {% endif %}
-                              {% endfor %}
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                  {% endif %}
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12">
-                      <input class="form-control" type="file" name="file_appointment" id="file_appointment" accept="application/pdf">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <div class="col-sm-12" align="right">
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> Add Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab">To-Do</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab">Appointment</button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content pt-2" id="borderedTabContent">
+
+                            <!-- ================= To-Do Tab ================= -->
+                            <div class="tab-pane  show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                                <form method="post" enctype="multipart/form-data" id="add_action" onsubmit="return fileValidation();">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
+                                    <input type="hidden" name="medicaid_id" id="medicaid_id">
+                                    <input type="hidden" name="number_of_attempt" value="">
+                                    <input type="hidden" name="visit_alertname" id="visit_alertname">
+                                    <input type="hidden" name="action_type_name" id="action_type_name">
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" name="action_id" id="action_id" required onchange="set_scheduled_action_status(this.value);">
+                                                <option value="">Activity Category</option>
+                                                {% for region in sel_panel_list %}
+                                                <option value="{{ region.id }}">{{ region.Panel_Name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" name="panel_id" id="panel_id" required>
+                                                <option value="">Activity Type</option>
+                                                {% for type in sel_panel_type %}
+                                                <option value="{{ type.id }}">{{ type.action_type }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input placeholder="Action Date" type="text" name="action_date" id="action_date" class="form-control datepicker" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" name="action_result_id" id="action_result_id" required>
+                                                <option value="">Status</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-select" name="action_status" id="action_status" required>
+                                                <option value="Scheduled">Scheduled</option>
+                                                <option value="Success">Success</option>
+                                                <option value="Failure">Failure</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note"></textarea>
+                                        </div>
+                                    </div>
+
+                                    {% if member_need_visit %}
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <select class="form-select" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
+                                                            <option value="">SELECT ALERT</option>
+                                                            {% for visit in member_need_visit %}
+                                                            <option value="{{ visit.alert_id }}/{{ visit.id }}">
+                                                                {{ visit.alert }} ({{ visit.alert_type }} - {{ visit.created_date }})
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-select" name="visit_alert_status_id">
+                                                            {% for alertStatus in alert_statusList %}
+                                                            {% if alertStatus.id == 28 %}
+                                                            <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input class="form-control" type="file" name="file_visit_update" accept="application/pdf" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12" align="right">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- ================= Appointment Tab ================= -->
+                            <div class="tab-pane " id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <form method="post" enctype="multipart/form-data" id="appoinmentment_add_action">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="provider_id" id="provider_id">
+                                    <input type="hidden" name="vendor_id" id="vendor_id">
+                                    <input type="hidden" name="appointment_medicaid_id" id="appointment_medicaid_id">
+                                    <input type="hidden" name="app_alertname" id="app_alertname">
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <div id="vendor_tab">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="90%">
+                                                            <input type='text' class="form-control" name="vendor_name" id="vendor_name" placeholder="Search Vendor">
+                                                        </td>
+                                                        <td width="10%">
+                                                            <input type="button" class="btn btn-primary" value="Search" onclick="get_vendor_list();" style="margin-left: 10px;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div style="float: left;display: none;" id="vendor_lebel"><b>Vendor List</b></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                            <div id="vendor_replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <div id="doctor_id" style="display: none;">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="90%">
+                                                            <input type='text' class="form-control" name="doctor_name" id="doctor_name" placeholder="Search Doctor">
+                                                        </td>
+                                                        <td width="10%">
+                                                            <input type="button" class="btn btn-primary" value="Search" onclick="get_doctor_list();" style="margin-left: 10px;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div style="float: left;display: none;" id="doc_lebel"><b>Doctor List</b></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                            <div id="replace_id" style="height: 120px;display: none; overflow-y: scroll;font-size: 14px;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input type='text' class="form-control datepicker" name="appointment_action_date" id="appointment_action_date" placeholder="Appointment Date" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input type='time' class="form-control" name="appointment_action_time" id="appointment_action_time" placeholder="Appointment Time">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input type="text" name="place_of_appointment" id="place_of_appointment" class="form-control" placeholder="Place of Appointment">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-control" name="transportation_needed" id="transportation_needed" required>
+                                                <option value="">Transportation Needed</option>
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-control" name="appointment_action" id="appointment_action" required>
+                                                <option value="Failure">Appointment Failure</option>
+                                                <option value="Rescheduled">Appointment Rescheduled</option>
+                                                <option value="Scheduled" selected>Appointment Scheduled</option>
+                                                <option value="Success">Appointment Success</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <textarea class="form-control" name="appointment_action_note" id="appointment_action_note" required placeholder="Note"></textarea>
+                                        </div>
+                                    </div>
+
+                                    {% if member_last_alert %}
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <select class="form-control" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
+                                                            <option value="">SELECT ALERT</option>
+                                                            {% for value in member_last_alert %}
+                                                            <option value="{{ value.alert_id }}/{{ value.id }}">
+                                                                {{ value.alert }} ({{ value.alert_type }} - {{ value.created_date }})
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control" name="app_alert_status_id">
+                                                            {% for alertStatus in alert_statusList %}
+                                                            {% if alertStatus.id == 5 %}
+                                                            <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
+                                                            {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <input class="form-control" type="file" name="file_appointment" id="file_appointment" accept="application/pdf">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12" align="right">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- End Add Action Modal -->
 
 
 <script type="text/javascript">
-  $('#members').DataTable({
-    order: [[3, 'asc']],  // default sort on 4th column (index 3)
-    columnDefs: [{
-      targets: [5, 10, 12, 14],  // hide multiple columns
-      visible: false
-    }]
-});
-  $('#tasks').DataTable();
-  $('#transferList').DataTable();
-  $('#transportation_prior_list_table_id').DataTable();
+    $('#members').DataTable({
+      order: [[3, 'asc']],  // default sort on 4th column (index 3)
+      columnDefs: [{
+        targets: [5],  // hide multiple columns
+        visible: false
+      }]
+  });
+    $('#tasks').DataTable();
+    $('#transferList').DataTable();
+    $('#transportation_prior_list_table_id').DataTable();
 
-<!--  $('.datepicker').datepicker({ changeMonth: true,changeYear: true });-->
-function showCallList(medicaid_id) {
-  if (medicaid_id) {
-    $.ajax({
-      type: "POST",
-      url: "{% url 'get_call_history' %}",   // Django URL
-      data: {
-        medicaid_id: medicaid_id,
-        csrfmiddlewaretoken: '{{ csrf_token }}'   // Django CSRF token
-      },
-      success: function (response) {
-        if (response.statusCode === 200 && response.data.length > 0) {
-          $("#callList_table_body").empty();
 
-          response.data.forEach((row, i) => {
-            let mydate = new Date(row.action_date);
-            let action_date =
-              (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
+  function showCallList(medicaid_id) {
+    if (medicaid_id) {
+      $.ajax({
+        type: "POST",
+        url: "{% url 'get_call_history' %}",   // Django URL
+        data: {
+          medicaid_id: medicaid_id,
+          csrfmiddlewaretoken: '{{ csrf_token }}'   // Django CSRF token
+        },
+        success: function (response) {
+          if (response.statusCode === 200 && response.data.length > 0) {
+            $("#callList_table_body").empty();
 
-            // ✅ Handle null values (if null → empty string)
-            let action_type = row.action_type ?? "";
-            let action_result = row.action_result ?? "";
-            let action_note = row.action_note ?? "";
+            response.data.forEach((row, i) => {
+              let mydate = new Date(row.action_date);
+              let action_date =
+                (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
 
-            $("#callList_table_body").append(
-              "<tr><td>" + (i + 1) + "</td>" +
-              "<td>" + action_date + "</td>" +
-              "<td>" + action_type + "</td>" +
-              "<td>" + action_result + "</td>" +
-              "<td>" + action_note + "</td></tr>"
+              // ✅ Handle null values (if null → empty string)
+              let action_type = row.action_type ?? "";
+              let action_result = row.action_result ?? "";
+              let action_note = row.action_note ?? "";
+
+              $("#callList_table_body").append(
+                "<tr><td>" + (i + 1) + "</td>" +
+                "<td>" + action_date + "</td>" +
+                "<td>" + action_type + "</td>" +
+                "<td>" + action_result + "</td>" +
+                "<td>" + action_note + "</td></tr>"
+              );
+            });
+          } else {
+            $("#callList_table_body").html(
+              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
             );
-          });
-        } else {
-          $("#callList_table_body").html(
-            "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
-          );
-        }
+          }
 
-        // ✅ Bootstrap 5 modal show
-        var myModal = new bootstrap.Modal(document.getElementById('callList'));
-        myModal.show();
-      },
-      error: function () {
-        alert("Action Result Not found.");
-      }
-    });
-  }
-}
-   function addAction(medicaid_id) {
-      //alert(medicaid_id);
-      $('#action_id').val(5);
-      $('#panel_id').val(2);
-      $('#action_date').val('');
-      $('#medicaid_id').val(medicaid_id)
-      $('#appointment_medicaid_id').val(medicaid_id)
-      $('#rsvp_appointment_medicaid_id').val(medicaid_id)
-      //$('#medicaid_id').val(medicaid_id)
-      $("#largeModal").modal('show');
+          // ✅ Bootstrap 5 modal show
+          var myModal = new bootstrap.Modal(document.getElementById('callList'));
+          myModal.show();
+        },
+        error: function () {
+          alert("Action Result Not found.");
+        }
+      });
     }
+  }
+
+
+  function showGapList(medicaid_id) {
+  //alert(medicaid_id)
+    if (medicaid_id) {
+      $.ajax({
+        type: "POST",
+        url: "{% url 'get_gap_list' %}",   // Django URL
+        data: {
+          medicaid_id: medicaid_id
+        },
+        success: function (response) {
+          if (response.statusCode === 200 && response.data.length > 0) {
+            $("#gapList_table_body").empty();
+
+            response.data.forEach((row, i) => {
+              let mydate = new Date(row.RELEVANT_DATE);
+              let action_date =
+                (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
+
+              // ✅ Handle null values (if null → empty string)
+              let DIAG_CODE = row.DIAG_CODE ?? "";
+              let DIAG_DESC = row.DIAG_DESC ?? "";
+              let HCC_CATEGORY = row.HCC_CATEGORY ?? "";
+              let STATUS = row.STATUS ?? "";
+
+              $("#gapList_table_body").append(
+                "<tr><td>" + (i + 1) + "</td>" +
+                "<td>" + action_date + "</td>" +
+                "<td>" + DIAG_CODE + "</td>" +
+                "<td>" + DIAG_DESC + "</td>" +
+                "<td>" + HCC_CATEGORY + "</td>" +
+                "<td>" + STATUS + "</td></tr>"
+              );
+            });
+          } else {
+            $("#gapList_table_body").html(
+              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+            );
+          }
+
+          // ✅ Bootstrap 5 modal show
+          var myModal = new bootstrap.Modal(document.getElementById('gapList'));
+          myModal.show();
+        },
+        error: function () {
+          alert("Action Result Not found.");
+        }
+      });
+    }
+  }
+     function addAction(medicaid_id) {
+        //alert(medicaid_id);
+        $('#action_id').val(5);
+        $('#panel_id').val(2);
+        $('#action_date').val('');
+        $('#medicaid_id').val(medicaid_id)
+        $('#appointment_medicaid_id').val(medicaid_id)
+        $('#rsvp_appointment_medicaid_id').val(medicaid_id)
+        //$('#medicaid_id').val(medicaid_id)
+        $("#largeModal").modal('show');
+      }
 
 </script>
 {% endblock %}
