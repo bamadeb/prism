@@ -482,6 +482,7 @@
                 <table class="table table-sm">
                     <thead>
                     <tr>
+                        <th></th>
                         <th>RELEVANT DATE</th>
                         <th>HCC CATEGORY</th>
                         <th>HCC MODEL</th>
@@ -863,15 +864,16 @@
               let DIAG_DESC = row.DIAG_DESC ?? "";
               let HCC_CATEGORY = row.HCC_CATEGORY ?? "";
               let STATUS = row.STATUS ?? "";
+               let HCC_MODEL = row.HCC_MODEL ?? "";
 
               $("#gapList_table_body").append(
                 "<tr><td>" + (i + 1) + "</td>" +
                 "<td>" + action_date + "</td>" +
                 "<td>" + HCC_CATEGORY + "</td>" +
                 "<td>" + HCC_MODEL + "</td>" +
-                "<td>" + STATUS + "</td></tr>"+
+                "<td>" + STATUS + "</td>"+
                 "<td>" + DIAG_CODE + "</td>" +
-                "<td>" + DIAG_DESC + "</td>" +
+                "<td>" + DIAG_DESC + "</td></tr>"
               );
             });
           } else {
