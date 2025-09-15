@@ -12,7 +12,11 @@ from django.contrib import messages
 from django.views.decorators.cache import never_cache, cache_control
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+import csv
+import io
+from django.shortcuts import render
+import uuid
+from datetime import datetime
 # Suppress the InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -1034,3 +1038,231 @@ def update_member_info(request):
         # You can also show a message or redirect to an error page
 
     return redirect("memberdetails", medicaid_id=request.POST.get("medicaid_id"))
+def processmember(request):
+    if not request.session.get('is_logged_in', False):
+        return render(request, 'login.html')
+
+    if request.method == "POST" and 'file' in request.FILES:
+        session_id = str(uuid.uuid4())
+        uploaded_file = request.FILES['file']
+
+        decoded_file = uploaded_file.read().decode('utf-8')
+        io_string = io.StringIO(decoded_file)
+
+        reader = csv.DictReader(io_string)
+
+        # Map CSV headers → DB keys
+        column_mapping = {
+            "SUBSCRIBER_ID": "SUBSCRIBER_NUMBER",
+            "FIRST_NM": "FIRST_NAME",
+            "MIDDLE_NM": "MIDDLE_NAME",
+            "LAST_NM": "LAST_NAME",
+            "MEDICARE_ID": "MEDICARE_NO",
+            "MEDICAID_ID": "RECIP_NO",
+            "DT_OF_BIRTH": "BIRTH",
+            "SEX": "SEX",
+            "ADDRESS_1": "OTHER_ADDR1",
+            "ADDRESS_2": "OTHER_ADDR2",
+            "CITY": "OTHER_CITY",
+            "STATE": "OTHER_STATE",
+            "ZIP_CODE": "OTHER_ZIP",
+            "HOME_TELEPHONE": "OTHER_PHONE",
+            "ENROLL_DT": "EFFCT_DT",
+            "DISENROLL_DT": "PROP_DISENROLL_DATE",
+            "DISENROLL_RSN_CD": "PROP_DISENR_RSN"
+        }
+
+        data = []
+        total_inserted_members = 0
+        #processSuccessMsg = ""
+        for row in reader:
+            filtered_row = {
+                new_key: row.get(old_key, "")
+                for old_key, new_key in column_mapping.items()
+            }
+            data.append(filtered_row)
+
+        insertDataArray = []
+        insertOutreachArray = []
+
+        for idx, row in enumerate(data):
+            # --- Members table row ---
+            member_row = {
+                "SUBSCRIBER_NUMBER": row["SUBSCRIBER_NUMBER"],
+                "FIRST_NAME": row["FIRST_NAME"],
+                "MIDDLE_NAME": row["MIDDLE_NAME"],
+                "LAST_NAME": row["LAST_NAME"],
+                "MEDICARE_NO": row["MEDICARE_NO"],
+                "RECIP_NO": row["RECIP_NO"],
+                "MEM_NO": row["RECIP_NO"],
+                "BIRTH": clean_date(row["BIRTH"]),
+                "SEX": row["SEX"],
+                "OTHER_ADDR1": row["OTHER_ADDR1"],
+                "OTHER_ADDR2": row["OTHER_ADDR2"],
+                "OTHER_CITY": row["OTHER_CITY"],
+                "OTHER_STATE": row["OTHER_STATE"],
+                "OTHER_ZIP": row["OTHER_ZIP"],
+                "OTHER_PHONE": row["OTHER_PHONE"],
+                "EFFCT_DT": clean_date(row["EFFCT_DT"]),
+                "PROP_DISENR_RSN": row["PROP_DISENR_RSN"],
+                "INSERT_SESSION_ID": session_id
+            }
+            insertDataArray.append(member_row)
+
+            # --- Outreach members row ---
+            care_coordinator_id = 1 if idx % 2 == 0 else 2
+            outreach_row = {
+                "medicaid_id": row["RECIP_NO"],
+                "mem_type": "OUTREACH",
+                "current_session": session_id,
+                "Care_Coordinator_id": care_coordinator_id,
+                "language": "01",
+                "zipcode": row["OTHER_ZIP"]
+            }
+            insertOutreachArray.append(outreach_row)
+
+        # --- Helper to split into batches of 1000 ---
+        def chunked(iterable, size=1000):
+            for i in range(0, len(iterable), size):
+                yield iterable[i:i + size]
+
+        # --- Insert Members ---
+        for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
+            print(f"Processing MEM_MEMBERS batch {batch_num}, rows: {len(batch)}")
+            apidata = {
+                "table_name": "MEM_MEMBERS",
+                "insertDataArray": batch,
+            }
+            insertresult = api_call(apidata, "prismMultipleinsert")
+
+        # --- Insert Outreach Members ---
+        for batch_num, batch in enumerate(chunked(insertOutreachArray, 1000), start=1):
+            print(f"Processing MEM_OUTREACH_MEMBERS batch {batch_num}, rows: {len(batch)}")
+            apidata = {
+                "table_name": "MEM_OUTREACH_MEMBERS",
+                "insertDataArray": batch,
+            }
+            insertresult = api_call(apidata, "prismMultipleinsert")
+            # If API succeeded → count these rows
+            if insertresult.get("statusCode") == 200:
+                total_inserted_members += len(batch)
+        messages.success(
+            request,
+            f"{total_inserted_members} members processed successfully."
+        )
+    return render(request, 'processmember.html', {
+        'pageTitle': "PROCESS MEMBER",
+    })
+def processriskgap(request):
+    if not request.session.get('is_logged_in', False):
+        return render(request, 'login.html')
+    data = []
+    total_inserted_gaps = 0
+    if request.method == "POST":
+        if 'file' in request.FILES:
+            session_id = str(uuid.uuid4())  # same for this file upload
+            uploaded_file = request.FILES['file']
+
+            decoded_file = uploaded_file.read().decode('utf-8')
+            io_string = io.StringIO(decoded_file)
+
+            reader = csv.DictReader(io_string)
+
+            # Map CSV headers → desired keys
+            column_mapping = {
+                "PAT_ID": "PAT_ID",
+                "MBR_ID": "SUBSCRIBER_NUMBER",
+                "PRODUCT_TYPE": "PRODUCT_TYPE",
+                "HCC_CATEGORY": "HCC_CATEGORY",
+                "HCC_MODEL": "HCC_MODEL",
+                "STATUS": "STATUS",
+                "RELEVANT_DATE": "RELEVANT_DATE",
+                "DIAG_SOURCE": "DIAG_SOURCE",
+                "DIAG_CODE": "DIAG_CODE",
+                "DIAG_DESC": "DIAG_DESC",
+                "PROV_SPECIALTY": "PROV_SPECIALTY"
+            }
+
+            # Extract only mapped columns
+            for row in reader:
+                filtered_row = {
+                    new_key: row.get(old_key, "")
+                    for old_key, new_key in column_mapping.items()
+                }
+                data.append(filtered_row)
+
+            insertDataArray = []
+            for row in data:
+                member_row = {
+                    "PAT_ID": row["PAT_ID"],
+                    "SUBSCRIBER_NUMBER": row["SUBSCRIBER_NUMBER"],
+                    "PRODUCT_TYPE": row["PRODUCT_TYPE"],
+                    "HCC_CATEGORY": row["HCC_CATEGORY"],
+                    "HCC_MODEL": row["HCC_MODEL"],
+                    "STATUS": row["STATUS"],
+                    "RELEVANT_DATE": clean_date(row["RELEVANT_DATE"]),
+                    "DIAG_SOURCE": row["DIAG_SOURCE"],
+                    "DIAG_CODE": row["DIAG_CODE"],
+                    "DIAG_DESC": escape_sql_string(row["DIAG_DESC"]),
+                    "PROV_SPECIALTY": row["PROV_SPECIALTY"],
+                    "INSERT_SESSION_ID": session_id
+                }
+                insertDataArray.append(member_row)
+            #insertDataArray = insertDataArray[:500]
+            # --- Split into batches of 1000 rows ---
+            def chunked(iterable, size=1000):
+                for i in range(0, len(iterable), size):
+                    yield iterable[i:i + size]
+
+            # Send batches
+            batch_num = 0
+            for batch in chunked(insertDataArray, 1000):
+                batch_num += 1
+                print(f"Processing batch {batch_num}, rows: {len(batch)}")
+
+                apidata = {
+                    "table_name": "MEM_RISK_GAP",
+                    "insertDataArray": batch,
+                }
+                insertresult = api_call(apidata, "prismMultipleinsert")
+                print("Renamed Data:", insertresult)
+                # If API succeeded → count these rows
+                if insertresult.get("statusCode") == 200:
+                    total_inserted_gaps += len(batch)
+            messages.success(
+                request,
+                f"{total_inserted_gaps} risk gaps processed successfully."
+            )
+            #print("Renamed Data:", insertDataArray[:5])
+    return render(request, 'processriskgap.html', {
+        'pageTitle': "PROCESS RISK GAP",
+
+    })
+def escape_sql_string(value):
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value.replace("'", "''")
+    return value
+def clean_date(value):
+    if not value or value.strip().upper() in ["NULL", "NONE", ""]:
+        return None  # send NULL instead of string
+
+    possible_formats = [
+        "%Y-%m-%d",   # 1979-01-01
+        "%m/%d/%Y",   # 01/01/1979
+        "%m/%d/%y",   # 01/01/79
+        "%d-%m-%Y",   # 01-01-1979
+    ]
+
+    for fmt in possible_formats:
+        try:
+            dt = datetime.strptime(value.strip(), fmt)
+            # Ensure within smalldatetime range
+            if 1900 <= dt.year <= 2079:
+                return dt.strftime("%Y-%m-%d")
+            return None
+        except ValueError:
+            continue
+
+    return None
