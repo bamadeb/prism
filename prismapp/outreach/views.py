@@ -1267,3 +1267,9 @@ def clean_date(value):
             continue
 
     return None
+
+
+def star_performance(request):
+    return render(request, 'star_performance.html', {
+        'pageTitle': "STAR PERFORMANCE",
+    })

@@ -18,6 +18,7 @@ urlpatterns = [
     # path('fscbyregion/<int:region_id>/', views.fscbyregion, name='fscbyregion'),
     path('update_member_indicator/', views.update_member_indicator, name='update_member_indicator'),
     path('update_member_info/', views.update_member_info, name='update_member_info'),
+    path('starperformance/', views.star_performance, name='starperformance'),
     path('history/<str:medicaid_id>', views.memberhistory, name='history'),
     # path('contact_us/', views.contact_us, name='contact_us'),
     # path('admin_login/', views.admin_login, name='admin_login'),
