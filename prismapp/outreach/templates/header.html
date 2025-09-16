@@ -168,10 +168,11 @@
       <li class="nav-item dropdown pe-3">
 
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-          <img src="{% static '/images/noimage.jpg' %}" alt="Profile" class="rounded-circle">
-
-         <span class="d-none d-md-block dropdown-toggle ps-2"> {{request.session.user_data.FistName}} {{request.session.user_data.LastName}} ({{request.session.user_data.ROLE_NAME}})</span>
-       </a><!-- End Profile Iamge Icon -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div><img src="{% static '/images/noimage.jpg' %}" alt="Profile" class="rounded-circle"></div>
+            <div class="d-none d-md-block dropdown-toggle ps-2"> {{request.session.user_data.FistName}} {{request.session.user_data.LastName}} ({{request.session.user_data.ROLE_NAME}})</div>
+          </div>
+        </a> <!-- End Profile Iamge Icon -->
 
        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile blue-border-font">
         <li class="dropdown-header">

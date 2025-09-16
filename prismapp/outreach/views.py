@@ -515,6 +515,7 @@ def appointment_add_action(request):
         return HttpResponse(str(e), status=500)
 
     return redirect("memberdetails", medicaid_id=request.POST.get("appointment_medicaid_id"))
+
 def memberhistory(request, medicaid_id):
     if not request.session.get('is_logged_in', False):
         return render(request, 'login.html')
