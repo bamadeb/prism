@@ -30,7 +30,7 @@ urlpatterns = [
     # path('region_manager_score/', views.region_manager_score, name='region_manager_score'),
     path('processmember/', views.processmember, name='processmember'),
     path('processriskgap/', views.processriskgap, name='processriskgap'),
-
+    path('processquality/', views.processquality, name='processquality'),
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
