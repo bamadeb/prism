@@ -194,9 +194,10 @@
                             <div class="tbl_scorll">
                                 <table class="table table-sm" style="font-size:14px;">
                                     <thead>
-                                    <tr>
+                                    <tr style="text-transform: uppercase;">
                                         <th>LOG NAME</th>
                                         <th>DETAILS</th>
+                                        <th>STATUS</th>
                                         <th width="15%">LOG BY</th>
                                         <th width="22%">DATE</th>
                                     </tr>
@@ -207,6 +208,7 @@
                                     <tr>
                                         <td>{{ log.log_name }}</td>
                                         <td>{{ log.action_type }}</td>
+                                        <td>{{ log.log_status }}</td>
                                         <td>{{ log.name }}</td>
                                         <td>{{ log.add_date|date:"m/d/Y H:i" }}</td>
                                     </tr>
@@ -238,7 +240,7 @@
                                     </thead>
                                     <tbody>
                                         {% for value in member_alertList %}
-                                            <tr>
+                                            <tr style="text-transform: uppercase;">
                                               <td>
                                                 <a style="cursor: pointer;text-decoration: underline;"
                                                    data-toggle="modal"
@@ -306,7 +308,7 @@
                             <div id="tab1" class="tab-pane fade in active">
                                 <form action="/add_action/" name="add_action" id="add_action"  enctype="multipart/form-data" method="post" >
                                     {% csrf_token %}
-                                    <input type="hidden" name="action_type_source" id="action_type_source" value="Visit">
+                                    <input type="hidden" name="action_type_source" id="action_type_source" value="Member Action">
                                     <input type="hidden" name="medicaid_id" value="{{medicaid_id}}" >
                                     <input type="hidden" name="visit_alertname" id="visit_alertname">
                                     <input type="hidden" name="action_type_name" id="action_type_name">
@@ -361,6 +363,26 @@
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
                                             <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note" style=" text-transform: uppercase;"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-control form-select" name="gap_id" id="gap_id"  style=" text-transform: uppercase;height: 120px;" multiple>
+                                                <option value="">-- Select Gap -- </option>
+                                                {% for gap in gap_list %}
+                                                <option value="{{ gap.ID }}">{{ forloop.counter }}. {{ gap.DIAG_DESC }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12">
+                                            <select class="form-control form-select" name="quality_id" id="quality_id"  style=" text-transform: uppercase;height: 120px;" multiple>
+                                                <option value="">-- Select Quality -- </option>
+                                                {% for quality in quality_list %}
+                                                <option value="{{ quality.ID }}">{{ forloop.counter }}. {{ quality.MEASURE_NAME }}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row mb-3">

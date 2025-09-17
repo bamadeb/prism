@@ -230,7 +230,12 @@ def memberdetails(request, medicaid_id):
     params = {"medicaid_id": medicaid_id}
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
-    #print(member_details)
+
+    ## create a api call
+    gap_list = api_call(params, "prismGetgapList")
+    quality_list = api_call(params, "prismGetqualityList")
+    #print(gap_list)
+
     log_details = []
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
@@ -342,6 +347,8 @@ def memberdetails(request, medicaid_id):
         "medications": member_details['data']['prismCrispMedication'],
         "insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
         "prism_claim_details": member_details['data']['prismPrismClaim'],
+        "gap_list": gap_list['data'],
+        "quality_list": quality_list['data'],
         "rx_claim_details": rx_claim_details,
         "hedis_rows": hedis_rows,
         "gift_details": gift_details,
@@ -361,9 +368,11 @@ def add_action(request):
 
     if request.method == "POST":
         try:
+            # print(request.POST)
+            # return HttpResponse("Not allowed")
+
             insertDataArray = []
             insertDataArray1 = []
-
             # Collect form data
             insert_data = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -385,10 +394,10 @@ def add_action(request):
 
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
-                "action_type": "FOLLOW-UP",
+                "action_type": request.POST.get("action_type_name"),
                 "log_name": request.POST.get("action_type_source"),
                 "log_details": request.POST.get("action_note"),
-                "log_status": "SUCCESS",
+                "log_status": request.POST.get("action_status"),
                 "log_by": request.session.get("user_data", {}).get("ID"),
             }
             insertDataArray1.append(insert_data1)
@@ -397,6 +406,35 @@ def add_action(request):
                 "insertDataArray": insertDataArray1,
             }
             api_call(apidata1, "prismMultipleinsert")
+
+            ##### update quality data
+            quality_ids = request.POST.getlist("quality_id")
+            for qid in quality_ids:
+                paramdata = {
+                    "PROCESS_STATUS": "1",
+                }
+                quality_data = {
+                    "updateData": paramdata,
+                    "table_name": "MEM_CIH_QUALITY",
+                    "id_field_name": "ID",
+                    "id_field_value": qid,
+                }
+                api_call(quality_data, "prismMultiplefieldupdate")
+
+            ##### update gap data
+            gap_ids = request.POST.getlist("gap_id")
+            for gid in gap_ids:
+                paramdata1 = {
+                    "PROCESS_STATUS": "1",
+                }
+                gap_data = {
+                    "updateData": paramdata1,
+                    "table_name": "MEM_RISK_GAP",
+                    "id_field_name": "ID",
+                    "id_field_value": gid,
+                }
+                api_call(gap_data, "prismMultiplefieldupdate")
+
 
             # Always return after POST
             medicaid_id = request.POST.get("medicaid_id")
