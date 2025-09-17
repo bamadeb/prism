@@ -231,6 +231,7 @@ def memberdetails(request, medicaid_id):
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
 
+    params = {"medicaid_id": medicaid_id, "PROCESS_STATUS": "0"}
     ## create a api call
     gap_list = api_call(params, "prismGetgapList")
     quality_list = api_call(params, "prismGetqualityList")
