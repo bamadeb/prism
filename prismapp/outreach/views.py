@@ -1311,3 +1311,93 @@ def star_performance(request):
     return render(request, 'star_performance.html', {
         'pageTitle': "STAR PERFORMANCE",
     })
+def processquality(request):
+    if not request.session.get('is_logged_in', False):
+        return render(request, 'login.html')
+    data = []
+    total_inserted_gaps = 0
+    if request.method == "POST":
+        if 'file' in request.FILES:
+            session_id = str(uuid.uuid4())  # same for this file upload
+            uploaded_file = request.FILES['file']
+
+            decoded_file = uploaded_file.read().decode('utf-8')
+            io_string = io.StringIO(decoded_file)
+
+            reader = csv.DictReader(io_string)
+
+            # Map CSV headers → desired keys
+            column_mapping = {
+                "Subscriber ID": "SUBSCRIBER_ID",
+                "Measure Name": "MEASURE_NAME",
+                "Submeasure": "SUB_MEASURE",
+                "First Name": "FIRST_NAME",
+                "Middle Name": "MIDDLE_NAME",
+                "Last Name": "LAST_NAME",
+                "Medicare ID": "MEDICARE_ID",
+                "Medicaid ID": "MEDICAID_ID",
+                "Date of Birth": "DOB",
+                "Sex": "SEX",
+                "Provider ID": "PROVIDER_ID",
+                "Provider Name": "PROVIDER_NAME",
+                "Numerator_Gap": "NUMERATOR_GAP"
+            }
+
+            # Extract only mapped columns
+            for row in reader:
+                filtered_row = {
+                    new_key: row.get(old_key, "")
+                    for old_key, new_key in column_mapping.items()
+                }
+                data.append(filtered_row)
+
+            insertDataArray = []
+            for row in data:
+                member_row = {
+                    "SUBSCRIBER_ID": row["SUBSCRIBER_ID"],
+                    "MEASURE_NAME": row["MEASURE_NAME"],
+                    "SUB_MEASURE": row["SUB_MEASURE"],
+                    "FIRST_NAME": row["FIRST_NAME"],
+                    "MIDDLE_NAME": row["MIDDLE_NAME"],
+                    "LAST_NAME": row["LAST_NAME"],
+                    "MEDICARE_ID": row["MEDICARE_ID"],
+                    "MEDICAID_ID": row["MEDICAID_ID"],
+                    "DOB": escape_sql_string(row["DOB"]),
+                    "SEX": row["SEX"],
+                    "PROVIDER_ID": row["PROVIDER_ID"],
+                    "PROVIDER_NAME": row["PROVIDER_NAME"],
+                    "NUMERATOR_GAP": row["NUMERATOR_GAP"],
+                    "INSERT_SESSION_ID": session_id
+                }
+                insertDataArray.append(member_row)
+            #insertDataArray = insertDataArray[:500]
+            #print(insertDataArray)
+            # --- Split into batches of 1000 rows ---
+            def chunked(iterable, size=1000):
+                for i in range(0, len(iterable), size):
+                    yield iterable[i:i + size]
+
+            # Send batches
+            batch_num = 0
+            for batch in chunked(insertDataArray, 1000):
+                batch_num += 1
+                print(f"Processing batch {batch_num}, rows: {len(batch)}")
+
+                apidata = {
+                    "table_name": "MEM_CIH_QUALITY",
+                    "insertDataArray": batch,
+                }
+                insertresult = api_call(apidata, "prismMultipleinsert")
+                print("Renamed Data:", insertresult)
+                # If API succeeded → count these rows
+                if insertresult.get("statusCode") == 200:
+                    total_inserted_gaps += len(batch)
+            messages.success(
+                request,
+                f"{total_inserted_gaps} CIH Quality processed successfully."
+            )
+            #print("Renamed Data:", insertDataArray[:5])
+    return render(request, 'processquality.html', {
+        'pageTitle': "PROCESS CHI QUALITY",
+
+    })
