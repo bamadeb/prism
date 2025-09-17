@@ -118,7 +118,7 @@ def mywork(request):
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
         myWorkAllSpace = myWorkSpaceResult['data']
 
-        print(overallSummaryResult)
+        #print(overallSummaryResult)
         today = date.today()
 
         task_list = myWorkAllSpace['taskList']
