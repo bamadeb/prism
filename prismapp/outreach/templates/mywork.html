@@ -8,48 +8,23 @@
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
-<!--                    -->
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
+<!--                            <h4 align="center"><u>RISK</u></h4>-->
                             <div class="card-body">
+
                                 <div class="row">
-                                    <div class="col-3 " style="text-transform: uppercase;"><h4>Overall</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Risk Gaps</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
-                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                    <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
                                     <div class="col-3 text-center"><h4>{{ overallSummary.0.risk_count }}</h4></div>
                                     <div class="col-3 text-center"><h4>{{ overallSummary.0.risk_comp_count }}</h4> </div>
                                     <div class="col-3 text-center"><h4 style="color: {{ overallSummary.0.risk_perf_color }}">{{ overallSummary.0.risk_perf }}% </h4></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-3" style="text-transform: uppercase;"><h4>Overall</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Quality Gaps</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
-                                   <div class="col-3"></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_count }}</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_comp_count }}</h4> </div>
-                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.0.quality_perf_color }}">{{ overallSummary.0.quality_perf }}% </h4></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-3" style="text-transform: uppercase;"><h4>My Own</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Risk Gaps</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
-                                   <div class="col-3"></div>
+
+                                    <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
                                     <div class="col-3 text-center"><h4>{{ ownSummary.0.risk_count }}</h4></div>
                                     <div class="col-3 text-center"><h4>{{ ownSummary.0.risk_comp_count }}</h4> </div>
                                     <div class="col-3 text-center"><h4 style="color: {{ ownSummary.0.risk_perf_color }}">{{ ownSummary.0.risk_perf }}% </h4></div>
@@ -59,13 +34,21 @@
                     </div>
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
+<!--                            <h4 align="center"><u>QUALITY</u></h4>-->
                             <div class="card-body">
+
                                 <div class="row">
-                                    <div class="col-3" style="text-transform: uppercase;"><h4>My Own</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Quality Gaps</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
-                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
-                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                    <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                    <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_count }}</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_comp_count }}</h4> </div>
+                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.0.quality_perf_color }}">{{ overallSummary.0.quality_perf }}% </h4></div>
+
+                                    <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
                                     <div class="col-3 text-center"><h4>{{ ownSummary.0.quality_count }}</h4></div>
                                     <div class="col-3 text-center"><h4>{{ ownSummary.0.quality_comp_count }}</h4> </div>
                                     <div class="col-3 text-center"><h4 style="color: {{ ownSummary.0.quality_perf_color }}">{{ ownSummary.0.quality_perf }}% </h4></div>
@@ -73,30 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--                    -->
                 </div>
-
-
-<!--                <div class="row" >-->
-<!--                    <div class="col-xl-6 col-sm-6 mb-xl-0">-->
-<!--                        <div class="card">-->
-<!--                            <div class="card-body d-flex justify-content-around align-items-center">-->
-<!--                                <div> <h3 style="margin-top:10px">ENROLLED</h3> </div>-->
-<!--                                <div> : </div>-->
-<!--                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.enrolledCnt }}</h3></div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-xl-6 col-sm-6 mb-xl-0">-->
-<!--                        <div class="card">-->
-<!--                             <div class="card-body d-flex justify-content-around align-items-center">-->
-<!--                                <div> <h3 style="margin-top:10px">ENGAGED</h3> </div>-->
-<!--                                <div> : </div>-->
-<!--                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.engagedCnt }}</h3></div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
 
 
                 <div class="row">
@@ -409,31 +369,16 @@
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div><!-- End tab-content -->
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div><!-- End Left side columns -->
-
 
             <div class="col-lg-6">
                 <!-- Recent Activity -->
                 <div class="card">
-                    <!--                    <div class="filter">-->
-                    <!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-                    <!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-                    <!--                            <li class="dropdown-header text-start">-->
-                    <!--                                <h6>Filter</h6>-->
-                    <!--                            </li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
-
                     <div class="card-body">
                         <h5 class="card-title">Recent Activity <span>| Today</span></h5>
                         <div class="activity">
@@ -458,20 +403,8 @@
 
             <!-- Right side columns -->
             <div class="col-lg-6">
-
                 <!-- Alerts -->
                 <div class="card">
-                    <!--                    <div class="filter">-->
-                    <!--                        <a class="icon" href="#" data-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-                    <!--                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-                    <!--                            <li class="dropdown-header text-start">-->
-                    <!--                                <h6>Filter</h6>-->
-                    <!--                            </li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">Today</a></li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">This Month</a></li>-->
-                    <!--                            <li><a class="dropdown-item" href="#">This Year</a></li>-->
-                    <!--                        </ul>-->
-                    <!--                    </div>-->
                     <div class="card-body">
                         <h5 class="card-title">Alerts <span>| Today</span></h5>
                         <div class="activity">
@@ -493,14 +426,14 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div><!-- End Recent Activity -->
             </div><!-- End Right side columns -->
 
         </div>
     </section>
 </main>
+
+
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">

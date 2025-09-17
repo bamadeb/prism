@@ -299,8 +299,6 @@ def memberdetails(request, medicaid_id):
             hedis_non_complant_count_array[year] = {}
         hedis_non_complant_count_array[year][month] = non_complant_count
 
-
-
         for member in member_details['data']['hedisDetails']:
             row = []
             for idx, key in enumerate(hedis_key_array, start=1):
@@ -419,31 +417,14 @@ def add_action(request):
             ##### update quality data
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
-                paramdata = {
-                    "PROCESS_STATUS": "1",
-                }
-                quality_data = {
-                    "updateData": paramdata,
-                    "table_name": "MEM_CIH_QUALITY",
-                    "id_field_name": "ID",
-                    "id_field_value": qid,
-                }
-                api_call(quality_data, "prismMultiplefieldupdate")
+                qualityupdate = {"id": qid}
+                api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
-                paramdata1 = {
-                    "PROCESS_STATUS": "1",
-                }
-                gap_data = {
-                    "updateData": paramdata1,
-                    "table_name": "MEM_RISK_GAP",
-                    "id_field_name": "ID",
-                    "id_field_value": gid,
-                }
-                api_call(gap_data, "prismMultiplefieldupdate")
-
+                paramsupdate = {"id": gid}
+                api_call(paramsupdate, "prismUpdategapStatus") 
 
             # Always return after POST
             medicaid_id = request.POST.get("medicaid_id")
