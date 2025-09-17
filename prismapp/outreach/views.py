@@ -424,7 +424,7 @@ def add_action(request):
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
                 paramsupdate = {"id": gid}
-                api_call(paramsupdate, "prismUpdategapStatus") 
+                api_call(paramsupdate, "prismUpdategapStatus")
 
             # Always return after POST
             medicaid_id = request.POST.get("medicaid_id")

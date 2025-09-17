@@ -368,7 +368,7 @@
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
                                             <select class="form-control form-select" name="gap_id" id="gap_id"  style=" text-transform: uppercase;height: 120px;" multiple>
-                                                <option value="">-- Select Gap -- </option>
+                                                <option value="">-- Select Risk Gaps -- </option>
                                                 {% for gap in gap_list %}
                                                 <option value="{{ gap.ID }}">{{ forloop.counter }}. {{ gap.DIAG_DESC }}</option>
                                                 {% endfor %}
@@ -378,7 +378,7 @@
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
                                             <select class="form-control form-select" name="quality_id" id="quality_id"  style=" text-transform: uppercase;height: 120px;" multiple>
-                                                <option value="">-- Select Quality -- </option>
+                                                <option value="">-- Select Quality Gaps -- </option>
                                                 {% for quality in quality_list %}
                                                 <option value="{{ quality.ID }}">{{ forloop.counter }}. {{ quality.MEASURE_NAME }}</option>
                                                 {% endfor %}
