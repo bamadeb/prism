@@ -37,6 +37,7 @@ urlpatterns = [
     path("api/get_doctor_list/", api.get_doctor_list, name="get_doctor_list"),
     path("api/get_alert_typeList/", api.get_alert_typeList, name="get_alert_typeList"),
     path('api/get_call_history/', api.get_call_history, name='get_call_history'),
-    path('api/get_gap_list/', api.get_gap_list, name='get_gap_list')
+    path('api/get_gap_list/', api.get_gap_list, name='get_gap_list'),
+    path('api/get_quality_list/', api.get_quality_list, name='get_quality_list')
 
 ]

@@ -8,50 +8,95 @@
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
-                    {% for item in prismWorkspacekpi %}
-                    <div class="col-xl-4 col-sm-4 mb-xl-0">
+<!--                    -->
+                    <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-12"> <h3 align="center">{{ item.period }}</h3> </div>
-                                    <div class="col-4">
-                                        <h4 align="center" style="color:red;">CALLED</h4> <br>
-                                        <div align="center"><h3>{{ item.called }}</h3></div>
-                                    </div>
-                                    <div class="col-4"> <h4 align="center" style="color:blue;">REACHED</h4><br>
-                                        <div align="center"><h3>{{ item.reached }}</h3></div> </div>
-                                    <div class="col-4"> <h4 align="center" style="color:green;">ENGAGED</h4><br>
-                                        <div align="center"><h3>{{ item.engaged }}</h3></div> </div>
-
-
+                                    <div class="col-3 " style="text-transform: uppercase;"><h4>Overall</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Risk Gaps</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
+                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.risk_count }}</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.risk_comp_count }}</h4> </div>
+                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.0.risk_perf_color }}">{{ overallSummary.0.risk_perf }}% </h4></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
-                </div>
-
-
-                <div class="row" >
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
-                            <div class="card-body d-flex justify-content-around align-items-center">
-                                <div> <h3 style="margin-top:10px">ENROLLED</h3> </div>
-                                <div> : </div>
-                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.enrolledCnt }}</h3></div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3" style="text-transform: uppercase;"><h4>Overall</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Quality Gaps</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
+                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_count }}</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ overallSummary.0.quality_comp_count }}</h4> </div>
+                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.0.quality_perf_color }}">{{ overallSummary.0.quality_perf }}% </h4></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
                         <div class="card">
-                             <div class="card-body d-flex justify-content-around align-items-center">
-                                <div> <h3 style="margin-top:10px">ENGAGED</h3> </div>
-                                <div> : </div>
-                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.engagedCnt }}</h3></div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3" style="text-transform: uppercase;"><h4>My Own</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Risk Gaps</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
+                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center"><h4>{{ ownSummary.0.risk_count }}</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ ownSummary.0.risk_comp_count }}</h4> </div>
+                                    <div class="col-3 text-center"><h4 style="color: {{ ownSummary.0.risk_perf_color }}">{{ ownSummary.0.risk_perf }}% </h4></div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-3" style="text-transform: uppercase;"><h4>My Own</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Quality Gaps</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Completed</h4> </div>
+                                    <div class="col-3 text-center" style="text-transform: uppercase;"><h4>Performance</h4> </div>
+                                   <div class="col-3"></div>
+                                    <div class="col-3 text-center"><h4>{{ ownSummary.0.quality_count }}</h4></div>
+                                    <div class="col-3 text-center"><h4>{{ ownSummary.0.quality_comp_count }}</h4> </div>
+                                    <div class="col-3 text-center"><h4 style="color: {{ ownSummary.0.quality_perf_color }}">{{ ownSummary.0.quality_perf }}% </h4></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--                    -->
                 </div>
+
+
+<!--                <div class="row" >-->
+<!--                    <div class="col-xl-6 col-sm-6 mb-xl-0">-->
+<!--                        <div class="card">-->
+<!--                            <div class="card-body d-flex justify-content-around align-items-center">-->
+<!--                                <div> <h3 style="margin-top:10px">ENROLLED</h3> </div>-->
+<!--                                <div> : </div>-->
+<!--                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.enrolledCnt }}</h3></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-xl-6 col-sm-6 mb-xl-0">-->
+<!--                        <div class="card">-->
+<!--                             <div class="card-body d-flex justify-content-around align-items-center">-->
+<!--                                <div> <h3 style="margin-top:10px">ENGAGED</h3> </div>-->
+<!--                                <div> : </div>-->
+<!--                                <div> <h3 style="margin-top:10px">{{ kpis_data.0.engagedCnt }}</h3></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
 
 
                 <div class="row">
@@ -142,7 +187,12 @@
                                                 <th>#CALL</th>
                                                 <th></th>
                                                 <!--                                                <th>ELIGIBILITY</th>-->
-                                                <th>RISK GAP</th>
+                                                <th>RISK GAPS</th>
+                                                <th>COMPLETED</th>
+                                                 <th>PERFORMANCE</th>
+                                                <th>QUALITY GAPS</th>
+                                                <th>COMPLETED</th>
+                                                 <th>PERFORMANCE</th>
                                                 <!--                                                <th>3RD CALL</th>-->
                                                 <!--                                                <th>2ND CALL</th>-->
                                                 <!--                                                <th>LAST CALL</th>-->
@@ -259,6 +309,16 @@
                                                         {{ member.risk_gap_count }}
                                                     </a>
                                                 </td>
+                                                <td>{{ member.risk_comp_count }}</td>
+                                                 <td style="color: {{ member.risk_perf_color }}">{{ member.risk_perf }}%</td>
+
+                                                <td>
+                                                    <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}');">
+                                                        {{ member.quality_count }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ member.quality_comp_count }}</td>
+                                                 <td style="color: {{ member.quality_perf_color }}">{{ member.quality_perf }}%</td>
                                                 <!--                                                <td>{% if member.third_last_action_date %}-->
                                                 <!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
                                                 <!--                                                    {% endif %}</td>-->
@@ -492,6 +552,35 @@
                     </tr>
                     </thead>
                     <tbody id="gapList_table_body">
+                    <!-- dynamically injected rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gap list modal start -->
+<div class="modal " id="qualityList" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"><span></span> CIH QUALITY LIST</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>MEASURE NAME</th>
+                        <th>SUB MEASURE</th>
+                        <th>PROVIDER ID</th>
+                        <th>PROVIDER NAME</th>
+                        <th>STATUS</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="quality_table_body">
                     <!-- dynamically injected rows -->
                     </tbody>
                 </table>
@@ -884,6 +973,59 @@
 
           // ✅ Bootstrap 5 modal show
           var myModal = new bootstrap.Modal(document.getElementById('gapList'));
+          myModal.show();
+        },
+        error: function () {
+          alert("Action Result Not found.");
+        }
+      });
+    }
+  }
+  function showCIHQualityList(medicaid_id) {
+  //alert(medicaid_id)
+    if (medicaid_id) {
+      $.ajax({
+        type: "POST",
+        url: "{% url 'get_quality_list' %}",   // Django URL
+        data: {
+          medicaid_id: medicaid_id
+        },
+        success: function (response) {
+          if (response.statusCode === 200 && response.data.length > 0) {
+            $("#quality_table_body").empty();
+
+            response.data.forEach((row, i) => {
+
+
+
+              let MEASURE_NAME = row.MEASURE_NAME ?? "";
+              let SUB_MEASURE = row.SUB_MEASURE ?? "";
+              let PROVIDER_ID = row.PROVIDER_ID ?? "";
+              let PROVIDER_NAME = row.PROVIDER_NAME ?? "";
+               let PROCESS_STATUS = row.PROCESS_STATUS;
+               let STATUS_STR = ""
+                if(PROCESS_STATUS==1){
+                    STATUS_STR = "COMPLETE";
+                }else{
+                    STATUS_STR = "OPEN";
+                }
+              $("#quality_table_body").append(
+                "<tr><td>" + (i + 1) + "</td>" +
+                "<td>" + MEASURE_NAME + "</td>" +
+                "<td>" + SUB_MEASURE + "</td>" +
+                "<td>" + PROVIDER_ID + "</td>" +
+                "<td>" + PROVIDER_NAME + "</td>"+
+                "<td>" + STATUS_STR + "</td></tr>"
+              );
+            });
+          } else {
+            $("#quality_table_body").html(
+              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+            );
+          }
+
+          // ✅ Bootstrap 5 modal show
+          var myModal = new bootstrap.Modal(document.getElementById('qualityList'));
           myModal.show();
         },
         error: function () {

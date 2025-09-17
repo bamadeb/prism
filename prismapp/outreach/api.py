@@ -58,6 +58,15 @@ def get_gap_list(request):
         return JsonResponse(resultcallHistoryResponse, safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+@csrf_exempt
+def get_quality_list(request):
+    if request.method == "POST":
+        medicaid_id = request.POST.get("medicaid_id")
+        params = {"medicaid_id": medicaid_id}
+        resultcallHistoryResponse = api_call(params, "prismGetqualityList")
+        return JsonResponse(resultcallHistoryResponse, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 @csrf_exempt
 def get_alert_typeList(request):

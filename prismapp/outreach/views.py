@@ -17,6 +17,7 @@ import io
 from django.shortcuts import render
 import uuid
 from datetime import datetime
+from datetime import datetime, date
 # Suppress the InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -108,13 +109,18 @@ def mywork(request):
         try:
             response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
             myWorkSpaceResult = response.json()  # Decode the JSON response
+            overallSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json={})
+            overallSummaryResult = overallSummary.json()  # Decode the JSON response
+            ownSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json=data)
+            ownSummaryResult = ownSummary.json()  # Decode the JSON response
             #print(myWorkSpaceResult)
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
         myWorkAllSpace = myWorkSpaceResult['data']
-        from datetime import datetime, date
 
+        print(overallSummaryResult)
         today = date.today()
+
         task_list = myWorkAllSpace['taskList']
 
         for task in task_list:
@@ -212,7 +218,9 @@ def mywork(request):
             'plan_list': myWorkAllSpace['prismPlanlist'],
             'all_3day_transport_list': myWorkAllSpace['transportList'],
             'recent_activity': recentActivity,
-            'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi']
+            'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
+            'overallSummary': overallSummaryResult['data'],
+            'ownSummary': ownSummaryResult['data']
         }
     #print(myWorkAllSpace)
     # print(request.session.get('user_data', {}).get('ID'))
