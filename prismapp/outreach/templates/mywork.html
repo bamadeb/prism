@@ -89,7 +89,7 @@
                                         <th><h5>{{ pcp_id }}</h5></th>
                                             {% endfor %}
                                         {% endfor %}
-
+                                        <th><h5>TOTAL</h5></th>
                                     </tr>
                                     <tr>
                                         <td>CALLED (PRIORITY)</td>
@@ -98,7 +98,7 @@
                                         <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
-
+                                        <td>{{ totalArray.total_call_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_call_color }}">{{ totalArray.priority_call_percentage }}%</span>)</td>
                                     </tr>
                                     <tr>
                                         <td>CALLED (OTHERS)</td>
@@ -107,7 +107,7 @@
                                                 <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
-
+                                        <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage }}%</span>)</td>
                                     </tr>
                                     <tr>
                                         <td>GAPS (PRIORITY)</td>
@@ -116,6 +116,7 @@
                                                 <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
+                                        <td>{{ totalArray.total_priority_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_gaps_percentage }}%</span>)</td>
 
                                     </tr>
                                     <tr>
@@ -125,6 +126,7 @@
                                                 <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
+                                        <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
 
                                     </tr>
                                 </table>
