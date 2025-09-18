@@ -3,10 +3,44 @@
 {% load static %}
 {% block body %}
 <style>
-    .ui-datepicker-title{
+.ui-datepicker-title{
     color:#000 !Important;
-    }
+}
+
+.multiselect {
+  width: 100%;
+}
+
+.selectBox {
+  position: relative;
+}
+
+.selectBox select {
+  width: 100%;
+  font-weight: bold;
+}
+
+.overSelect {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+#checkboxes {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+    #checkboxes1 {
+  display: none;
+  border: 1px #dadada solid;
+}
+
+
 </style>
+
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
         <div class="d-flex align-items-center justify-content-center py-1 border-primary">
@@ -188,7 +222,6 @@
             <div class="col-lg-6">
                 <div class="card" id="alert_box">
                     <div class="card-body">
-
                         <h4 align="center">ACTION LOG</h4>
                         <div class="box_height">
                             <div class="tbl_scorll">
@@ -300,7 +333,7 @@
                     <div class="card-body">
 
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#tab1">TO-DO</a></li>
+                            <li class="active"><a data-toggle="tab" href="#tab1">TO-DO / DONE</a></li>
                             <li><a data-toggle="tab" href="#tab2">APPOINTMENT</a></li>
                         </ul>
 
@@ -313,93 +346,105 @@
                                     <input type="hidden" name="visit_alertname" id="visit_alertname">
                                     <input type="hidden" name="action_type_name" id="action_type_name">
 
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="action_id" id="action_id" required style=" text-transform: uppercase;"
-                                                    onchange="set_scheduled_action_status(this.value)">
-                                                <option value="">-- Activity Category --</option>
-                                                {% for reagon in sel_panel_list %}
-                                                <option value="{{ reagon.id }}">{{ reagon.Panel_Name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
+                                     <div class="row mt-3">
+                                         <div class="col-sm-3">
+                                              <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Category:</label>
+                                         </div>
+                                         <div class="col-sm-9">
+                                             {% for reagon in sel_panel_list %}
+                                             <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="action_id" id="action_id" value="{{ reagon.id }}" onclick="set_scheduled_action_status(this.value)" {% if reagon.id == 11 %}checked{% endif %}>
+                                                  <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ reagon.Panel_Name }}</label>
+                                             </div>
+                                             {% endfor %}
+                                         </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="panel_id" id="panel_id" required style=" text-transform: uppercase;">
-                                                <option value="">-- Activity Type --</option>
-                                                {% for type in sel_panel_type %}
-                                                <option value="{{ type.id }}">{{ type.action_type }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker" required style=" text-transform: uppercase;">
-                                        </div>
-                                    </div>
+                                         <div class="col-sm-3 mt-4">
+                                              <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Type:</label>
+                                         </div>
+                                         <div class="col-sm-9 mt-4">
+                                             {% for type in sel_panel_type %}
+                                             <div class="form-check form-check-inline">
+                                                  <input class="form-check-input" type="radio" name="panel_id" id="panel_id" value="{{ type.id }}" {% if type.id == 2 %}checked{% endif %}>
+                                                  <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
+                                             </div>
+                                             {% endfor %}
+                                         </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="action_result_id" id="action_result_id" required style=" text-transform: uppercase;">
-                                                <option value=""> -- Status --</option>
-                                            </select>
+                                         <div class="col-sm-3 mt-4">
+                                            <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker text-uppercase" required>
                                         </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="action_status" id="action_status" required style=" text-transform: uppercase;">
+                                         <div class="col-sm-3 mt-4">
+                                            <select class="form-control form-select text-uppercase" name="action_status" id="action_status" required style=" text-transform: uppercase;">
                                                 <option value="Scheduled">Scheduled</option>
                                                 <option value="Success">Success</option>
                                                 <option value="Failure">Failure</option>
                                             </select>
+                                          </div>
+                                         <div class="col-sm-6 mt-4">
+                                            <select class="form-control form-select text-uppercase" name="action_result_id" id="action_result_id" required>
+                                                <option value=""> -- ACTION STATUS --</option>
+                                            </select>
                                         </div>
-                                    </div>
+                                         <div class="col-sm-12 mt-4">
+                                            <div class="multiselect">
+                                                <div class="selectBox" onclick="showCheckboxes('checkboxes')">
+                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">
+                                                    <option value=""> -- Select Risk Gaps -- </option>
+                                                  </select>
+                                                  <div class="overSelect"></div>
+                                                </div>
+                                                <div  id="checkboxes" class=" p-3">
+                                                    {% for gap in gap_list %}
+                                                  <div class="text-uppercase mb-2"><input type="checkbox" name="gap_id" id="gap_id_{{ gap.ID }}" value="{{ gap.ID }}" class="form-check-input me-2" >{{ gap.DIAG_DESC }}</div>
+                                                    {% endfor %}
+                                                </div>
+                                              </div>
 
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <textarea class="form-control" name="action_note" id="action_note" required placeholder="Note" style=" text-transform: uppercase;"></textarea>
+<!--                                            <select class="form-control form-select text-uppercase" name="gap_id" id="gap_id"  style="height: 120px;" multiple>-->
+<!--                                                <option value="">&#45;&#45; Select Risk Gaps &#45;&#45; </option>-->
+<!--                                                {% for gap in gap_list %}-->
+<!--                                                <option value="{{ gap.ID }}">{{ forloop.counter }}. {{ gap.DIAG_DESC }}</option>-->
+<!--                                                {% endfor %}-->
+<!--                                            </select>-->
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="gap_id" id="gap_id"  style=" text-transform: uppercase;height: 120px;" multiple>
-                                                <option value="">-- Select Risk Gaps -- </option>
-                                                {% for gap in gap_list %}
-                                                <option value="{{ gap.ID }}">{{ forloop.counter }}. {{ gap.DIAG_DESC }}</option>
-                                                {% endfor %}
-                                            </select>
+                                         <div class="col-sm-12 mt-4">
+
+                                             <div class="multiselect">
+                                                <div class="selectBox" onclick="showCheckboxes('checkboxes1')">
+                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">
+                                                    <option value=""> -- Select Quality Gaps -- </option>
+                                                  </select>
+                                                  <div class="overSelect"></div>
+                                                </div>
+                                                <div id="checkboxes1" class=" p-3">
+                                                    {% for quality in quality_list %}
+                                                  <div class="text-uppercase mb-2"><input type="checkbox" name="quality_id" id="quality_id" value="{{ quality.ID }}" class="form-check-input me-2">{{ quality.MEASURE_NAME }}</div>
+                                                    {% endfor %}
+                                                </div>
+                                              </div>
+
+<!--                                            <select class="form-control form-select" name="quality_id" id="quality_id"  style=" text-transform: uppercase;height: 120px;" multiple>-->
+<!--                                                <option value="">&#45;&#45; Select Quality Gaps &#45;&#45; </option>-->
+<!--                                                {% for quality in quality_list %}-->
+<!--                                                <option value="{{ quality.ID }}">{{ forloop.counter }}. {{ quality.MEASURE_NAME }}</option>-->
+<!--                                                {% endfor %}-->
+<!--                                            </select>-->
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
-                                            <select class="form-control form-select" name="quality_id" id="quality_id"  style=" text-transform: uppercase;height: 120px;" multiple>
-                                                <option value="">-- Select Quality Gaps -- </option>
-                                                {% for quality in quality_list %}
-                                                <option value="{{ quality.ID }}">{{ forloop.counter }}. {{ quality.MEASURE_NAME }}</option>
-                                                {% endfor %}
-                                            </select>
+                                         <div class="col-sm-12 mt-4">
+                                            <textarea class="form-control text-uppercase" name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
                                         </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12 mt-4">
                                             <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
                                         </div>
                                     </div>
-
-                                    <div class="row mb-3">
+                                    <div class="row mb-3 mt-4">
                                         <div class="col-sm-12" align="right">
                                             <button type="submit" class="btn btn-primary" >SUBMIT</button>
                                         </div>
                                     </div>
-
                                 </form>
-
-
                             </div>
                             <div id="tab2" class="tab-pane fade">
                                 <form action="/appointment_add_action/" name="appointment_add_action"  enctype="multipart/form-data" method="post" >
@@ -2182,7 +2227,9 @@
                     );
                 }
 
-                var action_type_name = $('#action_id :selected').text();
+               // var action_type_name = $('#action_id :selected').text();
+               var action_type_name = $("input[name='action_id']:checked").parent().text().trim();
+               //alert(action_type_name);
                 $('#action_type_name').val(action_type_name);
             },
             error: function () {
@@ -2395,4 +2442,20 @@ function addclaim() {
 </script>
 
 
+<script>
+$(".datepicker").datepicker("setDate", new Date());
+
+var expanded = false;
+function showCheckboxes(check) {
+  var checkboxes = document.getElementById(check);
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+    set_scheduled_action_status(11);
+</script>
 {% endblock %}
