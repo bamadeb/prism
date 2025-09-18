@@ -83,10 +83,10 @@
 
                                 <table class="table">
                                     <tr>
-                                        <th>My Own</th>
+                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">My Own</h4></th>
                                         {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                                <th>{{ pcp_id }}</th>
+                                        <th><h5>{{ pcp_id }}</h5></th>
                                             {% endfor %}
                                         {% endfor %}
 
