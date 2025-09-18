@@ -26,6 +26,7 @@
             <div class="col-lg-12">
                 <div class="row">
                     <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="col-xl-12 col-sm-12 mb-xl-0">
                         <div class="card">
 <!--                            <h4 align="center"><u>RISK</u></h4>-->
                             <div class="card-body">
@@ -49,7 +50,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="col-xl-12 col-sm-12 mb-xl-0">
                         <div class="card">
 <!--                            <h4 align="center"><u>QUALITY</u></h4>-->
                             <div class="card-body">
@@ -73,6 +74,66 @@
                             </div>
                         </div>
                     </div>
+                    </div>
+                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                        <div class="col-xl-12 col-sm-12 mb-xl-0">
+                        <div class="card">
+<!--                            <h4 align="center"><u>QUALITY</u></h4>-->
+                            <div class="card-body">
+
+                                <table class="table">
+                                    <tr>
+                                        <th>My Own</th>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                                <th>{{ pcp_id }}</th>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </tr>
+                                    <tr>
+                                        <td>CALLED (PRIORITY)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                        <td>{{ vals.call_count }}/{{ vals.priority_count }} <span style="color:{{ vals.priority_color }}">({{ vals.priority_percentage }}%)</span></td>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </tr>
+                                    <tr>
+                                        <td>CALLED (OTHERS)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} <span style="color:{{ vals.other_call_color }}">({{ vals.other_call_percentage }}%)</span></td>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </tr>
+                                    <tr>
+                                        <td>GAPS (PRIORITY)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} <span style="color:{{ vals.priority_gaps_color }}">({{ vals.priority_gaps_percentage }}%)</span></td>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </tr>
+                                    <tr>
+                                        <td>GAPS (OTHERS)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} <span style="color:{{ vals.other_gaps_color }}">({{ vals.other_gaps_percentage }}%)</span></td>
+                                            {% endfor %}
+                                        {% endfor %}
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+
+
                 </div>
 
 

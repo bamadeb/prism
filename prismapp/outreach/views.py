@@ -113,9 +113,64 @@ def mywork(request):
             overallSummaryResult = overallSummary.json()  # Decode the JSON response
             ownSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json=data)
             ownSummaryResult = ownSummary.json()  # Decode the JSON response
-            #print(myWorkSpaceResult)
+            performancSummary = requests.post(settings.API_URL + "prismPriorityAndOtherPerformancSummary", json=data)
+            performancSummaryResult = performancSummary.json()  # Decode the JSON response
+            #print(performancSummaryResult)
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
+        performanc = performancSummaryResult['data']
+        performancArray = []
+
+        for item in performanc:
+            pcp_id = item["PCP_TAX_ID"]
+            values = {k: v for k, v in item.items() if k != "PCP_TAX_ID"}
+            # Get safe numbers
+            call_count = float(values.get("call_count", 0) or 0)
+            priority_count = float(values.get("priority_count", 0) or 0)
+
+            # Calculate percentage
+            values["priority_percentage"] = round((call_count / priority_count) * 100, 2) if priority_count > 0 else 0
+            if values["priority_percentage"] < 60:
+                values["priority_color"] = "red"
+            elif values["priority_percentage"] < 80:
+                values["priority_color"] = "#FFAE42"
+            else:
+                values["priority_color"] = "green"
+            # Get safe numbers
+            other_call_count = float(values.get("other_call_count", 0) or 0)
+            other_count = float(values.get("other_count", 0) or 0)
+            # Calculate percentage
+            values["other_call_percentage"] = round((other_call_count / other_count) * 100, 2) if other_count > 0 else 0
+            if values["other_call_percentage"] < 60:
+                values["other_call_color"] = "red"
+            elif values["other_call_percentage"] < 80:
+                values["other_call_color"] = "#FFAE42"
+            else:
+                values["other_call_color"] = "green"
+            priority_complete_gaps_count = float(values.get("priority_complete_gaps_count", 0) or 0)
+            priority_gaps_count = float(values.get("priority_gaps_count", 0) or 0)
+            # Calculate percentage
+            values["priority_gaps_percentage"] = round((priority_complete_gaps_count / priority_gaps_count) * 100, 2) if priority_gaps_count > 0 else 0
+            if values["priority_gaps_percentage"] < 60:
+                values["priority_gaps_color"] = "red"
+            elif values["priority_gaps_percentage"] < 80:
+                values["priority_gaps_color"] = "#FFAE42"
+            else:
+                values["priority_gaps_color"] = "green"
+            other_gaps_count = float(values.get("other_gaps_count", 0) or 0)
+            other_complete_gaps_count = float(values.get("other_complete_gaps_count", 0) or 0)
+            # Calculate percentage
+            values["other_gaps_percentage"] = round((other_complete_gaps_count / other_gaps_count) * 100, 2) if other_gaps_count > 0 else 0
+            if values["other_gaps_percentage"] < 60:
+                values["other_gaps_color"] = "red"
+            elif values["other_gaps_percentage"] < 80:
+                values["other_gaps_color"] = "#FFAE42"
+            else:
+                values["other_gaps_color"] = "green"
+            performancArray.append({pcp_id: values})
+        print(performancArray)
+
+
         myWorkAllSpace = myWorkSpaceResult['data']
 
         #print(overallSummaryResult)
@@ -220,7 +275,8 @@ def mywork(request):
             'recent_activity': recentActivity,
             'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
             'overallSummary': overallSummaryResult['data'],
-            'ownSummary': ownSummaryResult['data']
+            'ownSummary': ownSummaryResult['data'],
+            'performancArray': performancArray
         }
     #print(myWorkAllSpace)
     # print(request.session.get('user_data', {}).get('ID'))
