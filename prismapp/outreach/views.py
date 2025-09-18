@@ -120,6 +120,24 @@ def mywork(request):
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
         performanc = performancSummaryResult['data']
         performancArray = []
+        totalArray = {
+            'total_priority_count': 0,
+            'total_call_count': 0,
+            'total_other_call_count': 0,
+            'total_other_count': 0,
+            'total_priority_complete_gaps_count': 0,
+            'total_priority_gaps_count': 0,
+            'total_other_gaps_count': 0,
+            'total_other_complete_gaps_count': 0,
+            'priority_call_percentage': 0,
+            'other_call_percentage': 0,
+            'priority_gaps_percentage': 0,
+            'other_gaps_percentage': 0,
+            'priority_call_color': '',
+            'other_call_color': '',
+            'priority_gaps_color': '',
+            'other_gaps_color': '',
+        }
 
         for item in performanc:
             pcp_id = item["PCP_TAX_ID"]
@@ -127,7 +145,8 @@ def mywork(request):
             # Get safe numbers
             call_count = float(values.get("call_count", 0) or 0)
             priority_count = float(values.get("priority_count", 0) or 0)
-
+            totalArray['total_priority_count'] += priority_count
+            totalArray['total_call_count'] += call_count
             # Calculate percentage
             values["priority_percentage"] = round((call_count / priority_count) * 100, 2) if priority_count > 0 else 0
             if values["priority_percentage"] < 60:
@@ -139,6 +158,8 @@ def mywork(request):
             # Get safe numbers
             other_call_count = float(values.get("other_call_count", 0) or 0)
             other_count = float(values.get("other_count", 0) or 0)
+            totalArray['total_other_call_count'] += other_call_count
+            totalArray['total_other_count'] += other_count
             # Calculate percentage
             values["other_call_percentage"] = round((other_call_count / other_count) * 100, 2) if other_count > 0 else 0
             if values["other_call_percentage"] < 60:
@@ -149,6 +170,8 @@ def mywork(request):
                 values["other_call_color"] = "green"
             priority_complete_gaps_count = float(values.get("priority_complete_gaps_count", 0) or 0)
             priority_gaps_count = float(values.get("priority_gaps_count", 0) or 0)
+            totalArray['total_priority_complete_gaps_count'] += priority_complete_gaps_count
+            totalArray['total_priority_gaps_count'] += priority_gaps_count
             # Calculate percentage
             values["priority_gaps_percentage"] = round((priority_complete_gaps_count / priority_gaps_count) * 100, 2) if priority_gaps_count > 0 else 0
             if values["priority_gaps_percentage"] < 60:
@@ -159,6 +182,8 @@ def mywork(request):
                 values["priority_gaps_color"] = "green"
             other_gaps_count = float(values.get("other_gaps_count", 0) or 0)
             other_complete_gaps_count = float(values.get("other_complete_gaps_count", 0) or 0)
+            totalArray['total_other_gaps_count'] += other_gaps_count
+            totalArray['total_other_complete_gaps_count'] += other_complete_gaps_count
             # Calculate percentage
             values["other_gaps_percentage"] = round((other_complete_gaps_count / other_gaps_count) * 100, 2) if other_gaps_count > 0 else 0
             if values["other_gaps_percentage"] < 60:
@@ -168,9 +193,37 @@ def mywork(request):
             else:
                 values["other_gaps_color"] = "green"
             performancArray.append({pcp_id: values})
-        print(performancArray)
 
+        totalArray['priority_call_percentage'] = round((totalArray['total_call_count'] / totalArray['total_priority_count']) * 100, 2) if totalArray['total_priority_count'] > 0 else 0
+        totalArray['other_call_percentage'] = round((totalArray['total_other_call_count'] / totalArray['total_other_count']) * 100, 2) if totalArray['total_other_count'] > 0 else 0
+        totalArray['priority_gaps_percentage'] = round((totalArray['total_priority_complete_gaps_count'] / totalArray['total_priority_gaps_count']) * 100, 2) if totalArray['total_priority_gaps_count'] > 0 else 0
+        totalArray['other_gaps_percentage'] = round((totalArray['total_other_complete_gaps_count'] / totalArray['total_other_gaps_count']) * 100, 2) if totalArray['total_other_gaps_count'] > 0 else 0
+        if totalArray['priority_call_percentage'] < 60:
+            totalArray["priority_call_color"] = "red"
+        elif totalArray['priority_call_percentage'] < 80:
+            totalArray["priority_call_color"] = "#FFAE42"
+        else:
+            totalArray["priority_call_color"] = "green"
+        if totalArray['other_call_percentage'] < 60:
+            totalArray["other_call_color"] = "red"
+        elif totalArray['other_call_percentage'] < 80:
+            totalArray["other_call_color"] = "#FFAE42"
+        else:
+            totalArray["other_call_color"] = "green"
+        if totalArray['priority_gaps_percentage'] < 60:
+            totalArray["priority_gaps_color"] = "red"
+        elif totalArray['priority_gaps_percentage'] < 80:
+            totalArray["priority_gaps_color"] = "#FFAE42"
+        else:
+            totalArray["priority_gaps_color"] = "green"
+        if totalArray['other_gaps_percentage'] < 60:
+            totalArray["other_gaps_color"] = "red"
+        elif totalArray['other_gaps_percentage'] < 80:
+            totalArray["other_gaps_color"] = "#FFAE42"
+        else:
+            totalArray["other_gaps_color"] = "green"
 
+        print(totalArray)
         myWorkAllSpace = myWorkSpaceResult['data']
 
         #print(overallSummaryResult)
@@ -276,7 +329,8 @@ def mywork(request):
             'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
             'overallSummary': overallSummaryResult['data'],
             'ownSummary': ownSummaryResult['data'],
-            'performancArray': performancArray
+            'performancArray': performancArray,
+            'totalArray': totalArray
         }
     #print(myWorkAllSpace)
     # print(request.session.get('user_data', {}).get('ID'))
