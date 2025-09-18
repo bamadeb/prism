@@ -95,7 +95,7 @@
                                         <td>CALLED (PRIORITY)</td>
                                         {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                        <td>{{ vals.call_count }}/{{ vals.priority_count }} <span style="color:{{ vals.priority_color }}">({{ vals.priority_percentage }}%)</span></td>
+                                        <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
 
@@ -104,7 +104,7 @@
                                         <td>CALLED (OTHERS)</td>
                                         {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} <span style="color:{{ vals.other_call_color }}">({{ vals.other_call_percentage }}%)</span></td>
+                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
 
@@ -113,7 +113,7 @@
                                         <td>GAPS (PRIORITY)</td>
                                         {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} <span style="color:{{ vals.priority_gaps_color }}">({{ vals.priority_gaps_percentage }}%)</span></td>
+                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
 
@@ -122,7 +122,7 @@
                                         <td>GAPS (OTHERS)</td>
                                         {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} <span style="color:{{ vals.other_gaps_color }}">({{ vals.other_gaps_percentage }}%)</span></td>
+                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage }}%</span>)</td>
                                             {% endfor %}
                                         {% endfor %}
 
