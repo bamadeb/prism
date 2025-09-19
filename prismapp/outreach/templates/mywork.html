@@ -329,7 +329,7 @@
 
                                                 <!-- Call Count -->
                                                 <td class="text-center">
-                                                    <a title="Call List" class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}');">
+                                                    <a title="Call List" class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.Call_count }}
                                                     </a>
                                                 </td>
@@ -352,7 +352,7 @@
                                                 <!--                                                    {% endif %}-->
                                                 <!--                                                </td>-->
                                                 <td class="text-center">
-                                                    <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}');">
+                                                    <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.risk_gap_count }}
                                                     </a>
                                                 </td>
@@ -360,7 +360,7 @@
                                                  <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf }}%</td>
 
                                                 <td class="text-center">
-                                                    <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}');">
+                                                    <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.quality_count }}
                                                     </a>
                                                 </td>
@@ -519,14 +519,20 @@
         </div>
     </section>
 </main>
-
-
+<!-- Loder HTML -->
+<div id="gapLoader"
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.3); z-index:9999; text-align:center; padding-top:20%;">
+  <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><span></span> CALL LIST</h4>
+                <h4 class="modal-title text-uppercase">CALL LIST - <span id="nameCallList"></span> (#<span id="idCallList"></span>)</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -555,7 +561,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><span></span> GAP LIST</h4>
+                <h4 class="modal-title  text-uppercase"> GAP LIST - <span id="nameGapList"></span> (#<span id="idGapList"></span>)</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -566,9 +572,9 @@
                         <th>RELEVANT DATE</th>
                         <th>HCC CATEGORY</th>
                         <th>HCC MODEL</th>
-                        <th>STATUS</th>
                         <th>DIAG CODE</th>
                         <th>DIAG DESC</th>
+                        <th>STATUS</th>
                     </tr>
                     </thead>
                     <tbody id="gapList_table_body">
@@ -584,7 +590,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><span></span> CIH QUALITY LIST</h4>
+                <h4 class="modal-title text-uppercase">CIH QUALITY LIST - <span id="nameQualityList"></span> (#<span id="idQualityList"></span>)</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -901,159 +907,175 @@
     $('#transportation_prior_list_table_id').DataTable();
 
 
-  function showCallList(medicaid_id) {
-    if (medicaid_id) {
-      $.ajax({
-        type: "POST",
-        url: "{% url 'get_call_history' %}",   // Django URL
-        data: {
-          medicaid_id: medicaid_id,
-          csrfmiddlewaretoken: '{{ csrf_token }}'   // Django CSRF token
-        },
-        success: function (response) {
-          if (response.statusCode === 200 && response.data.length > 0) {
-            $("#callList_table_body").empty();
+function showCallList(medicaid_id, member_name) {
+  if (medicaid_id) {
+    // ✅ Show loader
+    $("#gapLoader").show();
 
-            response.data.forEach((row, i) => {
-              let mydate = new Date(row.action_date);
-              let action_date =
-                (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
+    $.ajax({
+      type: "POST",
+      url: "{% url 'get_call_history' %}",   // Django URL
+      data: {
+        medicaid_id: medicaid_id,
+        csrfmiddlewaretoken: '{{ csrf_token }}'   // Django CSRF token
+      },
+      success: function (response) {
+        if (response.statusCode === 200 && response.data.length > 0) {
+          $("#callList_table_body").empty();
 
-              // ✅ Handle null values (if null → empty string)
-              let action_type = row.action_type ?? "";
-              let action_result = row.action_result ?? "";
-              let action_note = row.action_note ?? "";
+          response.data.forEach((row, i) => {
+            let mydate = new Date(row.action_date);
+            let action_date =
+              (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
 
-              $("#callList_table_body").append(
-                "<tr><td>" + (i + 1) + "</td>" +
-                "<td>" + action_date + "</td>" +
-                "<td>" + action_type + "</td>" +
-                "<td>" + action_result + "</td>" +
-                "<td>" + action_note + "</td></tr>"
-              );
-            });
-          } else {
-            $("#callList_table_body").html(
-              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+            let action_type = row.action_type ?? "";
+            let action_result = row.action_result ?? "";
+            let action_note = row.action_note ?? "";
+
+            $("#callList_table_body").append(
+              "<tr><td>" + (i + 1) + "</td>" +
+              "<td>" + action_date + "</td>" +
+              "<td>" + action_type + "</td>" +
+              "<td>" + action_result + "</td>" +
+              "<td>" + action_note + "</td></tr>"
             );
-          }
-
-          // ✅ Bootstrap 5 modal show
-          var myModal = new bootstrap.Modal(document.getElementById('callList'));
-          myModal.show();
-        },
-        error: function () {
-          alert("Action Result Not found.");
+          });
+        } else {
+          $("#callList_table_body").html(
+            "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+          );
         }
-      });
-    }
+
+        // ✅ Bootstrap 5 modal show
+        $('#nameCallList').text(member_name);
+        $('#idCallList').text(medicaid_id);
+        var myModal = new bootstrap.Modal(document.getElementById('callList'));
+        myModal.show();
+      },
+      error: function () {
+        alert("Action Result Not found.");
+      },
+      complete: function () {
+        // ✅ Always hide loader after request
+        $("#gapLoader").hide();
+      }
+    });
   }
+}
 
 
-  function showGapList(medicaid_id) {
-  //alert(medicaid_id)
-    if (medicaid_id) {
-      $.ajax({
-        type: "POST",
-        url: "{% url 'get_gap_list' %}",   // Django URL
-        data: {
-          medicaid_id: medicaid_id
-        },
-        success: function (response) {
-          if (response.statusCode === 200 && response.data.length > 0) {
-            $("#gapList_table_body").empty();
+function showGapList(medicaid_id, member_name) {
+  if (medicaid_id) {
+    // ✅ Show loader
+    $("#gapLoader").show();
 
-            response.data.forEach((row, i) => {
-              let mydate = new Date(row.RELEVANT_DATE);
-              let action_date =
-                (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
+    $.ajax({
+      type: "POST",
+      url: "{% url 'get_gap_list' %}",   // Django URL
+      data: { medicaid_id: medicaid_id },
+      success: function (response) {
+        if (response.statusCode === 200 && response.data.length > 0) {
+          $("#gapList_table_body").empty();
 
-              // ✅ Handle null values (if null → empty string)
-              let DIAG_CODE = row.DIAG_CODE ?? "";
-              let DIAG_DESC = row.DIAG_DESC ?? "";
-              let HCC_CATEGORY = row.HCC_CATEGORY ?? "";
-              let STATUS = row.STATUS ?? "";
-               let HCC_MODEL = row.HCC_MODEL ?? "";
+          response.data.forEach((row, i) => {
+            let mydate = new Date(row.RELEVANT_DATE);
+            let action_date =
+              (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
 
-              $("#gapList_table_body").append(
-                "<tr><td>" + (i + 1) + "</td>" +
-                "<td>" + action_date + "</td>" +
-                "<td>" + HCC_CATEGORY + "</td>" +
-                "<td>" + HCC_MODEL + "</td>" +
-                "<td>" + STATUS + "</td>"+
-                "<td>" + DIAG_CODE + "</td>" +
-                "<td>" + DIAG_DESC + "</td></tr>"
-              );
-            });
-          } else {
-            $("#gapList_table_body").html(
-              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+            let DIAG_CODE = row.DIAG_CODE ?? "";
+            let DIAG_DESC = row.DIAG_DESC ?? "";
+            let HCC_CATEGORY = row.HCC_CATEGORY ?? "";
+            let PROCESS_STATUS = row.PROCESS_STATUS ?? 0;
+            let HCC_MODEL = row.HCC_MODEL ?? "";
+
+            let STATUS_STR = PROCESS_STATUS == 1 ? "COMPLETE" : "OPEN";
+
+            $("#gapList_table_body").append(
+              "<tr><td>" + (i + 1) + "</td>" +
+              "<td>" + action_date + "</td>" +
+              "<td>" + HCC_CATEGORY + "</td>" +
+              "<td>" + HCC_MODEL + "</td>" +
+              "<td>" + DIAG_CODE + "</td>" +
+              "<td>" + DIAG_DESC + "</td>" +
+              "<td>" + STATUS_STR + "</td></tr>"
             );
-          }
-
-          // ✅ Bootstrap 5 modal show
-          var myModal = new bootstrap.Modal(document.getElementById('gapList'));
-          myModal.show();
-        },
-        error: function () {
-          alert("Action Result Not found.");
+          });
+        } else {
+          $("#gapList_table_body").html(
+            "<tr><td colspan='7' class='text-center'>No records found</td></tr>"
+          );
         }
-      });
-    }
+
+        // ✅ Bootstrap 5 modal show
+        $('#nameGapList').text(member_name);
+        $('#idGapList').text(medicaid_id);
+        var myModal = new bootstrap.Modal(document.getElementById('gapList'));
+        myModal.show();
+      },
+      error: function () {
+        alert("Action Result Not found.");
+      },
+      complete: function () {
+        // ✅ Hide loader after success/error
+        $("#gapLoader").hide();
+      }
+    });
   }
-  function showCIHQualityList(medicaid_id) {
-  //alert(medicaid_id)
-    if (medicaid_id) {
-      $.ajax({
-        type: "POST",
-        url: "{% url 'get_quality_list' %}",   // Django URL
-        data: {
-          medicaid_id: medicaid_id
-        },
-        success: function (response) {
-          if (response.statusCode === 200 && response.data.length > 0) {
-            $("#quality_table_body").empty();
+}
+function showCIHQualityList(medicaid_id, member_name) {
+  if (medicaid_id) {
+    // ✅ Show loader
+    $("#gapLoader").show();
 
-            response.data.forEach((row, i) => {
+    $.ajax({
+      type: "POST",
+      url: "{% url 'get_quality_list' %}",   // Django URL
+      data: { medicaid_id: medicaid_id },
+      success: function (response) {
+        if (response.statusCode === 200 && response.data.length > 0) {
+          $("#quality_table_body").empty();
 
+          response.data.forEach((row, i) => {
+            let MEASURE_NAME = row.MEASURE_NAME ?? "";
+            let SUB_MEASURE = row.SUB_MEASURE ?? "";
+            let PROVIDER_ID = row.PROVIDER_ID ?? "";
+            let PROVIDER_NAME = row.PROVIDER_NAME ?? "";
+            let PROCESS_STATUS = row.PROCESS_STATUS ?? 0;
 
+            let STATUS_STR = PROCESS_STATUS == 1 ? "COMPLETE" : "OPEN";
 
-              let MEASURE_NAME = row.MEASURE_NAME ?? "";
-              let SUB_MEASURE = row.SUB_MEASURE ?? "";
-              let PROVIDER_ID = row.PROVIDER_ID ?? "";
-              let PROVIDER_NAME = row.PROVIDER_NAME ?? "";
-               let PROCESS_STATUS = row.PROCESS_STATUS;
-               let STATUS_STR = ""
-                if(PROCESS_STATUS==1){
-                    STATUS_STR = "COMPLETE";
-                }else{
-                    STATUS_STR = "OPEN";
-                }
-              $("#quality_table_body").append(
-                "<tr><td>" + (i + 1) + "</td>" +
-                "<td>" + MEASURE_NAME + "</td>" +
-                "<td>" + SUB_MEASURE + "</td>" +
-                "<td>" + PROVIDER_ID + "</td>" +
-                "<td>" + PROVIDER_NAME + "</td>"+
-                "<td>" + STATUS_STR + "</td></tr>"
-              );
-            });
-          } else {
-            $("#quality_table_body").html(
-              "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+            $("#quality_table_body").append(
+              "<tr><td>" + (i + 1) + "</td>" +
+              "<td>" + MEASURE_NAME + "</td>" +
+              "<td>" + SUB_MEASURE + "</td>" +
+              "<td>" + PROVIDER_ID + "</td>" +
+              "<td>" + PROVIDER_NAME + "</td>" +
+              "<td>" + STATUS_STR + "</td></tr>"
             );
-          }
-
-          // ✅ Bootstrap 5 modal show
-          var myModal = new bootstrap.Modal(document.getElementById('qualityList'));
-          myModal.show();
-        },
-        error: function () {
-          alert("Action Result Not found.");
+          });
+        } else {
+          $("#quality_table_body").html(
+            "<tr><td colspan='6' class='text-center'>No records found</td></tr>"
+          );
         }
-      });
-    }
+
+        // ✅ Bootstrap 5 modal show
+        $('#nameQualityList').text(member_name);
+        $('#idQualityList').text(medicaid_id);
+
+        var myModal = new bootstrap.Modal(document.getElementById('qualityList'));
+        myModal.show();
+      },
+      error: function () {
+        alert("Action Result Not found.");
+      },
+      complete: function () {
+        // ✅ Always hide loader after request
+        $("#gapLoader").hide();
+      }
+    });
   }
+}
      function addAction(medicaid_id) {
         //alert(medicaid_id);
         $('#action_id').val(5);

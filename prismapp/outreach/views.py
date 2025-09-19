@@ -109,15 +109,15 @@ def mywork(request):
         }
         try:
             #################
-            now = timezone.now()  # gets current datetime with timezone support
-            print("Step 2 - 1st API Call Start:", now)  # prints in console
+            #now = timezone.now()  # gets current datetime with timezone support
+            #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
             #response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
 
             response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP", json=data)
             #################
-            now = timezone.now()  # gets current datetime with timezone support
-            print("Step 3  - 2st API Call Start:", now)  # prints in console
+            #now = timezone.now()  # gets current datetime with timezone support
+            #print("Step 3  - 2st API Call Start:", now)  # prints in console
             ################
 
             myWorkSpaceResult = response.json()  # Decode the JSON response
@@ -147,8 +147,8 @@ def mywork(request):
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
         #################
-        now = timezone.now()  # gets current datetime with timezone support
-        print("Step 7  - Data processing start:", now)  # prints in console
+        #now = timezone.now()  # gets current datetime with timezone support
+        #print("Step 7  - Data processing start:", now)  # prints in console
         ################
         myWorkAllSpace = myWorkSpaceResult['data']
         #print(myWorkAllSpace['priorityAndOtherPerformanceSummary'])
@@ -305,7 +305,7 @@ def mywork(request):
         #print(totalArray)
 
         #print(overallSummaryResult)
-        today = date.today()
+        #today = date.today()
 
         # task_list = myWorkAllSpace['taskList']
         #
@@ -341,7 +341,7 @@ def mywork(request):
 
         members_list = myWorkAllSpace['members']
         #alertListMember = myWorkAllSpace['alertList']
-        curdate = datetime.now().date()  # current date without time
+        #curdate = datetime.now().date()  # current date without time
         # for member in members_list:
         #     #print(member)
         #     alertCount = 0
@@ -389,11 +389,11 @@ def mywork(request):
         #         alert["due_date"] = dt  # keep as datetime object
         #print(members_list)
         #################
-        now = timezone.now()  # gets current datetime with timezone support
-        print("Step 7  - Data processing end:", now)  # prints in console
+        #now = timezone.now()  # gets current datetime with timezone support
+        #print("Step 7  - Data processing end:", now)  # prints in console
         ################
-        print(myWorkAllSpace['overallRiskQualitySummary'])
-        print(myWorkAllSpace['ownRiskQualitySummary'])
+        #print(myWorkAllSpace['overallRiskQualitySummary'])
+        #print(myWorkAllSpace['ownRiskQualitySummary'])
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
