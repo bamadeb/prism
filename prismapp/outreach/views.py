@@ -18,6 +18,7 @@ from django.shortcuts import render
 import uuid
 from datetime import datetime
 from datetime import datetime, date
+from django.utils import timezone
 # Suppress the InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -107,18 +108,51 @@ def mywork(request):
             "user_id": user_id
         }
         try:
-            response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
+            #################
+            now = timezone.now()  # gets current datetime with timezone support
+            print("Step 2 - 1st API Call Start:", now)  # prints in console
+            ################
+            #response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
+
+            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspace", json=data)
+            #################
+            now = timezone.now()  # gets current datetime with timezone support
+            print("Step 3  - 2st API Call Start:", now)  # prints in console
+            ################
+
             myWorkSpaceResult = response.json()  # Decode the JSON response
-            overallSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json={})
-            overallSummaryResult = overallSummary.json()  # Decode the JSON response
-            ownSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json=data)
-            ownSummaryResult = ownSummary.json()  # Decode the JSON response
-            performancSummary = requests.post(settings.API_URL + "prismPriorityAndOtherPerformancSummary", json=data)
-            performancSummaryResult = performancSummary.json()  # Decode the JSON response
+            #print(myWorkSpaceResult)
+            # overallSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json={})
+            # #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 4  - 3st API Call Start:", now)  # prints in console
+            # ################
+            #
+            # overallSummaryResult = overallSummary.json()  # Decode the JSON response
+            # ownSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json=data)
+            # #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 5  - 4st API Call Start:", now)  # prints in console
+            # ################
+            #
+            # ownSummaryResult = ownSummary.json()  # Decode the JSON response
+            # performancSummary = requests.post(settings.API_URL + "prismPriorityAndOtherPerformancSummary", json=data)
+            # #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 6  - All API call end:", now)  # prints in console
+            # ################
+            #
+            # performancSummaryResult = performancSummary.json()  # Decode the JSON response
             #print(performancSummaryResult)
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
-        performanc = performancSummaryResult['data']
+        #################
+        now = timezone.now()  # gets current datetime with timezone support
+        print("Step 7  - Data processing start:", now)  # prints in console
+        ################
+        myWorkAllSpace = myWorkSpaceResult['data']
+
+        performanc = myWorkAllSpace['priorityAndOtherPerformancSummary']
         performancArray = []
         totalArray = {
             'total_priority_count': 0,
@@ -268,77 +302,76 @@ def mywork(request):
         else:
             totalArray["other_pcp_color"] = "green"
 
-        print(totalArray)
-        myWorkAllSpace = myWorkSpaceResult['data']
+        #print(totalArray)
 
         #print(overallSummaryResult)
         today = date.today()
 
-        task_list = myWorkAllSpace['taskList']
-
-        for task in task_list:
-            ad = task.get("action_date")
-            if isinstance(ad, str):
-                try:
-                    # Parse ISO 8601 string
-                    task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-                except ValueError:
-                    task["action_date"] = None
-            action_date = task.get("action_date")
-
-            if action_date:
-                # If it's a string, convert it to date
-                if isinstance(action_date, str):
-                    try:
-                        # Adjust format depending on your actual data (YYYY-MM-DD assumed here)
-                        action_date = datetime.strptime(action_date, "%Y-%m-%d").date()
-                        task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-                    except ValueError:
-                        # Skip if invalid format
-                        task["color"] = "#fff"
-                        continue
-
-                # Now safe to compare
-                if action_date < today and task.get("status") not in ["Successful", "Close", "N/A"]:
-                    task["color"] = "red"
-                else:
-                    task["color"] = "#fff"
-            else:
-                task["color"] = "#fff"
+        # task_list = myWorkAllSpace['taskList']
+        #
+        # for task in task_list:
+        #     ad = task.get("action_date")
+        #     if isinstance(ad, str):
+        #         try:
+        #             # Parse ISO 8601 string
+        #             task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
+        #         except ValueError:
+        #             task["action_date"] = None
+        #     action_date = task.get("action_date")
+        #
+        #     if action_date:
+        #         # If it's a string, convert it to date
+        #         if isinstance(action_date, str):
+        #             try:
+        #                 # Adjust format depending on your actual data (YYYY-MM-DD assumed here)
+        #                 action_date = datetime.strptime(action_date, "%Y-%m-%d").date()
+        #                 task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
+        #             except ValueError:
+        #                 # Skip if invalid format
+        #                 task["color"] = "#fff"
+        #                 continue
+        #
+        #         # Now safe to compare
+        #         if action_date < today and task.get("status") not in ["Successful", "Close", "N/A"]:
+        #             task["color"] = "red"
+        #         else:
+        #             task["color"] = "#fff"
+        #     else:
+        #         task["color"] = "#fff"
 
         members_list = myWorkAllSpace['members']
-        alertListMember = myWorkAllSpace['alertList']
+        #alertListMember = myWorkAllSpace['alertList']
         curdate = datetime.now().date()  # current date without time
-        for member in members_list:
-            #print(member)
-            alertCount = 0
-            for memberAlert in alertListMember:
-                due_date = datetime.fromisoformat(memberAlert["due_date"].replace("Z", "+00:00")).date()
-                if member["medicaid_id"] == memberAlert["medicaid_id"] and curdate <= due_date:
-                    alertCount += 1
-            member["alertCount"] = alertCount
-            elig_exp_dt = member.get("ELIG_EXP_DT")
-            if elig_exp_dt:
-                member["ELIG_EXP_DT"] = datetime.fromisoformat(elig_exp_dt.replace("Z", "+00:00")).date()
-            else:
-                member["ELIG_EXP_DT"] = None
-            third_last_action_date = member.get("third_last_action_date")
-            if third_last_action_date:
-                member["third_last_action_date"] = datetime.fromisoformat(
-                    third_last_action_date.replace("Z", "+00:00")).date()
-            else:
-                member["third_last_action_date"] = None
-            second_last_action_date = member.get("second_last_action_date")
-            if second_last_action_date:
-                member["second_last_action_date"] = datetime.fromisoformat(
-                    second_last_action_date.replace("Z", "+00:00")).date()
-            else:
-                member["second_last_action_date"] = None
-            last_action_date = member.get("last_action_date")
-            if last_action_date:
-                member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
-            else:
-                member["last_action_date"] = None
+        # for member in members_list:
+        #     #print(member)
+        #     alertCount = 0
+        #     for memberAlert in alertListMember:
+        #         due_date = datetime.fromisoformat(memberAlert["due_date"].replace("Z", "+00:00")).date()
+        #         if member["medicaid_id"] == memberAlert["medicaid_id"] and curdate <= due_date:
+        #             alertCount += 1
+        #     member["alertCount"] = alertCount
+        #     elig_exp_dt = member.get("ELIG_EXP_DT")
+        #     if elig_exp_dt:
+        #         member["ELIG_EXP_DT"] = datetime.fromisoformat(elig_exp_dt.replace("Z", "+00:00")).date()
+        #     else:
+        #         member["ELIG_EXP_DT"] = None
+        #     third_last_action_date = member.get("third_last_action_date")
+        #     if third_last_action_date:
+        #         member["third_last_action_date"] = datetime.fromisoformat(
+        #             third_last_action_date.replace("Z", "+00:00")).date()
+        #     else:
+        #         member["third_last_action_date"] = None
+        #     second_last_action_date = member.get("second_last_action_date")
+        #     if second_last_action_date:
+        #         member["second_last_action_date"] = datetime.fromisoformat(
+        #             second_last_action_date.replace("Z", "+00:00")).date()
+        #     else:
+        #         member["second_last_action_date"] = None
+        #     last_action_date = member.get("last_action_date")
+        #     if last_action_date:
+        #         member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
+        #     else:
+        #         member["last_action_date"] = None
         recentActivity = myWorkAllSpace['recentActivity']
         for activity in recentActivity:
             #print(activity)
@@ -346,34 +379,39 @@ def mywork(request):
             if isinstance(add_date, str):
                 activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
 
-        alertList = myWorkAllSpace['alertList']
-        for alert in alertList:
-            #print(activity)
-            due_date = alert.get("due_date")
-            if isinstance(due_date, str) and due_date:
-                # Convert ISO string to datetime
-                dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
-                alert["due_date"] = dt  # keep as datetime object
+        # alertList = myWorkAllSpace['alertList']
+        # for alert in alertList:
+        #     #print(activity)
+        #     due_date = alert.get("due_date")
+        #     if isinstance(due_date, str) and due_date:
+        #         # Convert ISO string to datetime
+        #         dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
+        #         alert["due_date"] = dt  # keep as datetime object
         #print(members_list)
+        #################
+        now = timezone.now()  # gets current datetime with timezone support
+        print("Step 7  - Data processing end:", now)  # prints in console
+        ################
+
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
             'alertCount': 1,
             'today': date.today(),
-            'alert_count': myWorkAllSpace['alertCount'],
-            'alertList': alertList,
-            'kpis_data': myWorkAllSpace['kpisData'],
-            'task_list': task_list,
-            'refared_member_list': myWorkAllSpace['referrerList'],
-            'sel_panel_list': myWorkAllSpace['prismMemberAction'],
-            'sel_panel_type': myWorkAllSpace['prismMemberActionType'],
-            'roleList': myWorkAllSpace['prismRoleList'],
-            'plan_list': myWorkAllSpace['prismPlanlist'],
-            'all_3day_transport_list': myWorkAllSpace['transportList'],
+            #'alert_count': myWorkAllSpace['alertCount'],
+            #'alertList': alertList,
+            #'kpis_data': myWorkAllSpace['kpisData'],
+            #'task_list': task_list,
+            #'refared_member_list': myWorkAllSpace['referrerList'],
+            #'sel_panel_list': myWorkAllSpace['prismMemberAction'],
+            #'sel_panel_type': myWorkAllSpace['prismMemberActionType'],
+            #'roleList': myWorkAllSpace['prismRoleList'],
+            #'plan_list': myWorkAllSpace['prismPlanlist'],
+            #'all_3day_transport_list': myWorkAllSpace['transportList'],
             'recent_activity': recentActivity,
-            'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
-            'overallSummary': overallSummaryResult['data'],
-            'ownSummary': ownSummaryResult['data'],
+            #'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
+            'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
+            'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
             'performancArray': performancArray,
             'totalArray': totalArray
         }
@@ -530,7 +568,7 @@ def add_action(request):
 
     if request.method == "POST":
         try:
-            #print(request.POST)
+            # print(request.POST)
             # return HttpResponse("Not allowed")
 
             insertDataArray = []
@@ -552,8 +590,7 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            action_details = api_call(apidata, "prismMultipleinsert")
-            action_inserted_id = action_details["insertedIds"][0]
+            api_call(apidata, "prismMultipleinsert")
 
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -573,13 +610,13 @@ def add_action(request):
             ##### update quality data
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
-                qualityupdate = {"id": qid,"action_id":action_inserted_id}
+                qualityupdate = {"id": qid}
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
-                paramsupdate = {"id": gid,"action_id":action_inserted_id}
+                paramsupdate = {"id": gid}
                 api_call(paramsupdate, "prismUpdategapStatus")
 
             # Always return after POST
