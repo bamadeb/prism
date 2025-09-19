@@ -114,7 +114,7 @@ def mywork(request):
             ################
             #response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
 
-            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP", json=data)
+            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspace", json=data)
             #################
             now = timezone.now()  # gets current datetime with timezone support
             print("Step 3  - 2st API Call Start:", now)  # prints in console
@@ -152,7 +152,7 @@ def mywork(request):
         ################
         myWorkAllSpace = myWorkSpaceResult['data']
         #print(myWorkAllSpace['priorityAndOtherPerformanceSummary'])
-        performanc = myWorkAllSpace['priorityAndOtherPerformanceSummary']
+        performanc = myWorkAllSpace['priorityAndOtherPerformancSummary']
         performancArray = []
         totalArray = {
             'total_priority_count': 0,
