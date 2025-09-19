@@ -129,6 +129,26 @@
                                         <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
 
                                     </tr>
+                                    <tr>
+                                        <td>PCP VISIT (PRIORITY)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                        <td>{{ vals.priority_pcp_visit_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_pcp_visit_color }}">{{ vals.priority_pcp_visit_percentage }}%</span>)</td>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        <td>{{ totalArray.priority_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_pcp_color }}">{{ totalArray.priority_pcp_percentage }}%</span>)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PCP VISIT (OTHERS)</td>
+                                        {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_pcp_visit_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_pcp_visit_color }}">{{ vals.other_pcp_visit_percentage }}%</span>)</td>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        <td>{{ totalArray.other_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_pcp_color }}">{{ totalArray.other_pcp_percentage }}%</span>)</td>
+                                    </tr>
+
+
                                 </table>
                             </div>
                         </div>
