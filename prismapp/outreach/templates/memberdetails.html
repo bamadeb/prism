@@ -396,9 +396,20 @@
                                                   <div class="overSelect"></div>
                                                 </div>
                                                 <div  id="checkboxes" class=" p-3">
-                                                    {% for gap in gap_list %}
-                                                  <div class="text-uppercase mb-2"><input type="checkbox" name="gap_id" id="gap_id_{{ gap.ID }}" value="{{ gap.ID }}" class="form-check-input me-2" >{{ gap.DIAG_DESC }}</div>
-                                                    {% endfor %}
+                                                    {% if gap_list %}
+                                                        {% for gap in gap_list %}
+                                                            <div class="text-uppercase mb-2">
+                                                                <input type="checkbox"
+                                                                       name="gap_id"
+                                                                       id="gap_id_{{ gap.ID }}"
+                                                                       value="{{ gap.ID }}"
+                                                                       class="form-check-input me-2">
+                                                                {{ gap.DIAG_DESC }}
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <div>No record found</div>
+                                                    {% endif %}
                                                 </div>
                                               </div>
 
@@ -419,9 +430,21 @@
                                                   <div class="overSelect"></div>
                                                 </div>
                                                 <div id="checkboxes1" class=" p-3">
-                                                    {% for quality in quality_list %}
-                                                  <div class="text-uppercase mb-2"><input type="checkbox" name="quality_id" id="quality_id" value="{{ quality.ID }}" class="form-check-input me-2">{{ quality.MEASURE_NAME }}</div>
-                                                    {% endfor %}
+                                                    {% if quality_list %}
+                                                        {% for quality in quality_list %}
+                                                            <div class="text-uppercase mb-2">
+                                                                <input type="checkbox"
+                                                                       name="quality_id"
+                                                                       id="quality_id_{{ quality.ID }}"
+                                                                       value="{{ quality.ID }}"
+                                                                       class="form-check-input me-2">
+                                                                {{ quality.MEASURE_NAME }}
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <div class="text-danger">No record found</div>
+                                                    {% endif %}
+
                                                 </div>
                                               </div>
 

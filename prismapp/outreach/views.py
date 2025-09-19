@@ -485,7 +485,7 @@ def add_action(request):
 
     if request.method == "POST":
         try:
-            # print(request.POST)
+            #print(request.POST)
             # return HttpResponse("Not allowed")
 
             insertDataArray = []
@@ -507,7 +507,8 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert")
+            action_details = api_call(apidata, "prismMultipleinsert")
+            action_inserted_id = action_details["insertedIds"][0]
 
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -527,13 +528,13 @@ def add_action(request):
             ##### update quality data
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
-                qualityupdate = {"id": qid}
+                qualityupdate = {"id": qid,"action_id":action_inserted_id}
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
-                paramsupdate = {"id": gid}
+                paramsupdate = {"id": gid,"action_id":action_inserted_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
 
             # Always return after POST
