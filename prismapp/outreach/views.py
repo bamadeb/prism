@@ -133,10 +133,14 @@ def mywork(request):
             'other_call_percentage': 0,
             'priority_gaps_percentage': 0,
             'other_gaps_percentage': 0,
+            'priority_pcp_visit_count': 0,
+            'other_pcp_visit_count': 0,
             'priority_call_color': '',
             'other_call_color': '',
             'priority_gaps_color': '',
             'other_gaps_color': '',
+            'priority_pcp_visit_color': '',
+            'other_pcp_visit_color': ''
         }
 
         for item in performanc:
@@ -192,12 +196,41 @@ def mywork(request):
                 values["other_gaps_color"] = "#FFAE42"
             else:
                 values["other_gaps_color"] = "green"
+            # Get safe numbers for PCP visit
+            priority_pcp_visit_count = float(values.get("priority_pcp_visit_count", 0) or 0)
+            priority_count = float(values.get("priority_count", 0) or 0)
+            #totalArray['total_priority_count'] += priority_count
+            totalArray['priority_pcp_visit_count'] += priority_pcp_visit_count
+            # Calculate percentage other_count
+            values["priority_pcp_visit_percentage"] = round((priority_pcp_visit_count / priority_count) * 100, 2) if priority_count > 0 else 0
+            if values["priority_pcp_visit_percentage"] < 60:
+                values["priority_pcp_visit_color"] = "red"
+            elif values["priority_pcp_visit_percentage"] < 80:
+                values["priority_pcp_visit_color"] = "#FFAE42"
+            else:
+                values["priority_pcp_visit_color"] = "green"
+            # Get safe numbers for PCP visit
+            other_pcp_visit_count = float(values.get("other_pcp_visit_count", 0) or 0)
+            priority_count = float(values.get("priority_count", 0) or 0)
+            #totalArray['total_priority_count'] += priority_count
+            totalArray['other_pcp_visit_count'] += other_pcp_visit_count
+            # Calculate percentage other_count
+            values["other_pcp_visit_percentage"] = round((other_pcp_visit_count / other_count) * 100, 2) if other_count > 0 else 0
+            if values["other_pcp_visit_percentage"] < 60:
+                values["other_pcp_visit_color"] = "red"
+            elif values["other_pcp_visit_percentage"] < 80:
+                values["other_pcp_visit_color"] = "#FFAE42"
+            else:
+                values["other_pcp_visit_color"] = "green"
+
             performancArray.append({pcp_id: values})
 
         totalArray['priority_call_percentage'] = round((totalArray['total_call_count'] / totalArray['total_priority_count']) * 100, 2) if totalArray['total_priority_count'] > 0 else 0
         totalArray['other_call_percentage'] = round((totalArray['total_other_call_count'] / totalArray['total_other_count']) * 100, 2) if totalArray['total_other_count'] > 0 else 0
         totalArray['priority_gaps_percentage'] = round((totalArray['total_priority_complete_gaps_count'] / totalArray['total_priority_gaps_count']) * 100, 2) if totalArray['total_priority_gaps_count'] > 0 else 0
         totalArray['other_gaps_percentage'] = round((totalArray['total_other_complete_gaps_count'] / totalArray['total_other_gaps_count']) * 100, 2) if totalArray['total_other_gaps_count'] > 0 else 0
+        totalArray['priority_pcp_percentage'] = round((totalArray['priority_pcp_visit_count'] / totalArray['total_priority_count']) * 100, 2) if totalArray['total_priority_count'] > 0 else 0
+        totalArray['other_pcp_percentage'] = round((totalArray['other_pcp_visit_count'] / totalArray['total_other_count']) * 100, 2) if totalArray['total_other_count'] > 0 else 0
         if totalArray['priority_call_percentage'] < 60:
             totalArray["priority_call_color"] = "red"
         elif totalArray['priority_call_percentage'] < 80:
@@ -222,6 +255,18 @@ def mywork(request):
             totalArray["other_gaps_color"] = "#FFAE42"
         else:
             totalArray["other_gaps_color"] = "green"
+        if totalArray['priority_pcp_percentage'] < 60:
+            totalArray["priority_pcp_color"] = "red"
+        elif totalArray['priority_pcp_percentage'] < 80:
+            totalArray["priority_pcp_color"] = "#FFAE42"
+        else:
+            totalArray["priority_pcp_color"] = "green"
+        if totalArray['other_pcp_percentage'] < 60:
+            totalArray["other_pcp_color"] = "red"
+        elif totalArray['other_pcp_percentage'] < 80:
+            totalArray["other_pcp_color"] = "#FFAE42"
+        else:
+            totalArray["other_pcp_color"] = "green"
 
         print(totalArray)
         myWorkAllSpace = myWorkSpaceResult['data']
