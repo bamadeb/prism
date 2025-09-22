@@ -90,7 +90,9 @@ def login(request):
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
 
     context = {
-        'path': request.path
+        'path': request.path,
+        'projectName': settings.PROJECT_NAME,
+        'pageTitle': 'LOGIN',
     }
     # For GET requests, just render the login page
     return render(request, 'login.html',context)
@@ -397,6 +399,7 @@ def mywork(request):
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
+            'projectName': settings.PROJECT_NAME,
             'alertCount': 1,
             'today': date.today(),
             #'alert_count': myWorkAllSpace['alertCount'],
@@ -528,6 +531,7 @@ def memberdetails(request, medicaid_id):
 
     return render(request, 'memberdetails.html', {
         'pageTitle': "MEMBER DETAILS",
+        'projectName': settings.PROJECT_NAME,
         "sel_panel_list": member_details['data']['prismMemberAction'],
         "sel_panel_type": member_details['data']['prismMemberActionType'],
         "member_last_alert": member_details['data']['prismMemberlastalert'],
@@ -781,6 +785,7 @@ def memberhistory(request, medicaid_id):
     return render(request, 'memberhistory.html', {
         "member_details": historyResponse['data']['member_details'],
         'pageTitle': "MEMBER HISTORY",
+        'projectName': settings.PROJECT_NAME,
         "claim_details": historyResponse['data']['claim_details'],
         "log_type_list": historyResponse['data']['log_type_list'],
         "medicaid_id": medicaid_id,
@@ -1375,6 +1380,7 @@ def processmember(request):
         )
     return render(request, 'processmember.html', {
         'pageTitle': "PROCESS MEMBER",
+        'projectName': settings.PROJECT_NAME,
     })
 def processriskgap(request):
     if not request.session.get('is_logged_in', False):
@@ -1459,6 +1465,7 @@ def processriskgap(request):
             #print("Renamed Data:", insertDataArray[:5])
     return render(request, 'processriskgap.html', {
         'pageTitle': "PROCESS RISK GAP",
+        'projectName': settings.PROJECT_NAME,
 
     })
 def escape_sql_string(value):
@@ -1494,6 +1501,7 @@ def clean_date(value):
 def star_performance(request):
     return render(request, 'star_performance.html', {
         'pageTitle': "STAR PERFORMANCE",
+        'projectName': settings.PROJECT_NAME,
     })
 def processquality(request):
     if not request.session.get('is_logged_in', False):
@@ -1582,6 +1590,6 @@ def processquality(request):
             )
             #print("Renamed Data:", insertDataArray[:5])
     return render(request, 'processquality.html', {
-        'pageTitle': "PROCESS CHI QUALITY",
-
+        'pageTitle': "PROCESS QUALITY",
+        'projectName': settings.PROJECT_NAME,
     })

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>{% load static %}
-    <title>{% block title %} {% endblock %}</title>
+    <title>{% block title %} {{projectName}}  :: {{ pageTitle }} {% endblock %}</title>
     <!-- Favicons -->
     <link rel='icon' type='image/png' sizes='32x32' href="{% static '/images/favicon.png' %}">
     <link rel='icon' type='image/png' sizes='16x16' href="{% static '/images/favicon.png' %}">
