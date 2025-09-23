@@ -76,9 +76,9 @@
                                 </div>
                                 <div class="col-sm-4 mb-3">
                                     <select class="form-control text-uppercase" name="role_id" id="role_id" required>
-                                        <option value="7">Admin</option>
-                                        <option value="9">WellnessNavigator</option>
-                                        <option value="20">Management</option>
+                                        {% for role in role_list %}
+                                        <option value="{{role.ID}}">{{role.ROLE_NAME}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
