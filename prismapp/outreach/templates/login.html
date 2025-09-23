@@ -44,7 +44,7 @@
               <div class="loginHeaderpart"  >
                 <div class="loginHeaderSubpart">
                   <div align="center">
-                   <img class='logo' src="{% static '/images/logo1.svg' %}" alt="Healthcare Management" style="width: 300px;">
+                   <img class='logo' src="{% static '/images/CIH-logo.png' %}" alt="Healthcare Management" style="width: 300px;">
                  </div>
 
                  <div class ="loginBoxMargin">
@@ -52,6 +52,11 @@
 
                     <div class='ddc-form-signin-options ddc-mgt-4'>
                       <div class='ddc-form-signin-main'>
+                           {% if error %}
+                                <div style="color: red;" align="center">
+                                  {{ error }}
+                                </div>
+                            {% endif %}
 
                        <form action="/login/" method="POST">
                         {% csrf_token %}

@@ -73,12 +73,12 @@ def login(request):
                     #
                     # # Make the API call to insert the data into the activity log table
                     # requests.post(settings.API_URL + "vegasinsertdataintable", json=data_list)
-
-                    return redirect('/mywork/')
-                    # if request.session['user_data']['employee_role'] == "ZM" or request.session['user_data']['employee_role'] == "ZEM":
-                    #     return redirect('/manager_score/')
-                    # elif request.session['user_data']['employee_role'] == "RM":
-                    #     return redirect('/region_manager_score/')
+                    if user_data[0].get('role_id', None) == 9:
+                        return redirect('/mywork/')
+                    elif user_data[0].get('role_id', None) == 7:
+                        return redirect('/users/')
+                    elif user_data[0].get('role_id', None) == 20:
+                        return redirect('/users/')
 
                 else:
                     return render(request, 'login.html', {'error': 'Invalid username or password.'})

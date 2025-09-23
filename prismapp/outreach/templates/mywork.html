@@ -20,144 +20,139 @@
 </style>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="accordion" class=" mb-0">
+                                <div id="headingThree">
+                                    <h3 class="mb-0 mt-0 text-center">
+                                        <button style="    font-size: 18px; color:#000;" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            PROJECT OVERVIEW
+                                        </button>
+                                    </h3>
+                                </div>
+                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                                        <div class="row">
+                                            <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                            <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
+                                            <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf }}% </h4></div>
+
+                                            <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
+                                            <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf }}% </h4></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                            <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                            <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
+                                            <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf }}% </h4></div>
+
+                                            <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
+                                            <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
+                                            <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf }}% </h4></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-sm-6 mb-xl-0">
+                                        <table class="table">
+                                            <tr>
+                                                <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <th><h5>{{ pcp_id }}</h5></th>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <th><h5>TOTAL</h5></th>
+                                            </tr>
+
+                                            <tr>
+                                                <td>CONTACTED (PRIORITY)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.total_call_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_call_color }}">{{ totalArray.priority_call_percentage }}%</span>)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>CONTACTED (OTHERS)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage }}%</span>)</td>
+                                            </tr>
+                                            <tr><td></td></tr>
+                                            <tr>
+                                                <td>GAPS (PRIORITY)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.total_priority_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_gaps_percentage }}%</span>)</td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>GAPS (OTHERS)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
+
+                                            </tr>
+                                            <tr><td></td></tr>
+
+                                            <tr>
+                                                <td>PCP VISIT (PRIORITY)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.priority_pcp_visit_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_pcp_visit_color }}">{{ vals.priority_pcp_visit_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.priority_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_pcp_color }}">{{ totalArray.priority_pcp_percentage }}%</span>)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>PCP VISIT (OTHERS)</td>
+                                                {% for item in performancArray %}
+                                                {% for pcp_id, vals in item.items %}
+                                                <td>{{ vals.other_pcp_visit_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_pcp_visit_color }}">{{ vals.other_pcp_visit_percentage }}%</span>)</td>
+                                                {% endfor %}
+                                                {% endfor %}
+                                                <td>{{ totalArray.other_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_pcp_color }}">{{ totalArray.other_pcp_percentage }}%</span>)</td>
+                                            </tr>
+
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <!-- Left side columns -->
             <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                        <div class="col-xl-12 col-sm-12 mb-xl-0">
-                        <div class="card">
-<!--                            <h4 align="center"><u>RISK</u></h4>-->
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                    <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
-                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf }}% </h4></div>
-
-                                    <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
-                                    <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf }}% </h4></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="col-xl-12 col-sm-12 mb-xl-0">
-                        <div class="card">
-<!--                            <h4 align="center"><u>QUALITY</u></h4>-->
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                    <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                    <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
-                                    <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf }}% </h4></div>
-
-                                    <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
-                                    <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
-                                    <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf }}% </h4></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                        <div class="col-xl-12 col-sm-12 mb-xl-0">
-                        <div class="card">
-<!--                            <h4 align="center"><u>QUALITY</u></h4>-->
-                            <div class="card-body">
-
-                                <table class="table">
-                                    <tr>
-                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">My Own</h4></th>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                        <th><h5>{{ pcp_id }}</h5></th>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <th><h5>TOTAL</h5></th>
-                                    </tr>
-                                    <tr>
-                                        <td>CALLED (PRIORITY)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                        <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.total_call_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_call_color }}">{{ totalArray.priority_call_percentage }}%</span>)</td>
-                                    </tr>
-                                    <tr>
-                                        <td>CALLED (OTHERS)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage }}%</span>)</td>
-                                    </tr>
-                                    <tr>
-                                        <td>GAPS (PRIORITY)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.total_priority_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_gaps_percentage }}%</span>)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>GAPS (OTHERS)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>PCP VISIT (PRIORITY)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                        <td>{{ vals.priority_pcp_visit_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_pcp_visit_color }}">{{ vals.priority_pcp_visit_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.priority_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_pcp_color }}">{{ totalArray.priority_pcp_percentage }}%</span>)</td>
-                                    </tr>
-                                    <tr>
-                                        <td>PCP VISIT (OTHERS)</td>
-                                        {% for item in performancArray %}
-                                            {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_pcp_visit_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_pcp_visit_color }}">{{ vals.other_pcp_visit_percentage }}%</span>)</td>
-                                            {% endfor %}
-                                        {% endfor %}
-                                        <td>{{ totalArray.other_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_pcp_color }}">{{ totalArray.other_pcp_percentage }}%</span>)</td>
-                                    </tr>
-
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-
-
-                </div>
-
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -242,17 +237,17 @@
                                                 <th>#MEMBER ID</th>
                                                 <th>NAME/PHONE</th>
                                                 <th class="text-center">PCP</th>
-<!--                                                <th>ALERT</th>-->
+                                                <!--                                                <th>ALERT</th>-->
                                                 <th class="text-center">PRIORITY</th>
                                                 <th class="text-center">#CALL</th>
                                                 <th></th>
                                                 <!--                                                <th>ELIGIBILITY</th>-->
                                                 <th class="text-center">RISK GAPS</th>
                                                 <th class="text-center">COMPLETED</th>
-                                                 <th class="text-center">PERFORMANCE</th>
+                                                <th class="text-center">PERFORMANCE</th>
                                                 <th class="text-center">QUALITY GAPS</th>
                                                 <th class="text-center">COMPLETED</th>
-                                                 <th class="text-center">PERFORMANCE</th>
+                                                <th class="text-center">PERFORMANCE</th>
                                                 <!--                                                <th>3RD CALL</th>-->
                                                 <!--                                                <th>2ND CALL</th>-->
                                                 <!--                                                <th>LAST CALL</th>-->
@@ -273,58 +268,58 @@
                                                 <td class="text-center"><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div></td>
                                                 <td class="text-center">{{ member.PRIORITY_FLAG|default:"" }}</td>
                                                 <!-- Alerts -->
-<!--                                                <td>-->
-<!--                      <span class="badge alert_bg1 wrapper">-->
+                                                <!--                                                <td>-->
+                                                <!--                      <span class="badge alert_bg1 wrapper">-->
 
-<!--                                               -->
+                                                <!--                                               -->
 
-<!--                                                      {# Show notification bell if member.alertCount > 0 #}-->
-<!--                                                      {% if member.alertCount > 0 %}-->
-<!--                                                        <div style="position:absolute;margin-left: 21px;margin-top: -15px;">-->
-<!--                                                          <img src="{% static 'images/notification.png' %}" width="16">-->
-<!--                                                        </div>-->
-<!--                                                      {% endif %}-->
+                                                <!--                                                      {# Show notification bell if member.alertCount > 0 #}-->
+                                                <!--                                                      {% if member.alertCount > 0 %}-->
+                                                <!--                                                        <div style="position:absolute;margin-left: 21px;margin-top: -15px;">-->
+                                                <!--                                                          <img src="{% static 'images/notification.png' %}" width="16">-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                      {% endif %}-->
 
-<!--                                                      <div style="line-height:25px;">{{ member.alertCount }}-->
-<!--                                                        <div class="tooltip">-->
-<!--                                                          <div style="overflow-y:scroll; height: 180px !important;">-->
-<!--                                                            <table class="table table-sm" style="font-size:12px;">-->
-<!--                                                              {% if member.alertCount == 0 %}-->
-<!--                                                                <tr><td colspan="2" align="center">No alert found</td></tr>-->
-<!--                                                              {% else %}-->
-<!--                                                                {% for alert in alertList %}-->
-<!--                                                                  {% if member.medicaid_id == alert.medicaid_id and today|date:"U" <= alert.due_date|date:"U" %}-->
-<!--                                                                    <tr>-->
-<!--                                                                      <td>-->
-<!--                                                                        {{ alert.alert }} - {{ alert.alert_type }}<br>-->
+                                                <!--                                                      <div style="line-height:25px;">{{ member.alertCount }}-->
+                                                <!--                                                        <div class="tooltip">-->
+                                                <!--                                                          <div style="overflow-y:scroll; height: 180px !important;">-->
+                                                <!--                                                            <table class="table table-sm" style="font-size:12px;">-->
+                                                <!--                                                              {% if member.alertCount == 0 %}-->
+                                                <!--                                                                <tr><td colspan="2" align="center">No alert found</td></tr>-->
+                                                <!--                                                              {% else %}-->
+                                                <!--                                                                {% for alert in alertList %}-->
+                                                <!--                                                                  {% if member.medicaid_id == alert.medicaid_id and today|date:"U" <= alert.due_date|date:"U" %}-->
+                                                <!--                                                                    <tr>-->
+                                                <!--                                                                      <td>-->
+                                                <!--                                                                        {{ alert.alert }} - {{ alert.alert_type }}<br>-->
 
-<!--                                                                        {% if today|date:"U" > alert.due_date|date:"U" %}-->
-<!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# expired -> highlight #}-->
-<!--                                                                            {% with "#e63b3b !important" as color %}-->
-<!--                                                                            {% endwith %}-->
-<!--                                                                        {% else %}-->
-<!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# still valid #}-->
-<!--                                                                            {% with "" as color %}-->
-<!--                                                                            {% endwith %}-->
-<!--                                                                        {% endif %}-->
-<!--                                                                      </td>-->
-<!--                                                                      <td>-->
-<!--                                                                        <span style="background-color:{{ color }}" class="badge alert_bg tooltipbox">-->
-<!--                                                                          {{ alert.alert_status }}-->
-<!--                                                                        </span>-->
-<!--                                                                      </td>-->
-<!--                                                                    </tr>-->
-<!--                                                                  {% endif %}-->
-<!--                                                                {% endfor %}-->
-<!--                                                              {% endif %}-->
-<!--                                                            </table>-->
-<!--                                                          </div>-->
-<!--                                                        </div>-->
-<!--                                                      </div>-->
+                                                <!--                                                                        {% if today|date:"U" > alert.due_date|date:"U" %}-->
+                                                <!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# expired -> highlight #}-->
+                                                <!--                                                                            {% with "#e63b3b !important" as color %}-->
+                                                <!--                                                                            {% endwith %}-->
+                                                <!--                                                                        {% else %}-->
+                                                <!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# still valid #}-->
+                                                <!--                                                                            {% with "" as color %}-->
+                                                <!--                                                                            {% endwith %}-->
+                                                <!--                                                                        {% endif %}-->
+                                                <!--                                                                      </td>-->
+                                                <!--                                                                      <td>-->
+                                                <!--                                                                        <span style="background-color:{{ color }}" class="badge alert_bg tooltipbox">-->
+                                                <!--                                                                          {{ alert.alert_status }}-->
+                                                <!--                                                                        </span>-->
+                                                <!--                                                                      </td>-->
+                                                <!--                                                                    </tr>-->
+                                                <!--                                                                  {% endif %}-->
+                                                <!--                                                                {% endfor %}-->
+                                                <!--                                                              {% endif %}-->
+                                                <!--                                                            </table>-->
+                                                <!--                                                          </div>-->
+                                                <!--                                                        </div>-->
+                                                <!--                                                      </div>-->
 
-<!--                                                    </span>-->
+                                                <!--                                                    </span>-->
 
-<!--                                                </td>-->
+                                                <!--                                                </td>-->
 
                                                 <!-- Call Count -->
                                                 <td class="text-center">
@@ -356,7 +351,7 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ member.risk_comp_count }}</td>
-                                                 <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf }}%</td>
+                                                <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf }}%</td>
 
                                                 <td class="text-center">
                                                     <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
@@ -364,7 +359,7 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ member.quality_comp_count }}</td>
-                                                 <td class="text-center" style="color: {{ member.quality_perf_color }}">{{ member.quality_perf }}%</td>
+                                                <td class="text-center" style="color: {{ member.quality_perf_color }}">{{ member.quality_perf }}%</td>
                                                 <!--                                                <td>{% if member.third_last_action_date %}-->
                                                 <!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
                                                 <!--                                                    {% endif %}</td>-->
@@ -522,9 +517,9 @@
 <div id="gapLoader"
      style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
             background:rgba(0,0,0,0.3); z-index:9999; text-align:center; padding-top:20%;">
-  <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+    <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">

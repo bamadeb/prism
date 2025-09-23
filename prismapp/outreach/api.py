@@ -78,4 +78,14 @@ def get_alert_typeList(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@csrf_exempt
+def get_user_details(request):
+    if request.method == "POST":
+        id = request.POST.get("id")
+        params = {"user_id": id}
+        response = api_call(params, "prismUserListByRole")
+        return JsonResponse(response['data'], safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 

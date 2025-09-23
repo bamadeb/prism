@@ -1,0 +1,143 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block body %}
+
+<main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div align="right" class="mb-4"> <a onclick="add_user();" style="text-decoration:underline;cursor:pointer;">+ Add User</a></div>
+                                        <table class="table table-sm table-borderless" id="members">
+                                            <thead>
+                                                    <tr>
+                                                        <th>FIRST NAME</th>
+                                                        <th>LAST NAME</th>
+                                                        <th>EMAIL</th>
+                                                        <th>ROLE</th>
+                                                        <th>STATUS</th>
+                                                        <th>ACTION</th>
+                                                    </tr>
+                                            </thead>
+                                            <tbody>
+                                                 {% for user in user_list %}
+                                                    <tr>
+                                                        <td class="text-uppercase">{{user.FistName}}</td>
+                                                        <td class="text-uppercase">{{user.LastName}}</td>
+                                                        <td class="text-uppercase">{{user.EmailID}}</td>
+                                                        <td class="text-uppercase">{{user.ROLE_NAME}}</td>
+                                                        <td class="text-uppercase">{{user.status}}</td>
+                                                        <td class="text-uppercase"><a href="javascript:void(0);" onclick="update_user({{user.ID}});">Update</a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                    </div>
+                </div>
+            </div><!-- End Left side columns -->
+        </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Loder HTML -->
+<div id="gapLoader"
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.3); z-index:9999; text-align:center; padding-top:20%;">
+  <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<!-- Call list modal start -->
+<div class="modal " id="callList" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-uppercase">ADD / UPDATE USER</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <form method="post"   action="/add_user/">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" id="user_id">
+
+                            <div class="row ">
+                                <div class="col-sm-4 mb-3">
+                                    <input type='text' class="form-control text-uppercase" name="FistName"  id="FistName"  placeholder="First Name" required>
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <input type="text" name="LastName" id="LastName"   class="form-control text-uppercase" placeholder="Last Name" required>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <select class="form-control text-uppercase" name="role_id" id="role_id" required>
+                                        <option value="7">Admin</option>
+                                        <option value="9">WellnessNavigator</option>
+                                        <option value="20">Management</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="email" name="EmailID" id="EmailID" class="form-control text-uppercase" placeholder="Email" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="password" name="Password" id="Password"  class="form-control text-uppercase" placeholder="Password" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control text-uppercase" name="member_status" id="member_status" required>
+                                        <option value="0">Active</option>
+                                        <option value="1">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-sm-12" align="right">
+                                    <button type="submit" class="btn btn-primary">SUBMIT</button>
+                                </div>
+                            </div>
+                        </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Call list modal end -->
+
+<script type="text/javascript">
+    $('#members').DataTable();
+
+    function update_user(id=""){
+        $("#gapLoader").show();
+        if(id){
+            $.ajax({
+              type: "POST",
+              url: "{% url 'get_user_details' %}",
+              data: { id: id},
+              success: function (response) {
+                $('#FistName').val(response[0].FistName);
+                $('#LastName').val(response[0].LastName);
+                $('#role_id').val(response[0].role_id);
+                $('#EmailID').val(response[0].EmailID);
+                $('#Password').val(response[0].Password);
+                $('#member_status').val(response[0].member_status);
+                $('#user_id').val(response[0].ID);
+                var myModal = new bootstrap.Modal(document.getElementById('callList'));
+                 myModal.show();
+                 $("#gapLoader").hide();
+              }
+            });
+        }
+    }
+    function add_user(){
+        var myModal = new bootstrap.Modal(document.getElementById('callList'));
+         myModal.show();
+         $("#gapLoader").hide();
+    }
+ </script>
+{% endblock %}
+

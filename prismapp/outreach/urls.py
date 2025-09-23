@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api
+from . import views, api, users
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -38,6 +38,11 @@ urlpatterns = [
     path("api/get_alert_typeList/", api.get_alert_typeList, name="get_alert_typeList"),
     path('api/get_call_history/', api.get_call_history, name='get_call_history'),
     path('api/get_gap_list/', api.get_gap_list, name='get_gap_list'),
-    path('api/get_quality_list/', api.get_quality_list, name='get_quality_list')
+    path('api/get_quality_list/', api.get_quality_list, name='get_quality_list'),
+    path('api/get_user_details/', api.get_user_details, name='get_user_details'),
+
+    ### Users
+    path('users/', users.users, name='users'),
+    path('add_user/', users.add_user, name='add_user'),
 
 ]
