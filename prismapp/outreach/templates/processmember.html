@@ -1,4 +1,5 @@
 {% extends 'basic.html' %}
+{% block title%} PRISM  :: MEMBER DETAILS {% endblock %}
 {% load static %}
 {% block body %}
 
@@ -9,40 +10,155 @@
          <div class="col-lg-12">
            <div class="card">
                      <div class="card-body">
-                       <form method="post" action="/processmember/" enctype="multipart/form-data" id="process_member_action">
-                  {% csrf_token %}
-                         <div class="row">
-                           <div class="col-lg-2">
-                              Select Member File
-                           </div>
-                           <div class="col-lg-2">
-                             <input type="file" name="file" accept=".csv" class="form-control">
-                           </div>
-                           <div class="col-lg-2">
-                                <button type="submit" class="form-control btn btn-primary">Upload</button>
-                           </div>
-                             <div class="col-lg-6">
-                             </div>
-                                 <div class="col-lg-6 mt-4">
 
-                              {% if messages %}
-                  {% for message in messages %}
-                    <div style="color: red;" align="center">
-                      {{ message }}
-                    </div>
-                  {% endfor %}
-                {% endif %}
-                             </div>
-                         </div>
-                       </form>
+                         <div class="row align-items-center">
+    <!-- Upload form -->
+    <div class="col-lg-6">
+        <form method="post" action="/processmember/" enctype="multipart/form-data" id="process_member_action">
+            {% csrf_token %}
+            <div class="row g-2 align-items-center">
+                <div class="col-lg-4">
+                    Select Member File
+                </div>
+                <div class="col-lg-4">
+                    <input type="file" name="file" accept=".csv" class="form-control" required>
+                </div>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if totalTempMemberCount > 0 %}
+    <!-- Member info -->
+    <div class="col-lg-3">
+        Total {{ totalTempMemberCount }} members are to be processed
+        {% if error_count > 0 %}<br> Find {{ error_count }} error record{% endif %}
+        <br>Find {{ exist_count }} existing member(s)
+    </div>
+
+    <!-- Process form -->
+    <div class="col-lg-2">
+        <form method="post" action="/processmember/">
+            {% csrf_token %}
+            <input type="hidden" name="session_id" value="{{ session_id }}">
+            <button type="submit" class="btn btn-success w-100" name="processBTN">Process</button>
+        </form>
+    </div>
+    {% else %}
+      <div class="col-lg-6">
+      </div>
+    {% endif %}
+    <!-- Messages -->
+    <div class="col-lg-6">
+        {% if messages %}
+            {% for message in messages %}
+                <div style="color: red;" align="center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
                      </div>
            </div>
          </div>
         </div>
+        {% if totalTempMemberCount > 0 %}
+        <div class="row">
+         <!-- Left side columns -->
+         <div class="col-lg-12">
+           <div class="card">
+               <div class="card-body">
+                   <form method="post" action="/processmember/" enctype="multipart/form-data" id="process_member_action">
+                  {% csrf_token %}
+                       <table class="table table-sm table-borderless" id="tempMemberList">
+                           <thead>
+                           <tr>
+                               <th>SUBSCRIBER_ID</th>
+                               <th>FIRST_NM</th>
+                               <th>MIDDLE_NM</th>
+                               <th>LAST_NM</th>
+                               <th>MEDICARE_ID</th>
+                               <th>MEDICAID_ID</th>
+                               <th>DT_OF_BIRTH</th>
+                               <th>SEX</th>
+                               <th>HOME_TELEPHONE</th>
+                               <th>PCP_TAX_ID</th>
+                               <th>STATUS</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           {% for member in tempMember %}
+                           <tr>
+                               <td>{{ member.SUBSCRIBER_ID }}</td>
+                               <td>{{ member.FIRST_NM }}</td>
+                               <td>{{ member.MIDDLE_NM }}</td>
+                               <td>{{ member.LAST_NM }}</td>
+                               <td>{{ member.MEDICARE_ID }}</td>
+                               <td>{{ member.MEDICAID_ID }}</td>
+                               <td>{{ member.DT_OF_BIRTH|date:"m/d/Y" }}</td>
+                               <td>{{ member.SEX }}</td>
+                               <td>{{ member.HOME_TELEPHONE }}</td>
+                               <td>{{ member.PCP_TAX_ID }}</td>
+                               <td {% if member.SUBSCRIBER_ID == None or member.SUBSCRIBER_ID == "" %}style="background-color: red;" {% endif %}{% if member.exist_member %}style="background-color: yellow;"{% endif %}>{% if member.exist_member %}
+                                        Member already exists
+                                    {% endif %}
+                               {% if member.SUBSCRIBER_ID == None or member.SUBSCRIBER_ID == "" %}
+                                        Subscriber ID is missing
+                                    {% endif %}
+                               </td>
+                           </tr>
+                           {% endfor %}
+                           </tbody>
+                       </table>
+                   </form>
+               </div>
+           </div>
+         </div>
+        </div>
+        {% endif  %}
+       {% if logList %}
+        <div class="row">
+         <!-- Left side columns -->
+            <div class="col-lg-3">
+                </div>
+         <div class="col-lg-6">
+           <div class="card">
+               <div class="card-body">
+                        <h3>Process Log Details</h3>
+                       <table class="table table-sm table-borderless" id="tempMemberList1">
+                           <thead>
+                           <tr>
+                               <th>Log</th>
+                               <th>Date</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           {% for log in logList %}
+                           <tr {% if log.LOG_TYPE == "Error" %} style="color: red;" {% endif %}>
+                               <td>{{ log.MESSAGE }}</td>
+                               <td>{{ log.LOG_DATE }}</td>
+                           </tr>
+                           {% endfor %}
+                           </tbody>
+                       </table>
+                   </form>
+               </div>
+           </div>
+         </div>
+            <div class="col-lg-3">
+                </div>
+        </div>
+        {% endif  %}
     </section>
 </main>
 <!-- End #main -->
-
+<script>
+    $('#tempMemberList').DataTable();
+</script>
 
 
 {% endblock %}
