@@ -90,7 +90,7 @@ def processmember(request):
     tempMemberList = tempMember['data']
     exist_count = 0
     error_count = 0
-    print(tempMemberList)
+    #print(tempMemberList)
     for member in tempMemberList:
         # print(activity)
         if member["exist_member"]:
@@ -168,7 +168,7 @@ def processriskgap(request):
             }
             insertresult = api_call(apidata, "prismMultipleRowInsert")
             #insertR = insertresult.json()
-            print(insertresult)
+            #print(insertresult)
     apidata = {
         "session_id": session_id
     }
@@ -262,7 +262,7 @@ def processquality(request):
             }
             insertresult = api_call(apidata, "prismMultipleRowInsert")
             #insertR = insertresult.json()
-            print(insertresult)
+            #print(insertresult)
     apidata = {
         "session_id": session_id
     }
@@ -281,7 +281,7 @@ def processquality(request):
         dob = quality.get("Date_of_Birth")
         if isinstance(dob, str):
             quality["Date_of_Birth"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
-    print(tempQualityGapsList)
+    #print(tempQualityGapsList)
     return render(request, 'processquality.html', {
         'pageTitle': "PROCESS QUALITY GAP",
         'session_id': session_id,
