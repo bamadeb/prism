@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api, users
+from . import views, api, users, dataupload
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -28,9 +28,9 @@ urlpatterns = [
     # path('thank_you/', views.thank_you, name='thank_you'),
      path('mywork/', views.mywork, name='mywork'),
     # path('region_manager_score/', views.region_manager_score, name='region_manager_score'),
-    path('processmember/', views.processmember, name='processmember'),
-    path('processriskgap/', views.processriskgap, name='processriskgap'),
-    path('processquality/', views.processquality, name='processquality'),
+    path('processmember/', dataupload.processmember, name='processmember'),
+    path('processriskgap/', dataupload.processriskgap, name='processriskgap'),
+    path('processquality/', dataupload.processquality, name='processquality'),
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),

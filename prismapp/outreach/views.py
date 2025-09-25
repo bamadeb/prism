@@ -114,44 +114,12 @@ def mywork(request):
             #now = timezone.now()  # gets current datetime with timezone support
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
-            #response = requests.post(settings.API_URL + "prismAllmyworkspace", json=data)
-
             response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP", json=data)
             #################
-            #now = timezone.now()  # gets current datetime with timezone support
-            #print("Step 3  - 2st API Call Start:", now)  # prints in console
-            ################
-
             myWorkSpaceResult = response.json()  # Decode the JSON response
-            #print(myWorkSpaceResult)
-            # overallSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json={})
-            # #################
-            # now = timezone.now()  # gets current datetime with timezone support
-            # print("Step 4  - 3st API Call Start:", now)  # prints in console
-            # ################
-            #
-            # overallSummaryResult = overallSummary.json()  # Decode the JSON response
-            # ownSummary = requests.post(settings.API_URL + "prismRiskQualitySummary", json=data)
-            # #################
-            # now = timezone.now()  # gets current datetime with timezone support
-            # print("Step 5  - 4st API Call Start:", now)  # prints in console
-            # ################
-            #
-            # ownSummaryResult = ownSummary.json()  # Decode the JSON response
-            # performancSummary = requests.post(settings.API_URL + "prismPriorityAndOtherPerformancSummary", json=data)
-            # #################
-            # now = timezone.now()  # gets current datetime with timezone support
-            # print("Step 6  - All API call end:", now)  # prints in console
-            # ################
-            #
-            # performancSummaryResult = performancSummary.json()  # Decode the JSON response
-            #print(performancSummaryResult)
+
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
-        #################
-        #now = timezone.now()  # gets current datetime with timezone support
-        #print("Step 7  - Data processing start:", now)  # prints in console
-        ################
         myWorkAllSpace = myWorkSpaceResult['data']
         #print(myWorkAllSpace['priorityAndOtherPerformanceSummary'])
         performanc = myWorkAllSpace['priorityAndOtherPerformanceSummary']
@@ -165,6 +133,10 @@ def mywork(request):
             'total_priority_gaps_count': 0,
             'total_other_gaps_count': 0,
             'total_other_complete_gaps_count': 0,
+            'total_priority_complete_quality_gaps_count': 0,
+            'total_priority_quality_gaps_count': 0,
+            'total_other_quality_gaps_count': 0,
+            'total_other_complete_quality_gaps_count': 0,
             'priority_call_percentage': 0,
             'other_call_percentage': 0,
             'priority_gaps_percentage': 0,
@@ -175,6 +147,8 @@ def mywork(request):
             'other_call_color': '',
             'priority_gaps_color': '',
             'other_gaps_color': '',
+            'priority_quality_gaps_color': '',
+            'other_quality_gaps_color': '',
             'priority_pcp_visit_color': '',
             'other_pcp_visit_color': ''
         }
@@ -208,6 +182,7 @@ def mywork(request):
                 values["other_call_color"] = "#FFAE42"
             else:
                 values["other_call_color"] = "green"
+            ########## Risk Gaps calculation
             priority_complete_gaps_count = float(values.get("priority_complete_gaps_count", 0) or 0)
             priority_gaps_count = float(values.get("priority_gaps_count", 0) or 0)
             totalArray['total_priority_complete_gaps_count'] += priority_complete_gaps_count
@@ -232,6 +207,33 @@ def mywork(request):
                 values["other_gaps_color"] = "#FFAE42"
             else:
                 values["other_gaps_color"] = "green"
+            ############ Quality Gaps calculation
+            priority_complete_quality_gaps_count = float(values.get("priority_complete_quality_gaps_count", 0) or 0)
+            priority_quality_gaps_count = float(values.get("priority_quality_gaps_count", 0) or 0)
+            totalArray['total_priority_complete_quality_gaps_count'] += priority_complete_quality_gaps_count
+            totalArray['total_priority_quality_gaps_count'] += priority_quality_gaps_count
+            # Calculate percentage
+            values["priority_quality_gaps_percentage"] = round((priority_complete_quality_gaps_count / priority_quality_gaps_count) * 100, 2) if priority_quality_gaps_count > 0 else 0
+            if values["priority_quality_gaps_percentage"] < 60:
+                values["priority_quality_gaps_color"] = "red"
+            elif values["priority_quality_gaps_percentage"] < 80:
+                values["priority_quality_gaps_color"] = "#FFAE42"
+            else:
+                values["priority_quality_gaps_color"] = "green"
+            other_quality_gaps_count = float(values.get("other_quality_gaps_count", 0) or 0)
+            other_complete_quality_gaps_count = float(values.get("other_complete_quality_gaps_count", 0) or 0)
+            totalArray['total_other_quality_gaps_count'] += other_quality_gaps_count
+            totalArray['total_other_complete_quality_gaps_count'] += other_complete_quality_gaps_count
+            # Calculate percentage
+            values["other_quality_gaps_percentage"] = round((other_complete_quality_gaps_count / other_quality_gaps_count) * 100, 2) if other_quality_gaps_count > 0 else 0
+            if values["other_quality_gaps_percentage"] < 60:
+                values["other_quality_gaps_color"] = "red"
+            elif values["other_quality_gaps_percentage"] < 80:
+                values["other_quality_gaps_color"] = "#FFAE42"
+            else:
+                values["other_quality_gaps_color"] = "green"
+
+            #####################################
             # Get safe numbers for PCP visit
             priority_pcp_visit_count = float(values.get("priority_pcp_visit_count", 0) or 0)
             priority_count = float(values.get("priority_count", 0) or 0)
@@ -265,6 +267,8 @@ def mywork(request):
         totalArray['other_call_percentage'] = round((totalArray['total_other_call_count'] / totalArray['total_other_count']) * 100, 2) if totalArray['total_other_count'] > 0 else 0
         totalArray['priority_gaps_percentage'] = round((totalArray['total_priority_complete_gaps_count'] / totalArray['total_priority_gaps_count']) * 100, 2) if totalArray['total_priority_gaps_count'] > 0 else 0
         totalArray['other_gaps_percentage'] = round((totalArray['total_other_complete_gaps_count'] / totalArray['total_other_gaps_count']) * 100, 2) if totalArray['total_other_gaps_count'] > 0 else 0
+        totalArray['priority_quality_gaps_percentage'] = round((totalArray['total_priority_complete_quality_gaps_count'] / totalArray['total_priority_quality_gaps_count']) * 100, 2) if totalArray['total_priority_quality_gaps_count'] > 0 else 0
+        totalArray['other_quality_gaps_percentage'] = round((totalArray['total_other_complete_quality_gaps_count'] / totalArray['total_other_quality_gaps_count']) * 100, 2) if totalArray['total_other_quality_gaps_count'] > 0 else 0
         totalArray['priority_pcp_percentage'] = round((totalArray['priority_pcp_visit_count'] / totalArray['total_priority_count']) * 100, 2) if totalArray['total_priority_count'] > 0 else 0
         totalArray['other_pcp_percentage'] = round((totalArray['other_pcp_visit_count'] / totalArray['total_other_count']) * 100, 2) if totalArray['total_other_count'] > 0 else 0
         if totalArray['priority_call_percentage'] < 60:
@@ -279,6 +283,7 @@ def mywork(request):
             totalArray["other_call_color"] = "#FFAE42"
         else:
             totalArray["other_call_color"] = "green"
+            ####### Risk gaps total color
         if totalArray['priority_gaps_percentage'] < 60:
             totalArray["priority_gaps_color"] = "red"
         elif totalArray['priority_gaps_percentage'] < 80:
@@ -291,6 +296,21 @@ def mywork(request):
             totalArray["other_gaps_color"] = "#FFAE42"
         else:
             totalArray["other_gaps_color"] = "green"
+
+        ####### Quality gaps total color
+        if totalArray['priority_quality_gaps_percentage'] < 60:
+            totalArray["priority_quality_gaps_color"] = "red"
+        elif totalArray['priority_quality_gaps_percentage'] < 80:
+            totalArray["priority_quality_gaps_color"] = "#FFAE42"
+        else:
+            totalArray["priority_quality_gaps_color"] = "green"
+        if totalArray['other_quality_gaps_percentage'] < 60:
+            totalArray["other_quality_gaps_color"] = "red"
+        elif totalArray['other_quality_gaps_percentage'] < 80:
+            totalArray["other_quality_gaps_color"] = "#FFAE42"
+        else:
+            totalArray["other_quality_gaps_color"] = "green"
+        ######## PCP visit total color
         if totalArray['priority_pcp_percentage'] < 60:
             totalArray["priority_pcp_color"] = "red"
         elif totalArray['priority_pcp_percentage'] < 80:
