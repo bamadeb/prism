@@ -359,21 +359,16 @@ def memberdetails(request, medicaid_id):
     params = {"medicaid_id": medicaid_id}
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails"+"-"+settings.ENVIRONMENT)
-
-    paramslist = {"medicaid_id": medicaid_id, "PROCESS_STATUS": "0"}
-    ## create a api call
-    gap_list = api_call(paramslist, "prismGetgapList"+"-"+settings.ENVIRONMENT)
-    quality_list = api_call(paramslist, "prismGetqualityList"+"-"+settings.ENVIRONMENT)
-    #print(gap_list)
-
+    print(member_details)
     log_details = []
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
             # Convert string to datetime
+            #log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
             if log.get("add_date"):
                 log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
             else:
-                log["add_date"] = None  # or keep it None, depending on your use case
+                log["add_date"] = None
             log_details.append(log)
 
     member_alertList = []
@@ -383,76 +378,76 @@ def memberdetails(request, medicaid_id):
         member_alertList.append(member)
 
     medical_claim_details = []
-    for claim in member_details['data']['medicalClaim']:
-        # Convert string to datetime
-        dt = datetime.fromisoformat(claim["FIRST_DOS"].replace("Z", "+00:00"))
-        # Format as m/d/Y
-        claim["FIRST_DOS"] = dt.strftime("%m/%d/%Y")
-        medical_claim_details.append(claim)
+    # for claim in member_details['data']['medicalClaim']:
+    #     # Convert string to datetime
+    #     dt = datetime.fromisoformat(claim["FIRST_DOS"].replace("Z", "+00:00"))
+    #     # Format as m/d/Y
+    #     claim["FIRST_DOS"] = dt.strftime("%m/%d/%Y")
+    #     medical_claim_details.append(claim)
 
     gift_details = []
-    for gift in member_details['data']['prismGiftcard']:
-        # Convert ISO string (with Zulu timezone) to datetime
-        gift["DATE_OF_SERVICE"] = datetime.fromisoformat(gift["DATE_OF_SERVICE"].replace("Z", "+00:00"))
-        gift_details.append(gift)
+    # for gift in member_details['data']['prismGiftcard']:
+    #     # Convert ISO string (with Zulu timezone) to datetime
+    #     gift["DATE_OF_SERVICE"] = datetime.fromisoformat(gift["DATE_OF_SERVICE"].replace("Z", "+00:00"))
+    #     gift_details.append(gift)
 
     rx_claim_details = []
-    for rx in member_details['data']['prismRxClaimsNew']:
-        # Convert ISO string (with Zulu timezone) to datetime
-        rx["Service_Date"] = datetime.fromisoformat(rx["Service_Date"].replace("Z", "+00:00"))
-        rx_claim_details.append(rx)
+    # for rx in member_details['data']['prismRxClaimsNew']:
+    #     # Convert ISO string (with Zulu timezone) to datetime
+    #     rx["Service_Date"] = datetime.fromisoformat(rx["Service_Date"].replace("Z", "+00:00"))
+    #     rx_claim_details.append(rx)
 
     hedis_key_array = []
     hedis_non_complant_count_array = {}
     hedis_rows = []
 
-    for member_hedis in member_details['data']['hedisDetails']:
-        non_complant_count = 0
-
-        for key, hvalue in member_hedis.items():
-            if hvalue:
-                if hvalue == "Non-Compliant":
-                    non_complant_count += 1
-
-                if key not in hedis_key_array:
-                    hedis_key_array.append(key)
-
-        year = member_hedis["Year"]
-        month = member_hedis["Month"]
-        if year not in hedis_non_complant_count_array:
-            hedis_non_complant_count_array[year] = {}
-        hedis_non_complant_count_array[year][month] = non_complant_count
-
-        for member in member_details['data']['hedisDetails']:
-            row = []
-            for idx, key in enumerate(hedis_key_array, start=1):
-                value = member.get(key, "")
-                color = ""
-
-                # coloring rules
-                if key == "# Compliant" or value == "Compliant":
-                    color = "color: #008000;"
-                elif value == "Non-Compliant":
-                    color = "color: #FF0000;"
-
-                # insert "# Non-Compliant" column before 3rd column
-                if idx == 3:
-                    non_compliant_count = hedis_non_complant_count_array.get(
-                        member["Year"], {}
-                    ).get(member["Month"], 0)
-                    row.append({"value": non_compliant_count, "color": "color: #FF0000;"})
-
-                # add the normal column
-                row.append({"value": value, "color": color})
-            hedis_rows.append(row)
-
-            birth_str = member_details['data']['memberDetails'][0].get("BIRTH")
-            birth_date = None
-            if birth_str:
-                try:
-                    birth_date = datetime.strptime(birth_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
-                except ValueError:
-                    pass
+    # # for member_hedis in member_details['data']['hedisDetails']:
+    # #     non_complant_count = 0
+    # #
+    # #     for key, hvalue in member_hedis.items():
+    # #         if hvalue:
+    # #             if hvalue == "Non-Compliant":
+    # #                 non_complant_count += 1
+    # #
+    # #             if key not in hedis_key_array:
+    # #                 hedis_key_array.append(key)
+    # #
+    # #     year = member_hedis["Year"]
+    # #     month = member_hedis["Month"]
+    # #     if year not in hedis_non_complant_count_array:
+    # #         hedis_non_complant_count_array[year] = {}
+    # #     hedis_non_complant_count_array[year][month] = non_complant_count
+    # #
+    # #     for member in member_details['data']['hedisDetails']:
+    # #         row = []
+    # #         for idx, key in enumerate(hedis_key_array, start=1):
+    # #             value = member.get(key, "")
+    # #             color = ""
+    # #
+    # #             # coloring rules
+    # #             if key == "# Compliant" or value == "Compliant":
+    # #                 color = "color: #008000;"
+    # #             elif value == "Non-Compliant":
+    # #                 color = "color: #FF0000;"
+    # #
+    # #             # insert "# Non-Compliant" column before 3rd column
+    # #             if idx == 3:
+    # #                 non_compliant_count = hedis_non_complant_count_array.get(
+    # #                     member["Year"], {}
+    # #                 ).get(member["Month"], 0)
+    # #                 row.append({"value": non_compliant_count, "color": "color: #FF0000;"})
+    # #
+    # #             # add the normal column
+    # #             row.append({"value": value, "color": color})
+    # #         hedis_rows.append(row)
+    #
+    #         birth_str = member_details['data']['memberDetails'][0].get("BIRTH")
+    #         birth_date = None
+    #         if birth_str:
+    #             try:
+    #                 birth_date = datetime.strptime(birth_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    #             except ValueError:
+    #                 pass
 
 
 
@@ -466,22 +461,22 @@ def memberdetails(request, medicaid_id):
         "alertList": member_details['data']['prismAlertMaster'],
         "member_details": member_details['data']['memberDetails'],
         "assign_to_user": member_details['data']['prismUsers'],
-        "alt_address": member_details['data']['altaddress'],
-        "member_alt_phone_details": member_details['data']['prismMemberaltphone'],
-        "all_language_master_list": member_details['data']['prismMasterLanguage'],
-        "member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
-        "pcp_list": member_details['data']['prismMemberPCPList'],
-        "medical_claim_details": member_details['data']['medicalClaim'],
-        "risk_details": member_details['data']['prismMembershiprisk'],
-        "problem_list": member_details['data']['prismCrispProblems'],
-        "encounters": member_details['data']['prismCrispEncounters'],
-        "immunizations": member_details['data']['prismCrispImmunization'],
-        "medications": member_details['data']['prismCrispMedication'],
-        "insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
-        "prism_claim_details": member_details['data']['prismPrismClaim'],
-        "gap_list": gap_list['data'],
-        "quality_list": quality_list['data'],
-        "rx_claim_details": rx_claim_details,
+        #"alt_address": member_details['data']['altaddress'],
+        #"member_alt_phone_details": member_details['data']['prismMemberaltphone'],
+        #"all_language_master_list": member_details['data']['prismMasterLanguage'],
+        #"member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
+        #"pcp_list": member_details['data']['prismMemberPCPList'],
+        #"medical_claim_details": member_details['data']['medicalClaim'],
+        #"risk_details": member_details['data']['prismMembershiprisk'],
+        #"problem_list": member_details['data']['prismCrispProblems'],
+        #"encounters": member_details['data']['prismCrispEncounters'],
+        #"immunizations": member_details['data']['prismCrispImmunization'],
+        #"medications": member_details['data']['prismCrispMedication'],
+        #"insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
+        #"prism_claim_details": member_details['data']['prismPrismClaim'],
+        "gap_list": member_details['data']['prismGapList'],
+        "quality_list": member_details['data']['prismQualityList'],
+        #"rx_claim_details": rx_claim_details,
         "hedis_rows": hedis_rows,
         "gift_details": gift_details,
         "hedis_non_complant_count_array": hedis_non_complant_count_array,
@@ -523,6 +518,7 @@ def add_action(request):
                 "insertDataArray": insertDataArray,
             }
             insert = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            action_id = insert["insertedIds"]
             print(insert)
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -540,15 +536,16 @@ def add_action(request):
             api_call(apidata1, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             ##### update quality data
+            medicaid_id = request.POST.get("medicaid_id")
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
-                qualityupdate = {"id": qid}
+                qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
                 api_call(qualityupdate, "prismUpdatequalityStatus"+"-"+settings.ENVIRONMENT)
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
-                paramsupdate = {"id": gid}
+                paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus"+"-"+settings.ENVIRONMENT)
 
             # Always return after POST
