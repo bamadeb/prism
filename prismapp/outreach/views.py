@@ -324,76 +324,8 @@ def mywork(request):
         else:
             totalArray["other_pcp_color"] = "green"
 
-        #print(totalArray)
-
-        #print(overallSummaryResult)
-        #today = date.today()
-
-        # task_list = myWorkAllSpace['taskList']
-        #
-        # for task in task_list:
-        #     ad = task.get("action_date")
-        #     if isinstance(ad, str):
-        #         try:
-        #             # Parse ISO 8601 string
-        #             task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-        #         except ValueError:
-        #             task["action_date"] = None
-        #     action_date = task.get("action_date")
-        #
-        #     if action_date:
-        #         # If it's a string, convert it to date
-        #         if isinstance(action_date, str):
-        #             try:
-        #                 # Adjust format depending on your actual data (YYYY-MM-DD assumed here)
-        #                 action_date = datetime.strptime(action_date, "%Y-%m-%d").date()
-        #                 task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-        #             except ValueError:
-        #                 # Skip if invalid format
-        #                 task["color"] = "#fff"
-        #                 continue
-        #
-        #         # Now safe to compare
-        #         if action_date < today and task.get("status") not in ["Successful", "Close", "N/A"]:
-        #             task["color"] = "red"
-        #         else:
-        #             task["color"] = "#fff"
-        #     else:
-        #         task["color"] = "#fff"
 
         members_list = myWorkAllSpace['members']
-        #alertListMember = myWorkAllSpace['alertList']
-        #curdate = datetime.now().date()  # current date without time
-        # for member in members_list:
-        #     #print(member)
-        #     alertCount = 0
-        #     for memberAlert in alertListMember:
-        #         due_date = datetime.fromisoformat(memberAlert["due_date"].replace("Z", "+00:00")).date()
-        #         if member["medicaid_id"] == memberAlert["medicaid_id"] and curdate <= due_date:
-        #             alertCount += 1
-        #     member["alertCount"] = alertCount
-        #     elig_exp_dt = member.get("ELIG_EXP_DT")
-        #     if elig_exp_dt:
-        #         member["ELIG_EXP_DT"] = datetime.fromisoformat(elig_exp_dt.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["ELIG_EXP_DT"] = None
-        #     third_last_action_date = member.get("third_last_action_date")
-        #     if third_last_action_date:
-        #         member["third_last_action_date"] = datetime.fromisoformat(
-        #             third_last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["third_last_action_date"] = None
-        #     second_last_action_date = member.get("second_last_action_date")
-        #     if second_last_action_date:
-        #         member["second_last_action_date"] = datetime.fromisoformat(
-        #             second_last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["second_last_action_date"] = None
-        #     last_action_date = member.get("last_action_date")
-        #     if last_action_date:
-        #         member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["last_action_date"] = None
         recentActivity = myWorkAllSpace['recentActivity']
         for activity in recentActivity:
             #print(activity)
@@ -401,37 +333,12 @@ def mywork(request):
             if isinstance(add_date, str):
                 activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
 
-        # alertList = myWorkAllSpace['alertList']
-        # for alert in alertList:
-        #     #print(activity)
-        #     due_date = alert.get("due_date")
-        #     if isinstance(due_date, str) and due_date:
-        #         # Convert ISO string to datetime
-        #         dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
-        #         alert["due_date"] = dt  # keep as datetime object
-        #print(members_list)
-        #################
-        #now = timezone.now()  # gets current datetime with timezone support
-        #print("Step 7  - Data processing end:", now)  # prints in console
-        ################
-        #print(myWorkAllSpace['overallRiskQualitySummary'])
-        #print(myWorkAllSpace['ownRiskQualitySummary'])
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
             'projectName': settings.PROJECT_NAME,
             'alertCount': 1,
             'today': date.today(),
-            #'alert_count': myWorkAllSpace['alertCount'],
-            #'alertList': alertList,
-            #'kpis_data': myWorkAllSpace['kpisData'],
-            #'task_list': task_list,
-            #'refared_member_list': myWorkAllSpace['referrerList'],
-            #'sel_panel_list': myWorkAllSpace['prismMemberAction'],
-            #'sel_panel_type': myWorkAllSpace['prismMemberActionType'],
-            #'roleList': myWorkAllSpace['prismRoleList'],
-            #'plan_list': myWorkAllSpace['prismPlanlist'],
-            #'all_3day_transport_list': myWorkAllSpace['transportList'],
             'recent_activity': recentActivity,
             #'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
             'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
@@ -452,16 +359,34 @@ def memberdetails(request, medicaid_id):
         return render(request, 'login.html')
 
     ## create a api call
+    ################
+    now = timezone.now()  # gets current datetime with timezone support
+    print("Step 1 - 1st API Call Start:", now)  # prints in console
+    ################
     params = {"medicaid_id": medicaid_id}
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
+    #print(member_details);
+    #################
+    now = timezone.now()  # gets current datetime with timezone support
+    print("Step 2 - 2st API Call Start:", now)  # prints in console
+    ################
 
     paramslist = {"medicaid_id": medicaid_id, "PROCESS_STATUS": "0"}
     ## create a api call
-    gap_list = api_call(paramslist, "prismGetgapList")
-    quality_list = api_call(paramslist, "prismGetqualityList")
-    #print(gap_list)
 
+    #gap_list = api_call(paramslist, "prismGetgapList")
+    #################
+    now = timezone.now()  # gets current datetime with timezone support
+    print("Step 4 - 4st API Call Start:", now)  # prints in console
+    ################
+    #quality_list = api_call(paramslist, "prismGetqualityList")
+    #print(gap_list)
+    #################
+    now = timezone.now()  # gets current datetime with timezone support
+    print("Step 5 - 4st API Call end:", now)  # prints in console
+    ################
+    print(len(member_details['data']))
     log_details = []
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
@@ -476,77 +401,81 @@ def memberdetails(request, medicaid_id):
         member_alertList.append(member)
 
     medical_claim_details = []
-    for claim in member_details['data']['medicalClaim']:
-        # Convert string to datetime
-        dt = datetime.fromisoformat(claim["FIRST_DOS"].replace("Z", "+00:00"))
-        # Format as m/d/Y
-        claim["FIRST_DOS"] = dt.strftime("%m/%d/%Y")
-        medical_claim_details.append(claim)
+    # for claim in member_details['data']['medicalClaim']:
+    #     # Convert string to datetime
+    #     dt = datetime.fromisoformat(claim["FIRST_DOS"].replace("Z", "+00:00"))
+    #     # Format as m/d/Y
+    #     claim["FIRST_DOS"] = dt.strftime("%m/%d/%Y")
+    #     medical_claim_details.append(claim)
 
     gift_details = []
-    for gift in member_details['data']['prismGiftcard']:
-        # Convert ISO string (with Zulu timezone) to datetime
-        gift["DATE_OF_SERVICE"] = datetime.fromisoformat(gift["DATE_OF_SERVICE"].replace("Z", "+00:00"))
-        gift_details.append(gift)
+    # for gift in member_details['data']['prismGiftcard']:
+    #     # Convert ISO string (with Zulu timezone) to datetime
+    #     gift["DATE_OF_SERVICE"] = datetime.fromisoformat(gift["DATE_OF_SERVICE"].replace("Z", "+00:00"))
+    #     gift_details.append(gift)
 
     rx_claim_details = []
-    for rx in member_details['data']['prismRxClaimsNew']:
-        # Convert ISO string (with Zulu timezone) to datetime
-        rx["Service_Date"] = datetime.fromisoformat(rx["Service_Date"].replace("Z", "+00:00"))
-        rx_claim_details.append(rx)
+    # for rx in member_details['data']['prismRxClaimsNew']:
+    #     # Convert ISO string (with Zulu timezone) to datetime
+    #     rx["Service_Date"] = datetime.fromisoformat(rx["Service_Date"].replace("Z", "+00:00"))
+    #     rx_claim_details.append(rx)
 
     hedis_key_array = []
     hedis_non_complant_count_array = {}
     hedis_rows = []
 
-    for member_hedis in member_details['data']['hedisDetails']:
-        non_complant_count = 0
+    # # for member_hedis in member_details['data']['hedisDetails']:
+    # #     non_complant_count = 0
+    # #
+    # #     for key, hvalue in member_hedis.items():
+    # #         if hvalue:
+    # #             if hvalue == "Non-Compliant":
+    # #                 non_complant_count += 1
+    # #
+    # #             if key not in hedis_key_array:
+    # #                 hedis_key_array.append(key)
+    # #
+    # #     year = member_hedis["Year"]
+    # #     month = member_hedis["Month"]
+    # #     if year not in hedis_non_complant_count_array:
+    # #         hedis_non_complant_count_array[year] = {}
+    # #     hedis_non_complant_count_array[year][month] = non_complant_count
+    # #
+    # #     for member in member_details['data']['hedisDetails']:
+    # #         row = []
+    # #         for idx, key in enumerate(hedis_key_array, start=1):
+    # #             value = member.get(key, "")
+    # #             color = ""
+    # #
+    # #             # coloring rules
+    # #             if key == "# Compliant" or value == "Compliant":
+    # #                 color = "color: #008000;"
+    # #             elif value == "Non-Compliant":
+    # #                 color = "color: #FF0000;"
+    # #
+    # #             # insert "# Non-Compliant" column before 3rd column
+    # #             if idx == 3:
+    # #                 non_compliant_count = hedis_non_complant_count_array.get(
+    # #                     member["Year"], {}
+    # #                 ).get(member["Month"], 0)
+    # #                 row.append({"value": non_compliant_count, "color": "color: #FF0000;"})
+    # #
+    # #             # add the normal column
+    # #             row.append({"value": value, "color": color})
+    # #         hedis_rows.append(row)
+    #
+    #         birth_str = member_details['data']['memberDetails'][0].get("BIRTH")
+    #         birth_date = None
+    #         if birth_str:
+    #             try:
+    #                 birth_date = datetime.strptime(birth_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    #             except ValueError:
+    #                 pass
 
-        for key, hvalue in member_hedis.items():
-            if hvalue:
-                if hvalue == "Non-Compliant":
-                    non_complant_count += 1
-
-                if key not in hedis_key_array:
-                    hedis_key_array.append(key)
-
-        year = member_hedis["Year"]
-        month = member_hedis["Month"]
-        if year not in hedis_non_complant_count_array:
-            hedis_non_complant_count_array[year] = {}
-        hedis_non_complant_count_array[year][month] = non_complant_count
-
-        for member in member_details['data']['hedisDetails']:
-            row = []
-            for idx, key in enumerate(hedis_key_array, start=1):
-                value = member.get(key, "")
-                color = ""
-
-                # coloring rules
-                if key == "# Compliant" or value == "Compliant":
-                    color = "color: #008000;"
-                elif value == "Non-Compliant":
-                    color = "color: #FF0000;"
-
-                # insert "# Non-Compliant" column before 3rd column
-                if idx == 3:
-                    non_compliant_count = hedis_non_complant_count_array.get(
-                        member["Year"], {}
-                    ).get(member["Month"], 0)
-                    row.append({"value": non_compliant_count, "color": "color: #FF0000;"})
-
-                # add the normal column
-                row.append({"value": value, "color": color})
-            hedis_rows.append(row)
-
-            birth_str = member_details['data']['memberDetails'][0].get("BIRTH")
-            birth_date = None
-            if birth_str:
-                try:
-                    birth_date = datetime.strptime(birth_str, "%Y-%m-%dT%H:%M:%S.%fZ").date()
-                except ValueError:
-                    pass
-
+    #################
+    now = timezone.now()  # gets current datetime with timezone support
+    print("Step 6 - 6st calculation end:", now)  # prints in console
+    ################
 
 
     return render(request, 'memberdetails.html', {
@@ -559,22 +488,22 @@ def memberdetails(request, medicaid_id):
         "alertList": member_details['data']['prismAlertMaster'],
         "member_details": member_details['data']['memberDetails'],
         "assign_to_user": member_details['data']['prismUsers'],
-        "alt_address": member_details['data']['altaddress'],
-        "member_alt_phone_details": member_details['data']['prismMemberaltphone'],
-        "all_language_master_list": member_details['data']['prismMasterLanguage'],
-        "member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
-        "pcp_list": member_details['data']['prismMemberPCPList'],
-        "medical_claim_details": member_details['data']['medicalClaim'],
-        "risk_details": member_details['data']['prismMembershiprisk'],
-        "problem_list": member_details['data']['prismCrispProblems'],
-        "encounters": member_details['data']['prismCrispEncounters'],
-        "immunizations": member_details['data']['prismCrispImmunization'],
-        "medications": member_details['data']['prismCrispMedication'],
-        "insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
-        "prism_claim_details": member_details['data']['prismPrismClaim'],
-        "gap_list": gap_list['data'],
-        "quality_list": quality_list['data'],
-        "rx_claim_details": rx_claim_details,
+        #"alt_address": member_details['data']['altaddress'],
+        #"member_alt_phone_details": member_details['data']['prismMemberaltphone'],
+        #"all_language_master_list": member_details['data']['prismMasterLanguage'],
+        #"member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
+        #"pcp_list": member_details['data']['prismMemberPCPList'],
+        #"medical_claim_details": member_details['data']['medicalClaim'],
+        #"risk_details": member_details['data']['prismMembershiprisk'],
+        #"problem_list": member_details['data']['prismCrispProblems'],
+        #"encounters": member_details['data']['prismCrispEncounters'],
+        #"immunizations": member_details['data']['prismCrispImmunization'],
+        #"medications": member_details['data']['prismCrispMedication'],
+        #"insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
+        #"prism_claim_details": member_details['data']['prismPrismClaim'],
+        "gap_list": member_details['data']['prismGapList'],
+        "quality_list": member_details['data']['prismQualityList'],
+        #"rx_claim_details": rx_claim_details,
         "hedis_rows": hedis_rows,
         "gift_details": gift_details,
         "hedis_non_complant_count_array": hedis_non_complant_count_array,
@@ -615,8 +544,9 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert")
-
+            results = api_call(apidata, "prismMultipleinsert")
+            action_id = results["insertedIds"]
+            #print(action_id)
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
                 "action_type": request.POST.get("action_type_name"),
@@ -633,15 +563,16 @@ def add_action(request):
             api_call(apidata1, "prismMultipleinsert")
 
             ##### update quality data
+            medicaid_id = request.POST.get("medicaid_id")
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
-                qualityupdate = {"id": qid}
+                qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
-                paramsupdate = {"id": gid}
+                paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
 
             # Always return after POST
