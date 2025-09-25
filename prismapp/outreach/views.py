@@ -24,6 +24,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def home(request):
+    #print(settings.ENVIRONMENT)
     return HttpResponse("Hello, World!")
 
 def api_call(params, funName):
@@ -46,7 +47,7 @@ def login(request):
 
         # Make the API call to 'vegaslogin' endpoint
         try:
-            response = requests.post(settings.API_URL + "prismAuthentication", json=data)
+            response = requests.post(settings.API_URL + "prismAuthentication"+"-"+settings.ENVIRONMENT, json=data)
             result = response.json()  # Decode the JSON response
             #print(result)
 
@@ -114,7 +115,7 @@ def mywork(request):
             #now = timezone.now()  # gets current datetime with timezone support
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
-            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP", json=data)
+            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP"+"-"+settings.ENVIRONMENT, json=data)
             #################
             myWorkSpaceResult = response.json()  # Decode the JSON response
 
@@ -325,122 +326,25 @@ def mywork(request):
             totalArray["other_pcp_color"] = "green"
 
         #print(totalArray)
-
-        #print(overallSummaryResult)
-        #today = date.today()
-
-        # task_list = myWorkAllSpace['taskList']
-        #
-        # for task in task_list:
-        #     ad = task.get("action_date")
-        #     if isinstance(ad, str):
-        #         try:
-        #             # Parse ISO 8601 string
-        #             task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-        #         except ValueError:
-        #             task["action_date"] = None
-        #     action_date = task.get("action_date")
-        #
-        #     if action_date:
-        #         # If it's a string, convert it to date
-        #         if isinstance(action_date, str):
-        #             try:
-        #                 # Adjust format depending on your actual data (YYYY-MM-DD assumed here)
-        #                 action_date = datetime.strptime(action_date, "%Y-%m-%d").date()
-        #                 task["action_date"] = datetime.fromisoformat(ad.replace("Z", "+00:00")).date()
-        #             except ValueError:
-        #                 # Skip if invalid format
-        #                 task["color"] = "#fff"
-        #                 continue
-        #
-        #         # Now safe to compare
-        #         if action_date < today and task.get("status") not in ["Successful", "Close", "N/A"]:
-        #             task["color"] = "red"
-        #         else:
-        #             task["color"] = "#fff"
-        #     else:
-        #         task["color"] = "#fff"
-
         members_list = myWorkAllSpace['members']
-        #alertListMember = myWorkAllSpace['alertList']
-        #curdate = datetime.now().date()  # current date without time
-        # for member in members_list:
-        #     #print(member)
-        #     alertCount = 0
-        #     for memberAlert in alertListMember:
-        #         due_date = datetime.fromisoformat(memberAlert["due_date"].replace("Z", "+00:00")).date()
-        #         if member["medicaid_id"] == memberAlert["medicaid_id"] and curdate <= due_date:
-        #             alertCount += 1
-        #     member["alertCount"] = alertCount
-        #     elig_exp_dt = member.get("ELIG_EXP_DT")
-        #     if elig_exp_dt:
-        #         member["ELIG_EXP_DT"] = datetime.fromisoformat(elig_exp_dt.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["ELIG_EXP_DT"] = None
-        #     third_last_action_date = member.get("third_last_action_date")
-        #     if third_last_action_date:
-        #         member["third_last_action_date"] = datetime.fromisoformat(
-        #             third_last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["third_last_action_date"] = None
-        #     second_last_action_date = member.get("second_last_action_date")
-        #     if second_last_action_date:
-        #         member["second_last_action_date"] = datetime.fromisoformat(
-        #             second_last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["second_last_action_date"] = None
-        #     last_action_date = member.get("last_action_date")
-        #     if last_action_date:
-        #         member["last_action_date"] = datetime.fromisoformat(last_action_date.replace("Z", "+00:00")).date()
-        #     else:
-        #         member["last_action_date"] = None
         recentActivity = myWorkAllSpace['recentActivity']
         for activity in recentActivity:
             #print(activity)
             add_date = activity.get("add_date")
             if isinstance(add_date, str):
                 activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
-
-        # alertList = myWorkAllSpace['alertList']
-        # for alert in alertList:
-        #     #print(activity)
-        #     due_date = alert.get("due_date")
-        #     if isinstance(due_date, str) and due_date:
-        #         # Convert ISO string to datetime
-        #         dt = datetime.fromisoformat(due_date.replace("Z", "+00:00"))
-        #         alert["due_date"] = dt  # keep as datetime object
-        #print(members_list)
-        #################
-        #now = timezone.now()  # gets current datetime with timezone support
-        #print("Step 7  - Data processing end:", now)  # prints in console
-        ################
-        #print(myWorkAllSpace['overallRiskQualitySummary'])
-        #print(myWorkAllSpace['ownRiskQualitySummary'])
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
             'projectName': settings.PROJECT_NAME,
             'alertCount': 1,
             'today': date.today(),
-            #'alert_count': myWorkAllSpace['alertCount'],
-            #'alertList': alertList,
-            #'kpis_data': myWorkAllSpace['kpisData'],
-            #'task_list': task_list,
-            #'refared_member_list': myWorkAllSpace['referrerList'],
-            #'sel_panel_list': myWorkAllSpace['prismMemberAction'],
-            #'sel_panel_type': myWorkAllSpace['prismMemberActionType'],
-            #'roleList': myWorkAllSpace['prismRoleList'],
-            #'plan_list': myWorkAllSpace['prismPlanlist'],
-            #'all_3day_transport_list': myWorkAllSpace['transportList'],
             'recent_activity': recentActivity,
-            #'prismWorkspacekpi': myWorkAllSpace['prismWorkspacekpi'],
             'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
             'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
             'performancArray': performancArray,
             'totalArray': totalArray
         }
-    #print(myWorkAllSpace)
-    # print(request.session.get('user_data', {}).get('ID'))
     return render(request, 'mywork.html', context)
 
 def logoutuser(request):
@@ -454,12 +358,12 @@ def memberdetails(request, medicaid_id):
     ## create a api call
     params = {"medicaid_id": medicaid_id}
     birth_date = None
-    member_details = api_call(params,"prismMemberAllDetails")
+    member_details = api_call(params,"prismMemberAllDetails"+"-"+settings.ENVIRONMENT)
 
     paramslist = {"medicaid_id": medicaid_id, "PROCESS_STATUS": "0"}
     ## create a api call
-    gap_list = api_call(paramslist, "prismGetgapList")
-    quality_list = api_call(paramslist, "prismGetqualityList")
+    gap_list = api_call(paramslist, "prismGetgapList"+"-"+settings.ENVIRONMENT)
+    quality_list = api_call(paramslist, "prismGetqualityList"+"-"+settings.ENVIRONMENT)
     #print(gap_list)
 
     log_details = []
@@ -615,7 +519,7 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert")
+            api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -630,19 +534,19 @@ def add_action(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": insertDataArray1,
             }
-            api_call(apidata1, "prismMultipleinsert")
+            api_call(apidata1, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             ##### update quality data
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
                 qualityupdate = {"id": qid}
-                api_call(qualityupdate, "prismUpdatequalityStatus")
+                api_call(qualityupdate, "prismUpdatequalityStatus"+"-"+settings.ENVIRONMENT)
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
                 paramsupdate = {"id": gid}
-                api_call(paramsupdate, "prismUpdategapStatus")
+                api_call(paramsupdate, "prismUpdategapStatus"+"-"+settings.ENVIRONMENT)
 
             # Always return after POST
             medicaid_id = request.POST.get("medicaid_id")
@@ -686,7 +590,7 @@ def appointment_add_action(request):
                 "table_name": "MEM_SCHEDULE_APPOINTMENT_ACTION",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert")
+            api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # ---- log entry ----
             all_log_row = {
@@ -704,7 +608,7 @@ def appointment_add_action(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": insertDataArray1,
             }
-            api_call(apidata1, "prismMultipleinsert")
+            api_call(apidata1, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # ---- handle alerts ----
             if request.POST.get("app_alert_id"):
@@ -722,7 +626,7 @@ def appointment_add_action(request):
                     "id_field_name": "id",
                     "id_field_value": alert[1],
                 }
-                api_call(dataList1, "prismMultiplefieldupdate")
+                api_call(dataList1, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
 
                 all_log_row1 = {
                     "medicaid_id": request.POST.get("appointment_medicaid_id"),
@@ -740,7 +644,7 @@ def appointment_add_action(request):
                     "table_name": "MEM_SYSTEM_LOG",
                     "insertDataArray": insertDataArray2,
                 }
-                api_call(apidata2, "prismMultipleinsert")
+                api_call(apidata2, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
                 # update outreach member status
                 alert_name = request.POST.get("app_alertname").split("(")
@@ -755,7 +659,7 @@ def appointment_add_action(request):
                     "id_field_name": "medicaid_id",
                     "id_field_value": data["medicaid_id"],
                 }
-                api_call(dataList2, "prismMultiplefieldupdate")
+                api_call(dataList2, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -768,7 +672,7 @@ def memberhistory(request, medicaid_id):
 
     ## create a api call
     params = {"medicaid_id": medicaid_id}
-    historyResponse = api_call(params,"prismMemberhistory")
+    historyResponse = api_call(params,"prismMemberhistory"+"-"+settings.ENVIRONMENT)
     #print(historyResponse)
     roadmap_data = []
     roadmap_data_str = ''
@@ -846,7 +750,7 @@ def member_add_update_alert(request):
             #print(params)
 
             # API call
-            api_call(params, "prismMultipleinsert")
+            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
         else:
             # Update mode
@@ -870,7 +774,7 @@ def member_add_update_alert(request):
                 "id_field_value": alert_list_id,
             }
             # API call
-            api_call(params, "prismMultiplefieldupdate")
+            api_call(params, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
 
         # Insert into system log
         all_log = {
@@ -892,7 +796,7 @@ def member_add_update_alert(request):
             "insertDataArray": insertDataArray1,
         }
         # API call
-        api_call(params, "prismMultipleinsert")
+        api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return redirect("error_page")  # Or handle error gracefully
@@ -922,7 +826,7 @@ def add_member_alt_address(request):
             }
             #print(params)
             # API call
-            api_call(params, "prismMultipleinsert")
+            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # Data for system log table
             insertDataArray1 = [{
@@ -938,7 +842,7 @@ def add_member_alt_address(request):
                 "insertDataArray": insertDataArray1
             }
             # API call
-            api_call(logparams, "prismMultipleinsert")
+            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -965,7 +869,7 @@ def add_member_alt_phone(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(params, "prismMultipleinsert")
+            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # Data for system log
             insertDataArray1 = [{
@@ -981,7 +885,7 @@ def add_member_alt_phone(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert")
+            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1014,7 +918,7 @@ def add_member_alt_pnone(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(params, "prismMultipleinsert")
+            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # Data for system log
             insertDataArray1 = [{
@@ -1030,7 +934,7 @@ def add_member_alt_pnone(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert")
+            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1050,7 +954,7 @@ def add_member_alt_language(request):
 
             # Call API to get roster language + primary language
             param = {"medicaid_id": medicaid_id}
-            response = api_call(param, "prismMemberlanguage")
+            response = api_call(param, "prismMemberlanguage"+"-"+settings.ENVIRONMENT)
             #print(response)
             roster_language = response["data"][0]["LANGUAGE_DESC"]
             language_code = response["data"][0]["PRIMARY_LANG"]
@@ -1069,7 +973,7 @@ def add_member_alt_language(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(langparams, "prismMultipleinsert")
+            api_call(langparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # Insert into MEM_SYSTEM_LOG
             insertDataArray1 = [{
@@ -1085,7 +989,7 @@ def add_member_alt_language(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert")
+            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1124,7 +1028,7 @@ def add_prisim_claim(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            insert = api_call(params, "prismMultipleinsert")
+            insert = api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1161,7 +1065,7 @@ def add_rx_claim(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            insert = api_call(params, "prismMultipleinsert")
+            insert = api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
             # 2. If claim inserted, create alert
             if insert.get("statusCode") == 200:
@@ -1182,7 +1086,7 @@ def add_rx_claim(request):
                     "table_name": "MEM_ALERTLIST",
                     "insertDataArray": adata,
                 }
-                api_call(paramsalert, "prismMultipleinsert")
+                api_call(paramsalert, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
                 # 3. System Log
                 all_log_row = {
@@ -1197,7 +1101,7 @@ def add_rx_claim(request):
                     "table_name": "MEM_SYSTEM_LOG",
                     "insertDataArray": [all_log_row],
                 }
-                api_call(paramlog, "prismMultipleinsert")
+                api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
         except Exception as e:
             return HttpResponse(f"Error: {str(e)}")
@@ -1225,7 +1129,7 @@ def update_member_indicator(request):
                 "id_field_name": "medicaid_id",
                 "id_field_value": medicaid_id,
             }
-            api_call(updatedata, "prismMultiplefieldupdate")
+            api_call(updatedata, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
 
             all_log_row = {
                 "medicaid_id": medicaid_id,
@@ -1239,7 +1143,7 @@ def update_member_indicator(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": [all_log_row],
             }
-            api_call(paramlog, "prismMultipleinsert")
+            api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
         return redirect("memberdetails", medicaid_id=request.POST.get("medicaid_id"))
 
@@ -1261,7 +1165,7 @@ def update_member_info(request):
             "id_field_name": "medicaid_id",
             "id_field_value": medicaid_id,
         }
-        api_call(dataList2, "prismMultiplefieldupdate")
+        api_call(dataList2, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
 
         all_log_row = {
             "medicaid_id": medicaid_id,
@@ -1275,7 +1179,7 @@ def update_member_info(request):
             "table_name": "MEM_SYSTEM_LOG",
             "insertDataArray": [all_log_row],
         }
-        response = api_call(paramlog, "prismMultipleinsert")
+        response = api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
         # Optional: check API response
         if response.get("statusCode") != 200:
@@ -1381,7 +1285,7 @@ def processmember(request):
                 "table_name": "MEM_MEMBERS",
                 "insertDataArray": batch,
             }
-            insertresult = api_call(apidata, "prismMultipleinsert")
+            insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
 
         # --- Insert Outreach Members ---
         for batch_num, batch in enumerate(chunked(insertOutreachArray, 1000), start=1):
@@ -1390,7 +1294,7 @@ def processmember(request):
                 "table_name": "MEM_OUTREACH_MEMBERS",
                 "insertDataArray": batch,
             }
-            insertresult = api_call(apidata, "prismMultipleinsert")
+            insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
             # If API succeeded → count these rows
             if insertresult.get("statusCode") == 200:
                 total_inserted_members += len(batch)
@@ -1473,7 +1377,7 @@ def processriskgap(request):
                     "table_name": "MEM_RISK_GAP",
                     "insertDataArray": batch,
                 }
-                insertresult = api_call(apidata, "prismMultipleinsert")
+                insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
                 print("Renamed Data:", insertresult)
                 # If API succeeded → count these rows
                 if insertresult.get("statusCode") == 200:
@@ -1599,7 +1503,7 @@ def processquality(request):
                     "table_name": "MEM_CIH_QUALITY",
                     "insertDataArray": batch,
                 }
-                insertresult = api_call(apidata, "prismMultipleinsert")
+                insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
                 print("Renamed Data:", insertresult)
                 # If API succeeded → count these rows
                 if insertresult.get("statusCode") == 200:

@@ -115,11 +115,14 @@ USE_TZ = True
 
 BASE_URL = "http://127.0.0.1:8000/"
 STATIC_URL = 'static/'
+PROJECT_NAME ='PRISM'
+ENVIRONMENT = 'dev'
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",   # if you have a global static/ folder
 # ]
-#API_URL = 'https://6t95bh0wkl.execute-api.us-west-2.amazonaws.com/dev/'
-API_URL = 'https://si3lperuxf.execute-api.us-east-1.amazonaws.com/dev/'
+
+API_URL = 'https://e9vakopr4c.execute-api.us-east-1.amazonaws.com/dev/'
+#API_URL = 'https://si3lperuxf.execute-api.us-east-1.amazonaws.com/dev/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

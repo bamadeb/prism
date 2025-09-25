@@ -4,6 +4,7 @@ from . import views, api, users, dataupload
 urlpatterns = [
     path('', views.login, name='login'),
     path('login/', views.login, name='login'),
+    path('home/', views.home, name='home'),
     path('logout/', views.logoutuser, name='logout'),
     path('memberdetails/<str:medicaid_id>/', views.memberdetails, name='memberdetails'),
     path('add_action/', views.add_action, name='add_action'),
