@@ -49,6 +49,8 @@ def add_user(request):
 
     if request.method == "POST":
         try:
+            # print(request.POST)  # shows a QueryDict
+            # return HttpResponse("OK")
 
             insertDataArray = []
             # Collect form data
@@ -76,7 +78,8 @@ def add_user(request):
                     "table_name": "MEM_USERS",
                     "insertDataArray": insertDataArray,
                 }
-                api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                insert = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                #print(insert)
 
             return redirect("users")
 

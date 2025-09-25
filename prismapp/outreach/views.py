@@ -370,7 +370,10 @@ def memberdetails(request, medicaid_id):
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
             # Convert string to datetime
-            log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
+            if log.get("add_date"):
+                log["add_date"] = datetime.fromisoformat(log["add_date"].replace("Z", "+00:00"))
+            else:
+                log["add_date"] = None  # or keep it None, depending on your use case
             log_details.append(log)
 
     member_alertList = []
@@ -519,8 +522,8 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
-
+            insert = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            print(insert)
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
                 "action_type": request.POST.get("action_type_name"),
