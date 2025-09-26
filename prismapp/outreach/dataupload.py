@@ -30,8 +30,9 @@ def processmember(request):
             'session_id': session_id
         }
         if session_id :
-            response = requests.post(settings.API_URL + "prismProcessMembersSeccionID"+"-"+settings.ENVIRONMENT, json=data)
-            logResult = response.json()
+            logResult = api_call(data, "prismProcessMembersSeccionID"+"-"+settings.ENVIRONMENT)
+            #logResult = response.json()
+            print(logResult)
             session_id = int(time.time())
             logList = logResult['data']['loglist']
             for log in logList:
@@ -80,32 +81,35 @@ def processmember(request):
                 "table_name": "MEM_MEMBERS_TEMP",
                 "insertDataArray": batch,
             }
-            insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
-
+            insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+            print(insertresult)
     apidata = {
         "session_id": session_id
     }
-    tempMemberResponse = requests.post(settings.API_URL + "prismGetTempMembersBySeccionID"+"-"+settings.ENVIRONMENT, json=apidata)
-    tempMember = tempMemberResponse.json()
-    tempMemberList = tempMember['data']
     exist_count = 0
     error_count = 0
-    #print(tempMemberList)
-    for member in tempMemberList:
-        # print(activity)
-        if member["exist_member"]:
-            exist_count += 1
-        if member["SUBSCRIBER_ID"] is None or str(member["SUBSCRIBER_ID"]).strip() == "":
-            error_count += 1
-        dob = member.get("DT_OF_BIRTH")
-        if isinstance(dob, str):
-            member["DT_OF_BIRTH"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
+    totalRecords = 0
+    tempMemberList = {}
+    if request.method == "POST":
+        tempMember = api_call(apidata, "prismGetTempMembersBySeccionID"+"-"+settings.ENVIRONMENT)
+        tempMemberList = tempMember['data']
+        totalRecords = tempMember['totalRecords']
+        # print(tempMemberList)
+        for member in tempMemberList:
+            # print(activity)
+            if member["exist_member"]:
+                exist_count += 1
+            if member["SUBSCRIBER_ID"] is None or str(member["SUBSCRIBER_ID"]).strip() == "":
+                error_count += 1
+            dob = member.get("DT_OF_BIRTH")
+            if isinstance(dob, str):
+                member["DT_OF_BIRTH"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
     #print(logList)
     return render(request, 'processmember.html', {
         'pageTitle': "PROCESS MEMBER",
         'session_id': session_id,
         'tempMember' : tempMemberList,
-        'totalTempMemberCount' : tempMember['totalRecords'],
+        'totalTempMemberCount' : totalRecords,
         'exist_count': exist_count,
         'logList': logList,
         'error_count': error_count
@@ -123,8 +127,8 @@ def processriskgap(request):
             'session_id': session_id
         }
         if session_id :
-            response = requests.post(settings.API_URL + "prismProcessRiskGapsSeccionID"+"-"+settings.ENVIRONMENT, json=data)
-            logResult = response.json()
+            logResult = api_call(data, "prismProcessRiskGapsSeccionID"+"-"+settings.ENVIRONMENT)
+            #logResult = response.json()
             session_id = int(time.time())
             logList = logResult['data']['loglist']
             for log in logList:
@@ -169,30 +173,34 @@ def processriskgap(request):
             insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
             #insertR = insertresult.json()
             #print(insertresult)
-    apidata = {
-        "session_id": session_id
-    }
-    tempRiskGapsResponse = requests.post(settings.API_URL + "prismGetTempRiskGapsBySeccionID"+"-"+settings.ENVIRONMENT, json=apidata)
-    tempRiskGaps = tempRiskGapsResponse.json()
-    tempRiskGapsList = tempRiskGaps['data']
     exist_count = 0
     error_count = 0
-    #print(tempRiskGapsList)
-    for member in tempRiskGapsList:
-        # print(activity)
-        if member["member_exist"] is None or str(member["member_exist"]).strip() == "":
-            error_count += 1
-        elif member["exist_gap"]:
-            exist_count += 1
-        RELEVANT_DATE = member.get("RELEVANT_DATE")
-        if isinstance(RELEVANT_DATE, str):
-            member["RELEVANT_DATE"] = datetime.fromisoformat(RELEVANT_DATE.replace("Z", "+00:00"))
+    tempRiskGapsList = {}
+    totalRecords = 0
+    if request.method == "POST":
+        apidata = {
+            "session_id": session_id
+        }
+        tempRiskGapsResponse = api_call(apidata, "prismGetTempRiskGapsBySeccionID"+"-"+settings.ENVIRONMENT)
+        #print(tempRiskGapsResponse)
+        tempRiskGapsList = tempRiskGapsResponse['data']
+        totalRecords = tempRiskGapsResponse['totalRecords']
+        #print(tempRiskGapsList)
+        for member in tempRiskGapsList:
+            # print(activity)
+            if member["member_exist"] is None or str(member["member_exist"]).strip() == "":
+                error_count += 1
+            elif member["exist_gap"]:
+                exist_count += 1
+            RELEVANT_DATE = member.get("RELEVANT_DATE")
+            if isinstance(RELEVANT_DATE, str):
+                member["RELEVANT_DATE"] = datetime.fromisoformat(RELEVANT_DATE.replace("Z", "+00:00"))
     #print(logList)
     return render(request, 'processriskgap.html', {
         'pageTitle': "PROCESS RISK GAP",
         'session_id': session_id,
         'tempRiskGapsList' : tempRiskGapsList,
-        'totalTempRiskGapsCount' : tempRiskGaps['totalRecords'],
+        'totalTempRiskGapsCount' : totalRecords,
         'exist_count': exist_count,
         'logList': logList,
         'error_count': error_count
@@ -210,8 +218,10 @@ def processquality(request):
             'session_id': session_id
         }
         if session_id :
-            response = requests.post(settings.API_URL + "prismProcessQualityGapsSeccionID"+"-"+settings.ENVIRONMENT, json=data)
-            logResult = response.json()
+            logResult = api_call(data, "prismProcessQualityGapsSeccionID"+"-"+settings.ENVIRONMENT)
+            #logResult = response.json()
+            #print("Log result" + session_id)
+            #print(logResult)
             session_id = int(time.time())
             logList = logResult['data']['loglist']
             for log in logList:
@@ -263,30 +273,35 @@ def processquality(request):
             insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
             #insertR = insertresult.json()
             #print(insertresult)
-    apidata = {
-        "session_id": session_id
-    }
-    tempQualityGapsResponse = requests.post(settings.API_URL + "prismGetTempQualityGapsBySeccionID"+"-"+settings.ENVIRONMENT, json=apidata)
-    tempQualityGaps = tempQualityGapsResponse.json()
-    tempQualityGapsList = tempQualityGaps['data']
     exist_count = 0
     error_count = 0
-    #print(tempRiskGapsList)
-    for quality in tempQualityGapsList:
-        # print(activity)
-        if quality["member_exist"] is None or str(quality["member_exist"]).strip() == "":
-            error_count += 1
-        elif quality["quality_gaps_exist"]:
-            exist_count += 1
-        dob = quality.get("Date_of_Birth")
-        if isinstance(dob, str):
-            quality["Date_of_Birth"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
+    tempQualityGapsList = {}
+    totalRecords = 0
+    if request.method == "POST":
+        apidata = {
+            "session_id": session_id
+        }
+        tempQualityGaps = api_call(apidata, "prismGetTempQualityGapsBySeccionID"+"-"+settings.ENVIRONMENT)
+        #tempQualityGaps = tempQualityGapsResponse.json()
+        #print(tempQualityGaps)
+        tempQualityGapsList = tempQualityGaps['data']
+        #print(tempRiskGapsList)
+        totalRecords = tempQualityGaps['totalRecords']
+        for quality in tempQualityGapsList:
+            # print(activity)
+            if quality["member_exist"] is None or str(quality["member_exist"]).strip() == "":
+                error_count += 1
+            elif quality["quality_gaps_exist"]:
+                exist_count += 1
+            dob = quality.get("Date_of_Birth")
+            if isinstance(dob, str):
+                quality["Date_of_Birth"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
     #print(tempQualityGapsList)
     return render(request, 'processquality.html', {
         'pageTitle': "PROCESS QUALITY GAP",
         'session_id': session_id,
         'tempQualityGapsList' : tempQualityGapsList,
-        'totalTempQualityGapsCount' : tempQualityGaps['totalRecords'],
+        'totalTempQualityGapsCount' : totalRecords,
         'exist_count': exist_count,
         'logList': logList,
         'error_count': error_count
