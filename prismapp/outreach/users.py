@@ -22,7 +22,7 @@ from django.utils import timezone
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def api_call(params, funName):
-    api_url = settings.API_URL + funName
+    api_url = settings.API_URL + funName +"-"+settings.ENVIRONMENT
     response = requests.post(api_url, json=params)
     return response.json()
 
@@ -32,8 +32,8 @@ def users(request):
     else:
 
         params = {}
-        user_list = api_call(params, "prismUsers"+"-"+settings.ENVIRONMENT)
-        role_list = api_call(params, "prismRolelist"+"-"+settings.ENVIRONMENT)
+        user_list = api_call(params, "prismUsers")
+        role_list = api_call(params, "prismRolelist")
         context = {
             'pageTitle': "USERS LIST",
             'projectName': settings.PROJECT_NAME,
@@ -70,7 +70,7 @@ def add_user(request):
                     "id_field_name": "ID",
                     "id_field_value": request.POST.get("user_id"),
                 }
-                api_call(dataList1, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+                api_call(dataList1, "prismMultiplefieldupdate")
             else:
 
                 insertDataArray.append(insert_data)
@@ -78,7 +78,7 @@ def add_user(request):
                     "table_name": "MEM_USERS",
                     "insertDataArray": insertDataArray,
                 }
-                insert = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                insert = api_call(apidata, "prismMultipleinsert")
                 #print(insert)
 
             return redirect("users")

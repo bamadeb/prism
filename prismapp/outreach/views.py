@@ -28,7 +28,7 @@ def home(request):
     return HttpResponse("Hello, World!")
 
 def api_call(params, funName):
-    api_url = settings.API_URL + funName
+    api_url = settings.API_URL + funName +"-"+settings.ENVIRONMENT
     response = requests.post(api_url, json=params)
     return response.json()
 
@@ -359,7 +359,7 @@ def memberdetails(request, medicaid_id):
     params = {"medicaid_id": medicaid_id}
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails"+"-"+settings.ENVIRONMENT)
-    print(member_details)
+    #print(member_details)
     log_details = []
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
@@ -1179,7 +1179,7 @@ def update_member_info(request):
             "table_name": "MEM_SYSTEM_LOG",
             "insertDataArray": [all_log_row],
         }
-        response = api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+        response = api_call(paramlog, "prismMultipleinsert")
 
         # Optional: check API response
         if response.get("statusCode") != 200:
@@ -1285,7 +1285,7 @@ def processmember(request):
                 "table_name": "MEM_MEMBERS",
                 "insertDataArray": batch,
             }
-            insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            insertresult = api_call(apidata, "prismMultipleinsert")
 
         # --- Insert Outreach Members ---
         for batch_num, batch in enumerate(chunked(insertOutreachArray, 1000), start=1):
@@ -1294,7 +1294,7 @@ def processmember(request):
                 "table_name": "MEM_OUTREACH_MEMBERS",
                 "insertDataArray": batch,
             }
-            insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            insertresult = api_call(apidata, "prismMultipleinsert")
             # If API succeeded → count these rows
             if insertresult.get("statusCode") == 200:
                 total_inserted_members += len(batch)
@@ -1377,7 +1377,7 @@ def processriskgap(request):
                     "table_name": "MEM_RISK_GAP",
                     "insertDataArray": batch,
                 }
-                insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                insertresult = api_call(apidata, "prismMultipleinsert")
                 print("Renamed Data:", insertresult)
                 # If API succeeded → count these rows
                 if insertresult.get("statusCode") == 200:
@@ -1503,7 +1503,7 @@ def processquality(request):
                     "table_name": "MEM_CIH_QUALITY",
                     "insertDataArray": batch,
                 }
-                insertresult = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                insertresult = api_call(apidata, "prismMultipleinsert")
                 print("Renamed Data:", insertresult)
                 # If API succeeded → count these rows
                 if insertresult.get("statusCode") == 200:

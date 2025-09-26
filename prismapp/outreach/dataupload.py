@@ -14,7 +14,7 @@ import os
 import csv
 import io
 def api_call(params, funName):
-    api_url = settings.API_URL + funName
+    api_url = settings.API_URL + funName +"-"+settings.ENVIRONMENT
     response = requests.post(api_url, json=params)
     return response.json()
 def home(request):
@@ -95,7 +95,7 @@ def processmember(request):
                         "table_name": "MEM_MEMBERS_TEMP",
                         "insertDataArray": batch,
                     }
-                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    insertresult = api_call(apidata, "prismMultipleRowInsert")
                     print(insertresult)
             else:
                 #print("File header missmatch.")
@@ -111,7 +111,7 @@ def processmember(request):
     totalRecords = 0
     tempMemberList = {}
     if request.method == "POST":
-        tempMember = api_call(apidata, "prismGetTempMembersBySeccionID"+"-"+settings.ENVIRONMENT)
+        tempMember = api_call(apidata, "prismGetTempMembersBySeccionID")
         tempMemberList = tempMember['data']
         totalRecords = tempMember['totalRecords']
         # print(tempMemberList)
@@ -147,7 +147,7 @@ def processriskgap(request):
             'session_id': session_id
         }
         if session_id :
-            logResult = api_call(data, "prismProcessRiskGapsSeccionID"+"-"+settings.ENVIRONMENT)
+            logResult = api_call(data, "prismProcessRiskGapsSeccionID")
             #logResult = response.json()
             session_id = int(time.time())
             logList = logResult['data']['loglist']
@@ -203,7 +203,7 @@ def processriskgap(request):
                         "table_name": "MEM_RISK_GAP_TEMP",
                         "insertDataArray": batch,
                     }
-                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    insertresult = api_call(apidata, "prismMultipleRowInsert")
                     #insertR = insertresult.json()
                     #print(insertresult)
             else:
@@ -219,7 +219,7 @@ def processriskgap(request):
         apidata = {
             "session_id": session_id
         }
-        tempRiskGapsResponse = api_call(apidata, "prismGetTempRiskGapsBySeccionID"+"-"+settings.ENVIRONMENT)
+        tempRiskGapsResponse = api_call(apidata, "prismGetTempRiskGapsBySeccionID")
         #print(tempRiskGapsResponse)
         tempRiskGapsList = tempRiskGapsResponse['data']
         totalRecords = tempRiskGapsResponse['totalRecords']
@@ -256,7 +256,7 @@ def processquality(request):
             'session_id': session_id
         }
         if session_id :
-            logResult = api_call(data, "prismProcessQualityGapsSeccionID"+"-"+settings.ENVIRONMENT)
+            logResult = api_call(data, "prismProcessQualityGapsSeccionID")
             #logResult = response.json()
             #print("Log result" + session_id)
             #print(logResult)
@@ -322,7 +322,7 @@ def processquality(request):
                         "table_name": "MEM_CIH_QUALITY_TEMP",
                         "insertDataArray": batch,
                     }
-                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    insertresult = api_call(apidata, "prismMultipleRowInsert")
                     #insertR = insertresult.json()
                     #print(insertresult)
             else:
@@ -338,7 +338,7 @@ def processquality(request):
         apidata = {
             "session_id": session_id
         }
-        tempQualityGaps = api_call(apidata, "prismGetTempQualityGapsBySeccionID"+"-"+settings.ENVIRONMENT)
+        tempQualityGaps = api_call(apidata, "prismGetTempQualityGapsBySeccionID")
         #tempQualityGaps = tempQualityGapsResponse.json()
         #print(tempQualityGaps)
         tempQualityGapsList = tempQualityGaps['data']
