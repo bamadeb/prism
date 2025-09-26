@@ -80,6 +80,8 @@ def login(request):
                         return redirect('/users/')
                     elif user_data[0].get('role_id', None) == 20:
                         return redirect('/users/')
+                    elif user_data[0].get('role_id', None) == 10:
+                        return redirect('/users/')
 
                 else:
                     return render(request, 'login.html', {'error': 'Invalid username or password.'})
