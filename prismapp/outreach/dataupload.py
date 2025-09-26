@@ -8,7 +8,9 @@ from django.conf import settings
 from datetime import datetime, timedelta, timezone
 from datetime import datetime, date
 from django.shortcuts import render, redirect
+from django.contrib import messages
 import uuid
+import os
 import csv
 import io
 def api_call(params, funName):
@@ -44,45 +46,63 @@ def processmember(request):
         session_id = int(time.time())
     if request.method == "POST" and 'file' in request.FILES:
         uploaded_file = request.FILES['file']
-        decoded_file = uploaded_file.read().decode('utf-8')
-        io_string = io.StringIO(decoded_file)
-        reader = csv.DictReader(io_string)
-        # convert rows to list of dicts
-        insertDataArray = []
-        date_fields = [
-            "DT_OF_BIRTH",
-            "ENROLL_DT",
-            "PCP_EFF_DT_S"
-        ]
-        other_dates = [
-            "PCP_EFF_DT_E",
-            "PLAN_DT_S",
-            "PLAN_DT_E",
-            "DISENROLL_DT"
-        ]
-        for row in reader:
-            for field in date_fields:
-                if field in row:
-                    row[field] = clean_date(row[field])
-            for field in other_dates:
-                if field in row:
-                    row.pop(field)
-            row['INSERT_SESSION_ID'] = session_id
-            insertDataArray.append(row)
-        # --- Helper to split into batches of 1000 ---
-        def chunked(iterable, size=1000):
-            for i in range(0, len(iterable), size):
-                yield iterable[i:i + size]
+        ext = os.path.splitext(uploaded_file.name)[1].lower()
+        if ext != ".csv":
+            messages.success(
+                request,
+                f" Only .csv files are allowed."
+            )
+        else:
+            decoded_file = uploaded_file.read().decode('utf-8')
+            io_string = io.StringIO(decoded_file)
+            reader = csv.DictReader(io_string)
+            expected_headers = ['SUBSCRIBER_ID', 'MBR_PERIOD', 'FIRST_NM', 'MIDDLE_NM', 'LAST_NM', 'MEDICARE_ID', 'MEDICAID_ID', 'DT_OF_BIRTH', 'SEX', 'ADDRESS_1', 'ADDRESS_2', 'CITY', 'COUNTY', 'STATE', 'ZIP_CODE', 'HOME_TELEPHONE', 'CELL_PHONE', 'EMAIL', 'RISK_SCORE', 'CONTRACT_NO', 'PBP', 'PCP_TAX_ID', 'PCP_NPI', 'ENROLL_DT', 'PCP_EFF_DT_S', 'NETWORK_ID', 'NETWORK_NAME', 'PCP_EFF_DT_E', 'PLAN_ID', 'PLAN_NAME', 'PLAN_DT_S', 'PLAN_DT_E', 'DISENROLL_DT', 'DISENROLL_RSN_CD', 'DISENROLL_DESC', 'AGT_REC_NM', 'AGT_REC_PH', 'AGT_REC_EM']
 
-        # --- Insert Members ---
-        for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-            print(f"Processing MEM_MEMBERS batch {batch_num}, rows: {len(batch)}")
-            apidata = {
-                "table_name": "MEM_MEMBERS_TEMP",
-                "insertDataArray": batch,
-            }
-            insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
-            print(insertresult)
+            uploaded_headers = reader.fieldnames
+            print(uploaded_headers)
+            # convert rows to list of dicts
+            if uploaded_headers == expected_headers:
+                insertDataArray = []
+                date_fields = [
+                    "DT_OF_BIRTH",
+                    "ENROLL_DT",
+                    "PCP_EFF_DT_S"
+                ]
+                other_dates = [
+                    "PCP_EFF_DT_E",
+                    "PLAN_DT_S",
+                    "PLAN_DT_E",
+                    "DISENROLL_DT"
+                ]
+                for row in reader:
+                    for field in date_fields:
+                        if field in row:
+                            row[field] = clean_date(row[field])
+                    for field in other_dates:
+                        if field in row:
+                            row.pop(field)
+                    row['INSERT_SESSION_ID'] = session_id
+                    insertDataArray.append(row)
+                # --- Helper to split into batches of 1000 ---
+                def chunked(iterable, size=1000):
+                    for i in range(0, len(iterable), size):
+                        yield iterable[i:i + size]
+
+                # --- Insert Members ---
+                for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
+                    print(f"Processing MEM_MEMBERS batch {batch_num}, rows: {len(batch)}")
+                    apidata = {
+                        "table_name": "MEM_MEMBERS_TEMP",
+                        "insertDataArray": batch,
+                    }
+                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    print(insertresult)
+            else:
+                #print("File header missmatch.")
+                messages.success(
+                    request,
+                    f" File header missmatch."
+                )
     apidata = {
         "session_id": session_id
     }
@@ -140,39 +160,57 @@ def processriskgap(request):
         session_id = int(time.time())
     if request.method == "POST" and 'file' in request.FILES:
         uploaded_file = request.FILES['file']
-        decoded_file = uploaded_file.read().decode('utf-8')
-        io_string = io.StringIO(decoded_file)
-        reader = csv.DictReader(io_string)
-        # convert rows to list of dicts
-        insertDataArray = []
-        date_fields = [
-            "RELEVANT_DATE"
-        ]
-        other_dates = []
-        for row in reader:
-            for field in date_fields:
-                if field in row:
-                    row[field] = clean_date(row[field])
-            for field in other_dates:
-                if field in row:
-                    row.pop(field)
-            row['INSERT_SESSION_ID'] = session_id
-            insertDataArray.append(row)
-        # --- Helper to split into batches of 1000 ---
-        def chunked(iterable, size=1000):
-            for i in range(0, len(iterable), size):
-                yield iterable[i:i + size]
+        ext = os.path.splitext(uploaded_file.name)[1].lower()
+        if ext != ".csv":
+            messages.success(
+                request,
+                f" Only .csv files are allowed."
+            )
+        else:
+            decoded_file = uploaded_file.read().decode('utf-8')
+            io_string = io.StringIO(decoded_file)
+            reader = csv.DictReader(io_string)
+            # convert rows to list of dicts
+            expected_headers = ['PAT_ID', 'MBR_ID', 'PRODUCT_TYPE', 'HCC_CATEGORY', 'HCC_MODEL', 'STATUS', 'RELEVANT_DATE', 'DIAG_SOURCE', 'DIAG_CODE', 'DIAG_DESC', 'PROV_SPECIALTY']
 
-        # --- Insert Members ---
-        for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-            print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
-            apidata = {
-                "table_name": "MEM_RISK_GAP_TEMP",
-                "insertDataArray": batch,
-            }
-            insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
-            #insertR = insertresult.json()
-            #print(insertresult)
+            uploaded_headers = reader.fieldnames
+            print(uploaded_headers)
+            # convert rows to list of dicts
+            if uploaded_headers == expected_headers:
+                insertDataArray = []
+                date_fields = [
+                    "RELEVANT_DATE"
+                ]
+                other_dates = []
+                for row in reader:
+                    for field in date_fields:
+                        if field in row:
+                            row[field] = clean_date(row[field])
+                    for field in other_dates:
+                        if field in row:
+                            row.pop(field)
+                    row['INSERT_SESSION_ID'] = session_id
+                    insertDataArray.append(row)
+                # --- Helper to split into batches of 1000 ---
+                def chunked(iterable, size=1000):
+                    for i in range(0, len(iterable), size):
+                        yield iterable[i:i + size]
+
+                # --- Insert Members ---
+                for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
+                    print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
+                    apidata = {
+                        "table_name": "MEM_RISK_GAP_TEMP",
+                        "insertDataArray": batch,
+                    }
+                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    #insertR = insertresult.json()
+                    #print(insertresult)
+            else:
+                messages.success(
+                    request,
+                    f" File header missmatch."
+                )
     exist_count = 0
     error_count = 0
     tempRiskGapsList = {}
@@ -233,46 +271,65 @@ def processquality(request):
         session_id = int(time.time())
     if request.method == "POST" and 'file' in request.FILES:
         uploaded_file = request.FILES['file']
-        decoded_file = uploaded_file.read().decode('utf-8')
-        io_string = io.StringIO(decoded_file)
-        reader = csv.DictReader(io_string)
+        ext = os.path.splitext(uploaded_file.name)[1].lower()
+        if ext != ".csv":
+            messages.success(
+                request,
+                f" Only .csv files are allowed."
+            )
+        else:
 
-        # convert rows to list of dicts
-        insertDataArray = []
-        date_fields = ["Date_of_Birth"]  # use normalized names
-        other_dates = []
+            decoded_file = uploaded_file.read().decode('utf-8')
+            io_string = io.StringIO(decoded_file)
+            reader = csv.DictReader(io_string)
+            expected_headers = ['Subscriber ID', 'Measure Name', 'Submeasure', 'First Name', 'Middle Name', 'Last Name', 'Medicare ID', 'Medicaid ID', 'Date of Birth', 'Sex', 'Provider ID', 'Provider Name', 'Numerator_Gap']
 
-        for row in reader:
-            # normalize all keys: replace spaces with underscores
-            normalized_row = {k.replace(" ", "_"): v for k, v in row.items()}
+            uploaded_headers = reader.fieldnames
+            #print(uploaded_headers)
+            # convert rows to list of dicts
+            if uploaded_headers == expected_headers:
 
-            # clean date fields
-            for field in date_fields:
-                if field in normalized_row:
-                    normalized_row[field] = clean_date(normalized_row[field])
+                # convert rows to list of dicts
+                insertDataArray = []
+                date_fields = ["Date_of_Birth"]  # use normalized names
+                other_dates = []
 
-            # remove unwanted date fields
-            for field in other_dates:
-                normalized_row.pop(field, None)
+                for row in reader:
+                    # normalize all keys: replace spaces with underscores
+                    normalized_row = {k.replace(" ", "_"): v for k, v in row.items()}
 
-            normalized_row["INSERT_SESSION_ID"] = session_id
-            insertDataArray.append(normalized_row)
+                    # clean date fields
+                    for field in date_fields:
+                        if field in normalized_row:
+                            normalized_row[field] = clean_date(normalized_row[field])
 
-        # --- Helper to split into batches of 1000 ---
-        def chunked(iterable, size=1000):
-            for i in range(0, len(iterable), size):
-                yield iterable[i:i + size]
+                    # remove unwanted date fields
+                    for field in other_dates:
+                        normalized_row.pop(field, None)
 
-        # --- Insert Members ---
-        for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-            print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
-            apidata = {
-                "table_name": "MEM_CIH_QUALITY_TEMP",
-                "insertDataArray": batch,
-            }
-            insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
-            #insertR = insertresult.json()
-            #print(insertresult)
+                    normalized_row["INSERT_SESSION_ID"] = session_id
+                    insertDataArray.append(normalized_row)
+
+                # --- Helper to split into batches of 1000 ---
+                def chunked(iterable, size=1000):
+                    for i in range(0, len(iterable), size):
+                        yield iterable[i:i + size]
+
+                # --- Insert Members ---
+                for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
+                    print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
+                    apidata = {
+                        "table_name": "MEM_CIH_QUALITY_TEMP",
+                        "insertDataArray": batch,
+                    }
+                    insertresult = api_call(apidata, "prismMultipleRowInsert"+"-"+settings.ENVIRONMENT)
+                    #insertR = insertresult.json()
+                    #print(insertresult)
+            else:
+                messages.success(
+                    request,
+                    f" File header missmatch."
+                )
     exist_count = 0
     error_count = 0
     tempQualityGapsList = {}

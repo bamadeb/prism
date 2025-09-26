@@ -17,14 +17,14 @@
         <form method="post" action="/processriskgap/" enctype="multipart/form-data" id="process_member_action">
                   {% csrf_token %}
             <div class="row g-2 align-items-center">
-                <div class="col-lg-4">
+                <div class="col-lg-4 text-uppercase">
                     Select Risk Gap File
                 </div>
                 <div class="col-lg-4">
                     <input type="file" name="file" accept=".csv" class="form-control" required>
                 </div>
                 <div class="col-lg-4">
-                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    <button type="submit" class="btn btn-primary w-100 text-uppercase">Upload</button>
                 </div>
             </div>
         </form>
@@ -47,6 +47,7 @@
     </div>
     {% else %}
       <div class="col-lg-6">
+          <a href="{% static 'sample_file/Riskgaps_sample_file.csv' %}" target="_blank">RISK GAPS SAMPLE FILE</a>
       </div>
     {% endif %}
     <!-- Messages -->

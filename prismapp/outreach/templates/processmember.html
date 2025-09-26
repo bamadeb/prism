@@ -17,14 +17,14 @@
         <form method="post" action="/processmember/" enctype="multipart/form-data" id="process_member_action">
             {% csrf_token %}
             <div class="row g-2 align-items-center">
-                <div class="col-lg-4">
+                <div class="col-lg-4 text-uppercase">
                     Select Member File
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4 text-uppercase">
                     <input type="file" name="file" accept=".csv" class="form-control" required>
                 </div>
-                <div class="col-lg-4">
-                    <button type="submit" class="btn btn-primary w-100">Upload</button>
+                <div class="col-lg-4 text-uppercase">
+                    <button type="submit" class="btn btn-primary w-100 text-uppercase">Upload</button>
                 </div>
             </div>
         </form>
@@ -46,7 +46,8 @@
         </form>
     </div>
     {% else %}
-      <div class="col-lg-6">
+      <div class="col-lg-6  text-uppercase">
+          <a href="{% static 'sample_file/Member_sample_file.csv' %}" target="_blank">MEMBER SAMPLE FILE</a>
       </div>
     {% endif %}
     <!-- Messages -->
