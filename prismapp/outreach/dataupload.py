@@ -34,7 +34,7 @@ def processmember(request):
         if session_id :
             logResult = api_call(data, "prismProcessMembersSeccionID")
             #logResult = response.json()
-            print(logResult)
+            #print(logResult)
             session_id = int(time.time())
             logList = logResult['data']['loglist']
             for log in logList:
@@ -96,7 +96,7 @@ def processmember(request):
                         "insertDataArray": batch,
                     }
                     insertresult = api_call(apidata, "prismMultipleRowInsert")
-                    print(insertresult)
+                    #print(insertresult)
             else:
                 #print("File header missmatch.")
                 messages.success(
@@ -149,6 +149,7 @@ def processriskgap(request):
         if session_id :
             logResult = api_call(data, "prismProcessRiskGapsSeccionID")
             #logResult = response.json()
+            #print(logResult)
             session_id = int(time.time())
             logList = logResult['data']['loglist']
             for log in logList:
@@ -317,14 +318,14 @@ def processquality(request):
 
                 # --- Insert Members ---
                 for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-                    print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
+                    print(f"Processing MEM_CIH_QUALITY_TEMP batch {batch_num}, rows: {len(batch)}")
                     apidata = {
                         "table_name": "MEM_CIH_QUALITY_TEMP",
                         "insertDataArray": batch,
                     }
                     insertresult = api_call(apidata, "prismMultipleRowInsert")
                     #insertR = insertresult.json()
-                    #print(insertresult)
+                    print(insertresult)
             else:
                 messages.success(
                     request,

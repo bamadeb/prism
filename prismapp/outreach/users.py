@@ -32,13 +32,12 @@ def users(request):
     else:
 
         params = {}
-        user_list = api_call(params, "prismUsers")
-        role_list = api_call(params, "prismRolelist")
+        user_list = api_call(params, "prismUserslist")
         context = {
             'pageTitle': "USERS LIST",
             'projectName': settings.PROJECT_NAME,
-            "user_list": user_list['data'],
-            "role_list": role_list['data'],
+            "user_list": user_list['data']['users'],
+            "role_list": user_list['data']['roles'],
         }
     return render(request, 'users.html', context)
 
