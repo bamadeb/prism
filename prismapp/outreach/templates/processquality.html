@@ -33,7 +33,7 @@
     {% if totalTempQualityGapsCount > 0 %}
     <!-- Member info -->
     <div class="col-lg-3">
-        Total {{ totalTempQualityGapsCount }} risk gaps are to be processed
+        Total {{ totalTempQualityGapsCount }} quality gaps are to be processed
         {% if error_count > 0 %}<br> Find {{ error_count }} error record{% endif %}
         <br>Find {{ exist_count }} duplicate quality gaps
     </div>
@@ -48,7 +48,7 @@
     </div>
     {% else %}
       <div class="col-lg-6">
-          <a href="{% static 'sample_file/Qualitygaps_sample_file.csv' %}" target="_blank">QUALIRT GAPS SAMPLE FILE</a>
+          <a href="{% static 'sample_file/Qualitygaps_sample_file.csv' %}" target="_blank">QUALITY GAPS SAMPLE FILE</a>
       </div>
     {% endif %}
     <!-- Messages -->
