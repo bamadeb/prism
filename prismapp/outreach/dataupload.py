@@ -14,7 +14,7 @@ import os
 import csv
 import io
 def api_call(params, funName):
-    api_url = settings.API_URL + funName +"-"+settings.ENVIRONMENT
+    api_url = settings.API_URL + funName + "-" + settings.ENVIRONMENT
     response = requests.post(api_url, json=params)
     return response.json()
 def home(request):
@@ -32,7 +32,7 @@ def processmember(request):
             'session_id': session_id
         }
         if session_id :
-            logResult = api_call(data, "prismProcessMembersSeccionID"+"-"+settings.ENVIRONMENT)
+            logResult = api_call(data, "prismProcessMembersSeccionID")
             #logResult = response.json()
             print(logResult)
             session_id = int(time.time())
@@ -59,7 +59,7 @@ def processmember(request):
             expected_headers = ['SUBSCRIBER_ID', 'MBR_PERIOD', 'FIRST_NM', 'MIDDLE_NM', 'LAST_NM', 'MEDICARE_ID', 'MEDICAID_ID', 'DT_OF_BIRTH', 'SEX', 'ADDRESS_1', 'ADDRESS_2', 'CITY', 'COUNTY', 'STATE', 'ZIP_CODE', 'HOME_TELEPHONE', 'CELL_PHONE', 'EMAIL', 'RISK_SCORE', 'CONTRACT_NO', 'PBP', 'PCP_TAX_ID', 'PCP_NPI', 'ENROLL_DT', 'PCP_EFF_DT_S', 'NETWORK_ID', 'NETWORK_NAME', 'PCP_EFF_DT_E', 'PLAN_ID', 'PLAN_NAME', 'PLAN_DT_S', 'PLAN_DT_E', 'DISENROLL_DT', 'DISENROLL_RSN_CD', 'DISENROLL_DESC', 'AGT_REC_NM', 'AGT_REC_PH', 'AGT_REC_EM']
 
             uploaded_headers = reader.fieldnames
-            print(uploaded_headers)
+            #print(uploaded_headers)
             # convert rows to list of dicts
             if uploaded_headers == expected_headers:
                 insertDataArray = []
@@ -174,7 +174,7 @@ def processriskgap(request):
             expected_headers = ['PAT_ID', 'MBR_ID', 'PRODUCT_TYPE', 'HCC_CATEGORY', 'HCC_MODEL', 'STATUS', 'RELEVANT_DATE', 'DIAG_SOURCE', 'DIAG_CODE', 'DIAG_DESC', 'PROV_SPECIALTY']
 
             uploaded_headers = reader.fieldnames
-            print(uploaded_headers)
+            #print(uploaded_headers)
             # convert rows to list of dicts
             if uploaded_headers == expected_headers:
                 insertDataArray = []

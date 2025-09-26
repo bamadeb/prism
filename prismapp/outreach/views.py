@@ -47,11 +47,11 @@ def login(request):
 
         # Make the API call to 'vegaslogin' endpoint
         try:
-            response = requests.post(settings.API_URL + "prismAuthentication"+"-"+settings.ENVIRONMENT, json=data)
-            result = response.json()  # Decode the JSON response
+            result = api_call(data, "prismAuthentication")
+            #result = response.json()  # Decode the JSON response
             #print(result)
 
-            if response.status_code == 200:
+            if result.get("statusCode") == 200:
                 user_data = result['data']
                 if isinstance(user_data, list) and len(user_data) > 0:
                     request.session['user_data'] = user_data[0]
@@ -115,9 +115,9 @@ def mywork(request):
             #now = timezone.now()  # gets current datetime with timezone support
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
-            response = requests.post(settings.API_URL + "prismOutreachAllmyworkspaceSP"+"-"+settings.ENVIRONMENT, json=data)
+            myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
             #################
-            myWorkSpaceResult = response.json()  # Decode the JSON response
+            #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:
             return HttpResponse({"error": "An error occurred", "details": str(e)}, status=500)
@@ -358,7 +358,7 @@ def memberdetails(request, medicaid_id):
     ## create a api call
     params = {"medicaid_id": medicaid_id}
     birth_date = None
-    member_details = api_call(params,"prismMemberAllDetails"+"-"+settings.ENVIRONMENT)
+    member_details = api_call(params,"prismMemberAllDetails")
     #print(member_details)
     log_details = []
     if len(member_details) > 0:
@@ -517,9 +517,9 @@ def add_action(request):
                 "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
                 "insertDataArray": insertDataArray,
             }
-            insert = api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            insert = api_call(apidata, "prismMultipleinsert")
             action_id = insert["insertedIds"]
-            print(insert)
+            #print(insert)
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
                 "action_type": request.POST.get("action_type_name"),
@@ -533,20 +533,20 @@ def add_action(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": insertDataArray1,
             }
-            api_call(apidata1, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(apidata1, "prismMultipleinsert")
 
             ##### update quality data
             medicaid_id = request.POST.get("medicaid_id")
             quality_ids = request.POST.getlist("quality_id")
             for qid in quality_ids:
                 qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
-                api_call(qualityupdate, "prismUpdatequalityStatus"+"-"+settings.ENVIRONMENT)
+                api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             for gid in gap_ids:
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
-                api_call(paramsupdate, "prismUpdategapStatus"+"-"+settings.ENVIRONMENT)
+                api_call(paramsupdate, "prismUpdategapStatus")
 
             # Always return after POST
             medicaid_id = request.POST.get("medicaid_id")
@@ -590,7 +590,7 @@ def appointment_add_action(request):
                 "table_name": "MEM_SCHEDULE_APPOINTMENT_ACTION",
                 "insertDataArray": insertDataArray,
             }
-            api_call(apidata, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(apidata, "prismMultipleinsert")
 
             # ---- log entry ----
             all_log_row = {
@@ -608,7 +608,7 @@ def appointment_add_action(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": insertDataArray1,
             }
-            api_call(apidata1, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(apidata1, "prismMultipleinsert")
 
             # ---- handle alerts ----
             if request.POST.get("app_alert_id"):
@@ -626,7 +626,7 @@ def appointment_add_action(request):
                     "id_field_name": "id",
                     "id_field_value": alert[1],
                 }
-                api_call(dataList1, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+                api_call(dataList1, "prismMultiplefieldupdate")
 
                 all_log_row1 = {
                     "medicaid_id": request.POST.get("appointment_medicaid_id"),
@@ -644,7 +644,7 @@ def appointment_add_action(request):
                     "table_name": "MEM_SYSTEM_LOG",
                     "insertDataArray": insertDataArray2,
                 }
-                api_call(apidata2, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                api_call(apidata2, "prismMultipleinsert")
 
                 # update outreach member status
                 alert_name = request.POST.get("app_alertname").split("(")
@@ -659,7 +659,7 @@ def appointment_add_action(request):
                     "id_field_name": "medicaid_id",
                     "id_field_value": data["medicaid_id"],
                 }
-                api_call(dataList2, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+                api_call(dataList2, "prismMultiplefieldupdate")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -672,7 +672,7 @@ def memberhistory(request, medicaid_id):
 
     ## create a api call
     params = {"medicaid_id": medicaid_id}
-    historyResponse = api_call(params,"prismMemberhistory"+"-"+settings.ENVIRONMENT)
+    historyResponse = api_call(params,"prismMemberhistory")
     #print(historyResponse)
     roadmap_data = []
     roadmap_data_str = ''
@@ -750,7 +750,7 @@ def member_add_update_alert(request):
             #print(params)
 
             # API call
-            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(params, "prismMultipleinsert")
 
         else:
             # Update mode
@@ -774,7 +774,7 @@ def member_add_update_alert(request):
                 "id_field_value": alert_list_id,
             }
             # API call
-            api_call(params, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+            api_call(params, "prismMultiplefieldupdate")
 
         # Insert into system log
         all_log = {
@@ -796,7 +796,7 @@ def member_add_update_alert(request):
             "insertDataArray": insertDataArray1,
         }
         # API call
-        api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+        api_call(params, "prismMultipleinsert")
 
     except Exception as e:
         return redirect("error_page")  # Or handle error gracefully
@@ -826,7 +826,7 @@ def add_member_alt_address(request):
             }
             #print(params)
             # API call
-            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(params, "prismMultipleinsert")
 
             # Data for system log table
             insertDataArray1 = [{
@@ -842,7 +842,7 @@ def add_member_alt_address(request):
                 "insertDataArray": insertDataArray1
             }
             # API call
-            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(logparams, "prismMultipleinsert")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -869,7 +869,7 @@ def add_member_alt_phone(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(params, "prismMultipleinsert")
 
             # Data for system log
             insertDataArray1 = [{
@@ -885,7 +885,7 @@ def add_member_alt_phone(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(logparams, "prismMultipleinsert")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -918,7 +918,7 @@ def add_member_alt_pnone(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(params, "prismMultipleinsert")
 
             # Data for system log
             insertDataArray1 = [{
@@ -934,7 +934,7 @@ def add_member_alt_pnone(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(logparams, "prismMultipleinsert")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -954,7 +954,7 @@ def add_member_alt_language(request):
 
             # Call API to get roster language + primary language
             param = {"medicaid_id": medicaid_id}
-            response = api_call(param, "prismMemberlanguage"+"-"+settings.ENVIRONMENT)
+            response = api_call(param, "prismMemberlanguage")
             #print(response)
             roster_language = response["data"][0]["LANGUAGE_DESC"]
             language_code = response["data"][0]["PRIMARY_LANG"]
@@ -973,7 +973,7 @@ def add_member_alt_language(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            api_call(langparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(langparams, "prismMultipleinsert")
 
             # Insert into MEM_SYSTEM_LOG
             insertDataArray1 = [{
@@ -989,7 +989,7 @@ def add_member_alt_language(request):
                 "insertDataArray": insertDataArray1,
             }
             # API call
-            api_call(logparams, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(logparams, "prismMultipleinsert")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1028,7 +1028,7 @@ def add_prisim_claim(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            insert = api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            insert = api_call(params, "prismMultipleinsert")
 
     except Exception as e:
         return HttpResponse(str(e), status=500)
@@ -1065,7 +1065,7 @@ def add_rx_claim(request):
                 "insertDataArray": insertDataArray,
             }
             # API call
-            insert = api_call(params, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            insert = api_call(params, "prismMultipleinsert")
 
             # 2. If claim inserted, create alert
             if insert.get("statusCode") == 200:
@@ -1086,7 +1086,7 @@ def add_rx_claim(request):
                     "table_name": "MEM_ALERTLIST",
                     "insertDataArray": adata,
                 }
-                api_call(paramsalert, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                api_call(paramsalert, "prismMultipleinsert")
 
                 # 3. System Log
                 all_log_row = {
@@ -1101,7 +1101,7 @@ def add_rx_claim(request):
                     "table_name": "MEM_SYSTEM_LOG",
                     "insertDataArray": [all_log_row],
                 }
-                api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+                api_call(paramlog, "prismMultipleinsert")
 
         except Exception as e:
             return HttpResponse(f"Error: {str(e)}")
@@ -1129,7 +1129,7 @@ def update_member_indicator(request):
                 "id_field_name": "medicaid_id",
                 "id_field_value": medicaid_id,
             }
-            api_call(updatedata, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+            api_call(updatedata, "prismMultiplefieldupdate")
 
             all_log_row = {
                 "medicaid_id": medicaid_id,
@@ -1143,7 +1143,7 @@ def update_member_indicator(request):
                 "table_name": "MEM_SYSTEM_LOG",
                 "insertDataArray": [all_log_row],
             }
-            api_call(paramlog, "prismMultipleinsert"+"-"+settings.ENVIRONMENT)
+            api_call(paramlog, "prismMultipleinsert")
 
         return redirect("memberdetails", medicaid_id=request.POST.get("medicaid_id"))
 
@@ -1165,7 +1165,7 @@ def update_member_info(request):
             "id_field_name": "medicaid_id",
             "id_field_value": medicaid_id,
         }
-        api_call(dataList2, "prismMultiplefieldupdate"+"-"+settings.ENVIRONMENT)
+        api_call(dataList2, "prismMultiplefieldupdate")
 
         all_log_row = {
             "medicaid_id": medicaid_id,
