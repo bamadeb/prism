@@ -39,9 +39,7 @@ def processmember(request):
             logList = logResult['data']['loglist']
             for log in logList:
                 if isinstance(log["LOG_DATE"], str):
-                    log["LOG_DATE"] = datetime.fromisoformat(
-                        log["LOG_DATE"].replace("Z", "+00:00")
-                    )
+                    log["LOG_DATE"] = datetime.fromisoformat(log["LOG_DATE"].replace("Z", "+00:00"))
     else:
         session_id = int(time.time())
     if request.method == "POST" and 'file' in request.FILES:
