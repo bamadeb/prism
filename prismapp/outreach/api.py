@@ -88,4 +88,14 @@ def get_user_details(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@csrf_exempt
+def get_member_action_details(request):
+    if request.method == "POST":
+        id = request.POST.get("id")
+        params = {"action_id": id}
+        response = api_call(params, "prismActionDetails")
+        return JsonResponse(response['data'], safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 

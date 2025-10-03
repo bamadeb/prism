@@ -382,6 +382,11 @@ def memberdetails(request, medicaid_id):
         # Convert string to datetime
         member["due_date"] = datetime.fromisoformat(member["due_date"].replace("Z", "+00:00"))
         member_alertList.append(member)
+    member_actionList = []
+    for action in member_details['data']['memberActionList']:
+        # Convert string to datetime
+        action["action_date"] = datetime.fromisoformat(action["action_date"].replace("Z", "+00:00"))
+        member_actionList.append(action)
 
     medical_claim_details = []
     # for claim in member_details['data']['medicalClaim']:
@@ -456,7 +461,7 @@ def memberdetails(request, medicaid_id):
     #                 pass
 
 
-
+    #print(member_details['data']['prismQualityList'])
     return render(request, 'memberdetails.html', {
         'pageTitle': "MEMBER DETAILS",
         'projectName': settings.PROJECT_NAME,
@@ -467,15 +472,15 @@ def memberdetails(request, medicaid_id):
         "alertList": member_details['data']['prismAlertMaster'],
         "member_details": member_details['data']['memberDetails'],
         "assign_to_user": member_details['data']['prismUsers'],
-        #"alt_address": member_details['data']['altaddress'],
-        #"member_alt_phone_details": member_details['data']['prismMemberaltphone'],
-        #"all_language_master_list": member_details['data']['prismMasterLanguage'],
-        #"member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
-        #"pcp_list": member_details['data']['prismMemberPCPList'],
-        #"medical_claim_details": member_details['data']['medicalClaim'],
+        "memberActionList": member_actionList,
+        "member_alt_phone_details": member_details['data']['prismMemberaltphone'],
+        "all_language_master_list": member_details['data']['prismMasterLanguage'],
+        "member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
+        "pcp_list": member_details['data']['prismMemberPCPList'],
+        "medical_claim_details": member_details['data']['altaddress'],
         #"risk_details": member_details['data']['prismMembershiprisk'],
         #"problem_list": member_details['data']['prismCrispProblems'],
-        #"encounters": member_details['data']['prismCrispEncounters'],
+        "alt_address": member_details['data']['altaddress'],
         #"immunizations": member_details['data']['prismCrispImmunization'],
         #"medications": member_details['data']['prismCrispMedication'],
         #"insurance_provider": member_details['data']['prismCrispInsuranceProvider'],
@@ -503,28 +508,52 @@ def add_action(request):
         try:
             # print(request.POST)
             # return HttpResponse("Not allowed")
-
-            insertDataArray = []
+            action_id = request.POST.get("update_action_id")
             insertDataArray1 = []
-            # Collect form data
-            insert_data = {
-                "medicaid_id": request.POST.get("medicaid_id"),
-                "action_type_source": request.POST.get("action_type_source"),
-                "action_id": request.POST.get("action_id"),
-                "panel_id": request.POST.get("panel_id"),
-                "action_date": request.POST.get("action_date"),
-                "action_status": request.POST.get("action_status"),
-                "add_by": request.session.get("user_data", {}).get("ID"),
-                "action_note": request.POST.get("action_note"),
-                "action_result_id": request.POST.get("action_result_id"),
-            }
-            insertDataArray.append(insert_data)
-            apidata = {
-                "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
-                "insertDataArray": insertDataArray,
-            }
-            insert = api_call(apidata, "prismMultipleinsert")
-            action_id = insert["insertedIds"]
+            if not action_id:
+                insertDataArray = []
+
+                # Collect form data
+                insert_data = {
+                    "medicaid_id": request.POST.get("medicaid_id"),
+                    "action_type_source": request.POST.get("action_type_source"),
+                    "action_id": request.POST.get("action_id"),
+                    "panel_id": request.POST.get("panel_id"),
+                    "action_date": request.POST.get("action_date"),
+                    "action_status": request.POST.get("action_status"),
+                    "add_by": request.session.get("user_data", {}).get("ID"),
+                    "action_note": request.POST.get("action_note"),
+                    "action_result_id": request.POST.get("action_result_id"),
+                }
+                insertDataArray.append(insert_data)
+                apidata = {
+                    "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
+                    "insertDataArray": insertDataArray,
+                }
+                insert = api_call(apidata, "prismMultipleinsert")
+                action_id = insert["insertedIds"]
+            else:
+                # Update mode
+                bdata = {
+                    "action_type_source": request.POST.get("action_type_source"),
+                    "action_id": request.POST.get("action_id"),
+                    "panel_id": request.POST.get("panel_id"),
+                    "action_date": request.POST.get("action_date"),
+                    "action_status": request.POST.get("action_status"),
+                    #"add_by": request.session.get("user_data", {}).get("ID"),
+                    "action_note": request.POST.get("action_note"),
+                    "action_result_id": request.POST.get("action_result_id"),
+                }
+
+                params = {
+                    "updateData": bdata,
+                    "table_name": "MEM_MEMBER_ACTION_FOLLOW_UP",
+                    "id_field_name": "id",
+                    "id_field_value": action_id,
+                }
+                # API call
+                api_call(params, "prismMultiplefieldupdate")
+
             #print(insert)
             insert_data1 = {
                 "medicaid_id": request.POST.get("medicaid_id"),
@@ -544,12 +573,19 @@ def add_action(request):
             ##### update quality data
             medicaid_id = request.POST.get("medicaid_id")
             quality_ids = request.POST.getlist("quality_id")
+            paramsunsetq = {"medicaid_id": medicaid_id, "action_id": action_id}
+            api_call(paramsunsetq, "prismUnSetqualityStatus")
             for qid in quality_ids:
                 qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
+            #print(gap_ids)
+            paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
+            rr = api_call(paramsunset, "prismUnSetgapStatus")
+            #print(rr)
+            #return HttpResponse("Stopped after print: {}".format(rr))
             for gid in gap_ids:
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")

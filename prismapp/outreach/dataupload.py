@@ -234,7 +234,7 @@ def processriskgap(request):
                 member["RELEVANT_DATE"] = datetime.fromisoformat(RELEVANT_DATE.replace("Z", "+00:00"))
     #print(logList)
     return render(request, 'processriskgap.html', {
-        'pageTitle': "PROCESS RISK GAP",
+        'pageTitle': "PROCESS RISK GAPS",
         'session_id': session_id,
         'tempRiskGapsList' : tempRiskGapsList,
         'totalTempRiskGapsCount' : totalRecords,
@@ -354,7 +354,7 @@ def processquality(request):
                 quality["Date_of_Birth"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
     #print(tempQualityGapsList)
     return render(request, 'processquality.html', {
-        'pageTitle': "PROCESS QUALITY GAP",
+        'pageTitle': "PROCESS QUALITY GAPS",
         'session_id': session_id,
         'tempQualityGapsList' : tempQualityGapsList,
         'totalTempQualityGapsCount' : totalRecords,
