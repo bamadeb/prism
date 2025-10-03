@@ -105,4 +105,11 @@
       var end_date=curr_month +"/"+ curr_date +"/"+curr_year;
       return end_date;
     }
+    function close_modal(modal_id) {
+        var modalEl = document.getElementById(modal_id);
+        var modal = bootstrap.Modal.getInstance(modalEl); // get existing instance
+        if (modal) {
+            modal.hide();
+        }
+    }
 </script>

@@ -50,7 +50,7 @@
             </div>
             <div class="col-2">
                 <div class="float-end"  style="margin-right:10px;font-size: 16px;">
-                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" data-toggle="modal" data-target="#largeModal" >Add Action</a>
+                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" onclick="add_update_action_click();" >Add Action</a>
                 </div>
             </div>
             <div style="clear:both"></div>
@@ -257,6 +257,52 @@
             <div class="col-lg-6">
                 <div class="card" >
                     <div class="card-body">
+<!--                        <a class="add_btn" data-toggle="modal" data-target="#add_alert" onclick="add_alert();">+Add</a>-->
+                        <h4 align="center">ACTION LIST</h4>
+                        <div class="box_height">
+                            <div class="tbl_scorll">
+                                <table class="table table-sm" style="font-size:14px;">
+                                    <thead>
+                                        <tr>
+                                            <th>ACTYVITY TYPE</th>
+                                            <th style="text-align:center;">ACTION DATE</th>
+                                            <th>TYPE</th>
+                                            <th>STATUS</th>
+                                            <th>NOTE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for value in memberActionList %}
+                                            <tr style="text-transform: uppercase;">
+                                              <td>
+                                                <a style="cursor: pointer;text-decoration: underline;"
+
+                                                   onclick="add_update_action_click('{{ value.id }}');">
+                                                  {{ value.action_type }}
+                                                </a>
+                                              </td>
+                                              <td align="center">{{ value.action_date|date:"m/d/Y" }}</td>
+                                              <td>{{ value.Panel_Name }}</td>
+
+                                              <td style="text-transform: uppercase;">
+                                                {{ value.action_status }}
+                                              </td>
+                                                <td>{{ value.action_note }}</td>
+
+                                            </tr>
+                                            {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card" >
+                    <div class="card-body">
                         <a class="add_btn" data-toggle="modal" data-target="#add_alert" onclick="add_alert();">+Add</a>
                         <h4 align="center">ALERTS</h4>
                         <div class="box_height">
@@ -320,12 +366,12 @@
 
 
 <!-- Add Action Modal Start -->
-<div class="modal fade" id="largeModal" tabindex="-1" data-backdrop="false">
+<div class="modal " id="largeModal" tabindex="-1" data-backdrop="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> ADD ACTION</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close"  onclick="close_modal('largeModal');"></button>
             </div>
             <div class="modal-body">
                 <div class="card">
@@ -344,6 +390,7 @@
                                     <input type="hidden" name="medicaid_id" value="{{medicaid_id}}" >
                                     <input type="hidden" name="visit_alertname" id="visit_alertname">
                                     <input type="hidden" name="action_type_name" id="action_type_name">
+                                    <input type="hidden" name="update_action_id" id="update_action_id" >
 
                                      <div class="row mt-3">
                                          <div class="col-sm-3">
@@ -402,7 +449,7 @@
                                                                        name="gap_id"
                                                                        id="gap_id_{{ gap.DIAG_CODE }}"
                                                                        value="{{ gap.DIAG_CODE }}"
-                                                                       class="form-check-input me-2">
+                                                                       class="form-check-input me-2" {% if gap.PROCESS_STATUS == 1 %} checked {% endif %}>
                                                                 {{ gap.DIAG_DESC }}
                                                             </div>
                                                         {% endfor %}
@@ -436,7 +483,7 @@
                                                                        name="quality_id"
                                                                        id="quality_id_{{ quality.SUB_MEASURE }}"
                                                                        value="{{ quality.SUB_MEASURE }}"
-                                                                       class="form-check-input me-2">
+                                                                       class="form-check-input me-2" {% if quality.PROCESS_STATUS == 1 %} checked {% endif %}>
                                                                 {{ quality.MEASURE_NAME }}
                                                             </div>
                                                         {% endfor %}
@@ -2111,7 +2158,14 @@
     </div>
 </div>
 <!-- END PLAN DETAILS MODAL --->
-
+<!-- Loder HTML -->
+<div id="gapLoader"
+     style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.3); z-index:9999; text-align:center; padding-top:20%;">
+    <div class="spinner-border text-primary" role="status" style="width:3rem; height:3rem;">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
 <!-- START GIFT CARD MODAL --->
 <div class="modal fade" id="gift_card" tabindex="-1" data-backdrop="false">
     <div class="modal-dialog modal-lg">
@@ -2233,6 +2287,57 @@
 {% block js %}
 
 <script>
+    function add_update_action_click(action_id){
+        //alert(action_id);
+        //$("#largeModal").show()
+
+        //alert(action_id);get_member_action_details
+        if(action_id){
+                $("#gapLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_member_action_details' %}",  // Django reverse URL
+                data: {
+                    id: action_id
+                },
+                success: function (data) {
+                    //console.log(data[0].action_date);
+                    ///////////////////////////////////
+                    // Parse ISO string into a JS Date object
+                    var dateObj = new Date(data[0].action_date);
+
+                    // Format as mm/dd/yyyy
+                    var month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+                    var day = ("0" + dateObj.getDate()).slice(-2);
+                    var year = dateObj.getFullYear();
+                    var formattedDate = month + "/" + day + "/" + year;
+                    ////////////////////////////////////
+                    $("#action_date").val(formattedDate);
+                    $("input[name='action_id'][value='" + data[0].action_id + "']").prop("checked", true);
+                    $("input[name='panel_id'][value='" + data[0].panel_id + "']").prop("checked", true);
+                    $("#action_status").val(data[0].action_status);
+                    $("#action_result_id").val(data[0].action_result_id);
+                    $("#action_note").val(data[0].action_note);
+                    $("#update_action_id").val(data[0].update_action_id);
+                    $("#update_action_id").val(data[0].id);
+                    $("#gapLoader").hide();
+                    showCheckboxes('checkboxes');
+                    showCheckboxes('checkboxes1');
+                    var myModal = new bootstrap.Modal(document.getElementById('largeModal'));
+                    myModal.show();
+                },
+                error: function () {
+                $("#gapLoader").hide();
+                    alert("Action Result Not found.");
+                }
+            });
+        }else{
+                    var myModal = new bootstrap.Modal(document.getElementById('largeModal'));
+                    myModal.show();
+
+        }
+    }
     function set_scheduled_action_status(scheduled_type) {
     //alert(scheduled_type);
         $.ajax({
