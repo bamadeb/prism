@@ -98,4 +98,14 @@ def get_member_action_details(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@csrf_exempt
+def get_member_task_list(request):
+    if request.method == "POST":
+        medicaid_id = request.POST.get("medicaid_id")
+        params = {"medicaid_id": medicaid_id}
+        response = api_call(params, "prismGetMemberUpcommingTaskList")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 

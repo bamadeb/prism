@@ -527,7 +527,31 @@ def add_action(request):
                     "insertDataArray": insertDataArray,
                 }
                 insert = api_call(apidata, "prismMultipleinsert")
+                #print(insert)
                 action_id = insert["insertedIds"]
+                next_panel_id = request.POST.get("next_panel_id")
+                if next_panel_id:
+                    insertTaskDataArray = []
+
+                    # Collect form data
+                    insertArray = {
+                        "medicaid_id": request.POST.get("medicaid_id"),
+                        #"action_type_source": request.POST.get("action_type_source"),
+                        "action_id": request.POST.get("next_panel_id"),
+                        "action_date": request.POST.get("next_action_date"),
+                        "action_note": request.POST.get("next_action_note"),
+                        "status": 'Open',
+                        "assign_to": request.session.get("user_data", {}).get("ID"),
+                        "add_by": request.session.get("user_data", {}).get("ID")
+                    }
+                    insertTaskDataArray.append(insertArray)
+                    apidata = {
+                        "table_name": "MEM_TASK_FOLLOW_UP",
+                        "insertDataArray": insertTaskDataArray,
+                    }
+                    insert = api_call(apidata, "prismMultipleinsert")
+
+
             else:
                 # Update mode
                 bdata = {
