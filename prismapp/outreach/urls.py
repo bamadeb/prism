@@ -43,6 +43,7 @@ urlpatterns = [
     path('api/get_user_details/', api.get_user_details, name='get_user_details'),
     path('api/get_member_action_details/', api.get_member_action_details, name='get_member_action_details'),
     path('api/get_member_task_list/', api.get_member_task_list, name='get_member_task_list'),
+    path('api/get_member_gaps_list/', api.get_member_gaps_list, name='get_member_gaps_list'),
 
     ### Users
     path('users/', users.users, name='users'),

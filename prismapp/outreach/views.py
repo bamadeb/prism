@@ -18,6 +18,7 @@ from django.shortcuts import render
 import uuid
 from datetime import datetime
 from datetime import datetime, date
+from .utils import fetch_add_action_master_data
 from django.utils import timezone
 # Suppress the InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -123,6 +124,9 @@ def mywork(request):
             ################
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
             #################
+            add_action_master_data_result = fetch_add_action_master_data()
+            #print(add_action_master_data)
+            add_action_master_data = add_action_master_data_result['data']
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:
@@ -342,7 +346,10 @@ def mywork(request):
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
+            'source': 'mywork',
             'projectName': settings.PROJECT_NAME,
+            'sel_panel_list': add_action_master_data['actionActivityCategory'],
+            "sel_panel_type": add_action_master_data['actionActivityType'],
             'alertCount': 1,
             'today': date.today(),
             'recent_activity': recentActivity,
@@ -464,6 +471,7 @@ def memberdetails(request, medicaid_id):
     #print(member_details['data']['prismQualityList'])
     return render(request, 'memberdetails.html', {
         'pageTitle': "MEMBER DETAILS",
+        'source': 'memberdetails',
         'projectName': settings.PROJECT_NAME,
         "sel_panel_list": member_details['data']['prismMemberAction'],
         "sel_panel_type": member_details['data']['prismMemberActionType'],
@@ -614,9 +622,13 @@ def add_action(request):
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
 
-            # Always return after POST
-            medicaid_id = request.POST.get("medicaid_id")
-            return redirect("memberdetails", medicaid_id=medicaid_id)
+            # Always return after POSTadd_action_source
+            add_action_source = request.POST.getlist("add_action_source")
+            if add_action_source== 'memberdetails':
+                medicaid_id = request.POST.get("medicaid_id")
+                return redirect("memberdetails", medicaid_id=medicaid_id)
+            else:
+                return redirect("mywork")
 
         except Exception as e:
             # Return error response instead of None

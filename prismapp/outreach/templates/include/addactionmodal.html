@@ -17,7 +17,7 @@
     <div class="modal-dialog " style="width:90%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> ADD/UPDATE ACTION | {{ member_details.0.FIRST_NAME }} {{ member_details.0.LAST_NAME }} - #{{ member_details.0.medicaid_id }}</h5>
+                <h5 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> ADD/UPDATE ACTION | <span id="display_first_name" class="text-uppercase"></span> <span id="display_last_name" class="text-uppercase"></span> -# <span id="display_medicaid_id"></span></h5>
                 <button type="button" class="btn-close"  onclick="close_modal('largeModal');"></button>
             </div>
             <div class="modal-body">
@@ -34,10 +34,11 @@
                                 <form action="/add_action/" name="add_action" id="add_action"  enctype="multipart/form-data" method="post" >
                                     {% csrf_token %}
                                     <input type="hidden" name="action_type_source" id="action_type_source" value="Member Action">
-                                    <input type="hidden" name="medicaid_id" value="{{medicaid_id}}" >
+                                    <input type="hidden" name="medicaid_id" id="medicaid_id" value="{{medicaid_id}}" >
                                     <input type="hidden" name="visit_alertname" id="visit_alertname">
                                     <input type="hidden" name="action_type_name" id="action_type_name">
                                     <input type="hidden" name="update_action_id" id="update_action_id" >
+                                    <input type="hidden" name="add_action_source" id="add_action_source" value="{{ source }}" >
 
                                      <div class="row mt-3">
                                          <div class="col-sm-6 mt-3 border rounded p-3">
@@ -81,7 +82,7 @@
                                                     </select>
                                                 </div>
                                              <div class="col-sm-12 mt-4">
-                                                <textarea class="form-control text-uppercase" name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
+                                                <textarea class="form-control " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
                                             </div>
                                             <div class="col-sm-12 mt-4">
                                                 <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
@@ -114,11 +115,11 @@
                                             <div class="col-sm-12 mt-4">
                                                 <table class="table">
                                                     <tr>
-                                                        <th>Task Type</th>
-                                                        <th>Task Date</th>
-                                                        <th>Status</th>
-                                                        <th>Assign To</th>
-                                                        <th>Note</th>
+                                                        <th class="text-uppercase">Task Type</th>
+                                                        <th class="text-uppercase">Task Date</th>
+                                                        <th class="text-uppercase">Status</th>
+                                                        <th class="text-uppercase">Assign To</th>
+                                                        <th class="text-uppercase">Note</th>
                                                     </tr>
                                                     <tbody id="action_task_list">
 
@@ -139,20 +140,7 @@
 <!--                                                  <div class="overSelect"></div>-->
 <!--                                                </div>-->
                                                 <div  id="checkboxes" class=" p-3">
-                                                    {% if gap_list %}
-                                                        {% for gap in gap_list %}
-                                                            <div class="text-uppercase mb-2">
-                                                                <input type="checkbox"
-                                                                       name="gap_id"
-                                                                       id="gap_id_{{ gap.DIAG_CODE }}"
-                                                                       value="{{ gap.DIAG_CODE }}"
-                                                                       class="form-check-input me-2" {% if gap.PROCESS_STATUS == 1 %} checked {% endif %}>
-                                                                {{ gap.DIAG_DESC }}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        <div>No record found</div>
-                                                    {% endif %}
+
                                                 </div>
                                               </div>
 
@@ -173,30 +161,12 @@
 <!--                                                  <div class="overSelect"></div>-->
 <!--                                                </div>-->
                                                 <div id="checkboxes1" class=" p-3">
-                                                    {% if quality_list %}
-                                                        {% for quality in quality_list %}
-                                                            <div class="text-uppercase mb-2">
-                                                                <input type="checkbox"
-                                                                       name="quality_id"
-                                                                       id="quality_id_{{ quality.SUB_MEASURE }}"
-                                                                       value="{{ quality.SUB_MEASURE }}"
-                                                                       class="form-check-input me-2" {% if quality.PROCESS_STATUS == 1 %} checked {% endif %}>
-                                                                {{ quality.MEASURE_NAME }}
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        <div>No record found</div>
-                                                    {% endif %}
+
 
                                                 </div>
                                               </div>
 
-<!--                                            <select class="form-control form-select" name="quality_id" id="quality_id"  style=" text-transform: uppercase;height: 120px;" multiple>-->
-<!--                                                <option value="">&#45;&#45; Select Quality Gaps &#45;&#45; </option>-->
-<!--                                                {% for quality in quality_list %}-->
-<!--                                                <option value="{{ quality.ID }}">{{ forloop.counter }}. {{ quality.MEASURE_NAME }}</option>-->
-<!--                                                {% endfor %}-->
-<!--                                            </select>-->
+
                                         </div>
                                          </div>
                                     </div>
@@ -355,10 +325,13 @@
 </div>
 <!-- End Add action Modal-->
 <script>
-    function add_update_action_click(medicaid_id,action_id){
+    function add_update_action_click(medicaid_id,first_name,last_name,action_id){
         //alert(medicaid_id);
         //$("#largeModal").show()
-
+        $('#display_first_name').html(first_name)
+        $('#display_last_name').html(last_name)
+        $('#display_medicaid_id').html(medicaid_id)
+        $('#medicaid_id').val(medicaid_id)
         //alert(action_id);
         if(medicaid_id){
             $("#gapLoader").show();
@@ -394,6 +367,73 @@
                       $("#action_task_list").html(
                         "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
                       );
+                    }
+                    $("#gapLoader").hide();
+                },
+                error: function () {
+                $("#gapLoader").hide();
+                    //alert("Action Result Not found.");
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_member_gaps_list' %}",  // Django reverse URL
+                data: {
+                    medicaid_id: medicaid_id
+                },
+                success: function (response) {
+                    console.log(response.data.prismQualityList);
+                    if (response.statusCode === 200) {
+                      //$("#action_task_list").empty();
+                       var qualityList = response.data.prismQualityList;
+                       var html = '';
+
+                        if (qualityList.length > 0) {
+                            $.each(qualityList, function (index, quality) {
+                                html += `
+                                <div class="form-check text-uppercase mb-2">
+                                    <input type="checkbox"
+                                           name="quality_id"
+                                           id="quality_id_${index}"
+                                           value="${quality.SUB_MEASURE}"
+                                           class="form-check-input me-2"
+                                           ${quality.PROCESS_STATUS === 1 ? 'checked' : ''}>
+                                            <label class="form-check-label" for="quality_id_${index}">
+                                                ${quality.MEASURE_NAME.trim()}
+                                            </label>
+                                        </div>
+                                    `;
+                            });
+                        } else {
+                            html = '<div>No record found</div>';
+                        }
+
+                        // Append to div with id checkboxes1
+                        $('#checkboxes1').html(html);
+                        var gapList = response.data.prismGapList;
+                        var html = '';
+
+                        if (gapList.length > 0) {
+                            $.each(gapList, function (index, gap) {
+                                html += `
+                                    <div class="text-uppercase mb-2">
+                                        <input type="checkbox"
+                                               name="gap_id"
+                                               id="gap_id_${index}"
+                                               value="${gap.DIAG_CODE}"
+                                               class="form-check-input me-2"
+                                               ${gap.PROCESS_STATUS === 1 ? 'checked' : ''}>
+                                        ${gap.DIAG_DESC}
+                                    </div>
+                                `;
+                            });
+                        } else {
+                            html = '<div>No record found</div>';
+                        }
+
+                        // Append generated HTML inside #checkboxes div
+                        $('#checkboxes').html(html);
+
                     }
                     $("#gapLoader").hide();
                 },
@@ -451,4 +491,31 @@
 
         }
     }
+    function set_scheduled_action_status(scheduled_type) {
+    //alert(scheduled_type);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'get_scheduled_action_status' %}",  // Django reverse URL
+            data: {
+                scheduled_type: scheduled_type
+            },
+            success: function (data) {
+                $("#action_result_id").empty();
+                for (let i = 0; i < data.length; i++) {
+                    $("#action_result_id").append(
+                        "<option value='" + data[i].id + "'>" + data[i].action_result + "</option>"
+                    );
+                }
+
+               // var action_type_name = $('#action_id :selected').text();
+               var action_type_name = $("input[name='action_id']:checked").parent().text().trim();
+               //alert(action_type_name);
+                $('#action_type_name').val(action_type_name);
+            },
+            error: function () {
+                alert("Action Result Not found.");
+            }
+        });
+    }
+
 </script>
