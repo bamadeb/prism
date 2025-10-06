@@ -40,7 +40,7 @@
             </div>
             <div class="col-2">
                 <div class="float-end"  style="margin-right:10px;font-size: 16px;">
-                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" onclick="add_update_action_click('{{ member_details.0.medicaid_id }}');" >Add Action</a>
+                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ member_details.0.FIRST_NAME }}','{{ member_details.0.LAST_NAME }}');" >Add Action</a>
                 </div>
             </div>
             <div style="clear:both"></div>
@@ -267,7 +267,7 @@
                                               <td>
                                                 <a style="cursor: pointer;text-decoration: underline;"
 
-                                                   onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ value.id }}');">
+                                                   onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ member_details.0.FIRST_NAME }}','{{ member_details.0.LAST_NAME }}','{{ value.id }}');">
                                                   {{ value.action_type }}
                                                 </a>
                                               </td>
@@ -1980,32 +1980,6 @@
 {% block js %}
 
 <script>
-    function set_scheduled_action_status(scheduled_type) {
-    //alert(scheduled_type);
-        $.ajax({
-            type: "POST",
-            url: "{% url 'get_scheduled_action_status' %}",  // Django reverse URL
-            data: {
-                scheduled_type: scheduled_type
-            },
-            success: function (data) {
-                $("#action_result_id").empty();
-                for (let i = 0; i < data.length; i++) {
-                    $("#action_result_id").append(
-                        "<option value='" + data[i].id + "'>" + data[i].action_result + "</option>"
-                    );
-                }
-
-               // var action_type_name = $('#action_id :selected').text();
-               var action_type_name = $("input[name='action_id']:checked").parent().text().trim();
-               //alert(action_type_name);
-                $('#action_type_name').val(action_type_name);
-            },
-            error: function () {
-                alert("Action Result Not found.");
-            }
-        });
-    }
     function get_vendor_list(){
      if($('#vendor_name').val()){
        var vendor_name = $('#vendor_name').val();

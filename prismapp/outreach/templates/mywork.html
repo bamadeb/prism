@@ -398,8 +398,12 @@
                                                 <!--                                                <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
                                                 <!-- Actions -->
                                                 <td class="text-center" >
+
                                                     <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
                                                         <i title="Member Details" class="fa fa-eye"></i>
+                                                    </a>&nbsp;&nbsp;
+                                                    <a  href="javascript:void(0);" onclick="add_update_action_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">
+                                                        <i title="Add Action" class="fa fa-plus"></i>
                                                     </a>&nbsp;&nbsp;
                                                     <a target="_blank" href="{% url 'history' member.medicaid_id %}">
                                                         <i title="Member History" class="fa fa-history"></i>
@@ -542,6 +546,8 @@
         <span class="visually-hidden">Loading...</span>
     </div>
 </div>
+
+{% include "include/addactionmodal.html" %}
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
