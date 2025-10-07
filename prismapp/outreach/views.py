@@ -81,11 +81,7 @@ def login(request):
                         return redirect('/users/')
                     elif user_data[0].get('role_id', None) == 20:
                         return redirect('/users/')
-<<<<<<< HEAD
-                    else:
-=======
                     elif user_data[0].get('role_id', None) == 10:
->>>>>>> Development
                         return redirect('/users/')
 
                 else:
