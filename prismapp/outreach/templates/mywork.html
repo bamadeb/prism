@@ -98,7 +98,9 @@
                                                 {% endfor %}
                                                 <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage }}%</span>)</td>
                                             </tr>
-                                            <tr><td></td></tr>
+                                            <tr>
+                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                            </tr>
                                             <tr>
                                                 <td>RISK GAPS (PRIORITY)</td>
                                                 {% for item in performancArray %}
@@ -119,7 +121,9 @@
                                                 <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
 
                                             </tr>
-                                            <tr><td></td></tr>
+                                            <tr>
+                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                            </tr>
                                             <tr>
                                                 <td>QUALITY GAPS (PRIORITY)</td>
                                                 {% for item in performancArray %}
@@ -140,7 +144,9 @@
                                                 <td>{{ totalArray.total_other_complete_quality_gaps_count|floatformat:0 }}/{{ totalArray.total_other_quality_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_quality_gaps_percentage }}%</span>)</td>
 
                                             </tr>
-                                            <tr><td></td></tr>
+                                            <tr>
+                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                            </tr>
 
                                             <tr>
                                                 <td>PCP VISIT (PRIORITY)</td>
