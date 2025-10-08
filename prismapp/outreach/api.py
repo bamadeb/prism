@@ -116,5 +116,14 @@ def get_member_gaps_list(request):
         return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+@csrf_exempt
+def get_task_details(request):
+    if request.method == "POST":
+        task_id = request.POST.get("task_id")
+        params = {"task_id": task_id}
+        response = api_call(params, "prismGetTaskDetailsByID")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 

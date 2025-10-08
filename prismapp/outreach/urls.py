@@ -28,6 +28,7 @@ urlpatterns = [
     # path('admin_score_history/', views.admin_score_history, name='admin_score_history'),
     # path('thank_you/', views.thank_you, name='thank_you'),
      path('mywork/', views.mywork, name='mywork'),
+    path('add_update_task/', views.add_update_task, name='add_update_task'),
     # path('region_manager_score/', views.region_manager_score, name='region_manager_score'),
     path('processmember/', dataupload.processmember, name='processmember'),
     path('processriskgap/', dataupload.processriskgap, name='processriskgap'),
@@ -44,6 +45,7 @@ urlpatterns = [
     path('api/get_member_action_details/', api.get_member_action_details, name='get_member_action_details'),
     path('api/get_member_task_list/', api.get_member_task_list, name='get_member_task_list'),
     path('api/get_member_gaps_list/', api.get_member_gaps_list, name='get_member_gaps_list'),
+    path('api/get_task_details/', api.get_task_details, name='get_task_details'),
 
     ### Users
     path('users/', users.users, name='users'),
