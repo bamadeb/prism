@@ -1,0 +1,220 @@
+<style>
+  #taskModal .modal-dialog {
+      max-width: 50% !important;
+  }
+  #checkboxes {
+    //display: none;
+    border: 1px #dadada solid;
+  }
+  #checkboxes1 {
+    //display: none;
+    border: 1px #dadada solid;
+  }
+
+</style>
+<!-- Add Action Modal Start -->
+<div class="modal " id="taskModal" tabindex="-1" data-backdrop="false">
+  <div class="modal-dialog " style="width:90%;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> MANAGE TASK | <span id="task_display_first_name" class="text-uppercase"></span> <span id="task_display_last_name" class="text-uppercase"></span> -# <span id="task_display_medicaid_id"></span></h5>
+        <h5 class="modal-title" style="padding-left: 120px;"> <a href="javascript:void(0);" onclick="add_task_click();"><i class="fa fa-plus" aria-hidden="true"></i> Add Task</a></h5>
+        <button type="button" class="btn-close"  onclick="close_modal('taskModal');"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/add_update_task/" name="add_update_task" id="add_update_task"  enctype="multipart/form-data" method="post" >
+          {% csrf_token %}
+          <input type="hidden" name="task_action_type_source" id="action_type_source" value="Member Action">
+          <input type="hidden" name="task_medicaid_id" id="task_medicaid_id" value="{{medicaid_id}}" >
+          <input type="hidden" name="visit_alertname" id="visit_alertname">
+          <input type="hidden" name="action_type_name" id="action_type_name">
+          <input type="hidden" name="update_task_id" id="update_task_id" >
+          <input type="hidden" name="task_add_action_source" id="add_action_source" value="{{ source }}" >
+
+          <div class="row " id="task_add_update_form" style="display: none;">
+
+            <div class="col-sm-12  border rounded p-3" >
+              <div class=" text-uppercase text-center"><h5><b>Add/Update Task</b></h5></div>
+              <div class="row ">
+<!--                <div class="col-sm-3 ">-->
+<!--                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Task Type:</label>-->
+<!--                </div>-->
+                <div class="col-sm-9 mt-4">
+                  {% for type in sel_panel_type %}
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="task_next_panel_id" id="task_next_panel_id" value="{{ type.id }}" >
+                    <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
+                  </div>
+                  {% endfor %}
+                </div>
+                <!--                                             <div class="col-sm-3 mt-4">-->
+                <!--                                                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Task Date:</label>-->
+                <!--                                             </div>-->
+                <div class="col-sm-4 mt-4">
+                  <input placeholder="Task Date" type="text" name="task_date"  id="task_date"  class="form-control datepicker text-uppercase" required>
+                </div>
+                <div class="col-sm-4 mt-4">
+                  <select class="form-control" style="text-transform: uppercase;" name="task_assign_to" id="task_assign_to"  required>
+                    <option value="">ASSIGN TO</option>
+                    {% for value in navigatorList %}
+                    <option value="{{ value.ID }}">
+                        {{ value.FistName }} {{ value.LastName }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-sm-4 mt-4">
+                  <select class="form-control" style="text-transform: uppercase;" name="task_status" id="task_status" required>
+                    <option value="Open">OPEN</option>
+                    <option value="In-Process">IN-PROCESS</option>
+                    <option value="Successful">SUCCESSFUL</option>
+                  </select>
+                </div>
+                <div class="col-sm-12 mt-4">
+                  <textarea class="form-control " name="task_action_note" id="task_action_note"  placeholder="Type your text..."></textarea>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="col-sm-12" align="right">
+              <button type="submit" class="btn btn-primary" >SUBMIT</button>
+            </div>
+
+
+          </div>
+
+          <div class="row mb-3 ">
+            <div class="col-sm-12 ">
+              <table class="table">
+                <tr>
+                  <th class="text-uppercase">Task Type</th>
+                  <th class="text-uppercase">Task Date</th>
+                  <th class="text-uppercase">Status</th>
+                  <th class="text-uppercase">Assign To</th>
+                  <th class="text-uppercase">Note</th>
+                  <th class="text-uppercase">Action</th>
+                </tr>
+                <tbody id="task_action_task_list">
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </form>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Add action Modal-->
+<script>
+  function add_update_task_click(medicaid_id,first_name,last_name,action_id){
+      //alert({{ user_id }});
+      //$("#taskModal").show()
+      $('#task_display_first_name').html(first_name);
+      $('#task_display_last_name').html(last_name);
+      $('#task_display_medicaid_id').html(medicaid_id);
+      $('#task_medicaid_id').val(medicaid_id);
+      //alert(action_id);user_id
+      $('#task_add_update_form').hide();
+      $('#task_assign_to').val({{ user_id }});
+      if(medicaid_id){
+          $("#gapLoader").show();
+          $.ajax({
+              type: "POST",
+              url: "{% url 'get_member_task_list' %}",  // Django reverse URL
+              data: {
+                  medicaid_id: medicaid_id
+              },
+              success: function (response) {
+                  if (response.statusCode === 200 && response.data.length > 0) {
+                    $("#task_action_task_list").empty();
+
+                    response.data.forEach((row, i) => {
+                      let mydate = new Date(row.action_date);
+                      let action_date =
+                        (mydate.getMonth() + 1) + "/" + mydate.getDate() + "/" + mydate.getFullYear();
+
+                      let action_type = row.action_type ?? "";
+                      let status = row.status ?? "";
+                      let action_note = row.action_note ?? "";
+                      let initial = row.initial ?? "";
+
+                      $("#task_action_task_list").append(
+                        "<tr><td>" + action_type + "</td>" +
+                        "<td>" + action_date + "</td>" +
+                        "<td>" + status + "</td>" +
+                        "<td>" + initial + "</td>" +
+                        "<td>" + action_note + "</td>" +
+                        "<td class='text-center'><a href='javascript:void(0);' onclick='edit_task_click(" + row.id + ");'><i class='fa fa-pencil'></i></a></td></tr>"
+                      );
+                    });
+                  } else {
+                    $("#task_action_task_list").html(
+                      "<tr><td colspan='5' class='text-center'>No records found</td></tr>"
+                    );
+                  }
+                  var myModal = new bootstrap.Modal(document.getElementById('taskModal'));
+                  myModal.show();
+
+                  $("#gapLoader").hide();
+              },
+              error: function () {
+              $("#gapLoader").hide();
+                  //alert("Action Result Not found.");
+              }
+          });
+
+
+      }
+
+  }
+  function add_task_click(){
+        $('#task_assign_to').val({{ user_id }});
+        $('#update_task_id').val('');
+      $('#task_add_update_form').show();
+  }
+  function edit_task_click(task_id){
+    //alert(task_id);
+        $("#gapLoader").show();
+        $('#update_task_id').val(task_id);
+            $.ajax({
+                type: "POST",
+                url: "{% url 'get_task_details' %}",  // Django reverse URL
+                data: {
+                    task_id: task_id
+                },
+                success: function (data) {
+                    //console.log(data[0].action_date);
+                    ///////////////////////////////////
+                    // Parse ISO string into a JS Date object
+                    var dateObj = new Date(data.data[0].action_date);
+
+                    // Format as mm/dd/yyyy
+                    var month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+                    var day = ("0" + dateObj.getDate()).slice(-2);
+                    var year = dateObj.getFullYear();
+                    var formattedDate = month + "/" + day + "/" + year;
+                    ////////////////////////////////////
+                    //alert(data.data[0].action_note);
+                    $("#task_date").val(formattedDate);
+                    $("input[name='task_next_panel_id'][value='" + data.data[0].action_id + "']").prop("checked", true);
+                    $("#task_status").val(data.data[0].status);
+                    $("#task_action_note").val(data.data[0].action_note);
+                    $("#gapLoader").hide();
+                },
+                error: function () {
+                $("#gapLoader").hide();
+                    alert("Action Result Not found.");
+                }
+            });
+    $('#task_add_update_form').show();
+  }
+
+//set_scheduled_action_status(11);
+</script>

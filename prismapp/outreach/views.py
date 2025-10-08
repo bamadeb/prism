@@ -346,13 +346,15 @@ def mywork(request):
             'projectName': settings.PROJECT_NAME,
             'sel_panel_list': add_action_master_data['actionActivityCategory'],
             "sel_panel_type": add_action_master_data['actionActivityType'],
+            "navigatorList": add_action_master_data['navigatorList'],
             'alertCount': 1,
             'today': date.today(),
             'recent_activity': recentActivity,
             'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
             'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
             'performancArray': performancArray,
-            'totalArray': totalArray
+            'totalArray': totalArray,
+            'user_id': user_id
         }
     return render(request, 'mywork.html', context)
 
@@ -617,6 +619,90 @@ def add_action(request):
             for gid in gap_ids:
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
+
+            # Always return after POSTadd_action_source
+            add_action_source = request.POST.getlist("add_action_source")
+            if add_action_source== 'memberdetails':
+                medicaid_id = request.POST.get("medicaid_id")
+                return redirect("memberdetails", medicaid_id=medicaid_id)
+            else:
+                return redirect("mywork")
+
+        except Exception as e:
+            # Return error response instead of None
+            return HttpResponse(f"Error: {str(e)}", status=500)
+
+    # Handle non-POST case (GET etc.)
+    return HttpResponse("Invalid request method", status=405)
+@csrf_exempt
+def add_update_task(request):
+    # 1. Check login session
+    if not request.session.get('is_logged_in'):
+        return redirect('login')
+
+    if request.method == "POST":
+        try:
+            # print(request.POST)
+            # return HttpResponse("Not allowed")
+            task_id = request.POST.get("update_task_id")
+            insertDataArray1 = []
+            if not task_id:
+                insertTaskDataArray = []
+
+                # Collect form data
+                insertArray = {
+                    "medicaid_id": request.POST.get("task_medicaid_id"),
+                    # "action_type_source": request.POST.get("action_type_source"),
+                    "action_id": request.POST.get("task_next_panel_id"),
+                    "action_date": request.POST.get("task_date"),
+                    "action_note": request.POST.get("task_action_note"),
+                    "status": request.POST.get('task_status'),
+                    "assign_to": request.POST.get("task_assign_to"),
+                    "add_by": request.session.get("user_data", {}).get("ID")
+                }
+                insertTaskDataArray.append(insertArray)
+                apidata = {
+                    "table_name": "MEM_TASK_FOLLOW_UP",
+                    "insertDataArray": insertTaskDataArray,
+                }
+                insert = api_call(apidata, "prismMultipleinsert")
+                #print(insertArray)
+
+            else:
+                # Update mode
+                bdata = {
+                    "action_id": request.POST.get("task_next_panel_id"),
+                    "action_date": request.POST.get("task_date"),
+                    "action_note": request.POST.get("task_action_note"),
+                    "status": request.POST.get('task_status'),
+                    "assign_to": request.POST.get("task_assign_to"),
+                }
+
+                params = {
+                    "updateData": bdata,
+                    "table_name": "MEM_TASK_FOLLOW_UP",
+                    "id_field_name": "id",
+                    "id_field_value": task_id,
+                }
+                # API call
+                api_call(params, "prismMultiplefieldupdate")
+
+            # #print(insert)
+            # insert_data1 = {
+            #     "medicaid_id": request.POST.get("medicaid_id"),
+            #     "action_type": request.POST.get("action_type_name"),
+            #     "log_name": request.POST.get("action_type_source"),
+            #     "log_details": request.POST.get("action_note"),
+            #     "log_status": request.POST.get("action_status"),
+            #     "log_by": request.session.get("user_data", {}).get("ID"),
+            # }
+            # insertDataArray1.append(insert_data1)
+            # apidata1 = {
+            #     "table_name": "MEM_SYSTEM_LOG",
+            #     "insertDataArray": insertDataArray1,
+            # }
+            # api_call(apidata1, "prismMultipleinsert")
+
 
             # Always return after POSTadd_action_source
             add_action_source = request.POST.getlist("add_action_source")

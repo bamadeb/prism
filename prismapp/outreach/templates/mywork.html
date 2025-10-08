@@ -266,25 +266,17 @@
                                                 <th class="text-center">PCP</th>
                                                 <!--                                                <th>ALERT</th>-->
                                                 <th class="text-center">PRIORITY</th>
+                                                <th class="text-center">#TASK</th>
                                                 <th class="text-center">#CALL</th>
                                                 <th></th>
                                                 <!--                                                <th>ELIGIBILITY</th>-->
                                                 <th class="text-center">RISK GAPS</th>
                                                 <th class="text-center">COMPLETED</th>
-                                                <th class="text-center">PERFORMANCE</th>
+                                                <th class="text-center">%</th>
                                                 <th class="text-center">QUALITY GAPS</th>
                                                 <th class="text-center">COMPLETED</th>
-                                                <th class="text-center">PERFORMANCE</th>
-                                                <!--                                                <th>3RD CALL</th>-->
-                                                <!--                                                <th>2ND CALL</th>-->
-                                                <!--                                                <th>LAST CALL</th>-->
-                                                <!--                                                <th>NEXT ACTIVITY</th>-->
-
-                                                <!--                                                <th>APP. DATE</th>-->
-
-                                                <!--                                                <th>EVENT DATE</th>-->
-
-                                                <th align="right">ACTION</th>
+                                                <th class="text-center">%</th>
+                                                 <th align="right">ACTION</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -294,91 +286,20 @@
                                                 <td class="text-primary" style="text-transform:uppercase;">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}<br>{{ member.OTHER_PHONE|default:'' }}</td>
                                                 <td class="text-center"><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div></td>
                                                 <td class="text-center">{{ member.PRIORITY_FLAG|default:"" }}</td>
-                                                <!-- Alerts -->
-                                                <!--                                                <td>-->
-                                                <!--                      <span class="badge alert_bg1 wrapper">-->
-
-                                                <!--                                               -->
-
-                                                <!--                                                      {# Show notification bell if member.alertCount > 0 #}-->
-                                                <!--                                                      {% if member.alertCount > 0 %}-->
-                                                <!--                                                        <div style="position:absolute;margin-left: 21px;margin-top: -15px;">-->
-                                                <!--                                                          <img src="{% static 'images/notification.png' %}" width="16">-->
-                                                <!--                                                        </div>-->
-                                                <!--                                                      {% endif %}-->
-
-                                                <!--                                                      <div style="line-height:25px;">{{ member.alertCount }}-->
-                                                <!--                                                        <div class="tooltip">-->
-                                                <!--                                                          <div style="overflow-y:scroll; height: 180px !important;">-->
-                                                <!--                                                            <table class="table table-sm" style="font-size:12px;">-->
-                                                <!--                                                              {% if member.alertCount == 0 %}-->
-                                                <!--                                                                <tr><td colspan="2" align="center">No alert found</td></tr>-->
-                                                <!--                                                              {% else %}-->
-                                                <!--                                                                {% for alert in alertList %}-->
-                                                <!--                                                                  {% if member.medicaid_id == alert.medicaid_id and today|date:"U" <= alert.due_date|date:"U" %}-->
-                                                <!--                                                                    <tr>-->
-                                                <!--                                                                      <td>-->
-                                                <!--                                                                        {{ alert.alert }} - {{ alert.alert_type }}<br>-->
-
-                                                <!--                                                                        {% if today|date:"U" > alert.due_date|date:"U" %}-->
-                                                <!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# expired -> highlight #}-->
-                                                <!--                                                                            {% with "#e63b3b !important" as color %}-->
-                                                <!--                                                                            {% endwith %}-->
-                                                <!--                                                                        {% else %}-->
-                                                <!--                                                                            {{ alert.due_date|date:"m/d/y" }}  {# still valid #}-->
-                                                <!--                                                                            {% with "" as color %}-->
-                                                <!--                                                                            {% endwith %}-->
-                                                <!--                                                                        {% endif %}-->
-                                                <!--                                                                      </td>-->
-                                                <!--                                                                      <td>-->
-                                                <!--                                                                        <span style="background-color:{{ color }}" class="badge alert_bg tooltipbox">-->
-                                                <!--                                                                          {{ alert.alert_status }}-->
-                                                <!--                                                                        </span>-->
-                                                <!--                                                                      </td>-->
-                                                <!--                                                                    </tr>-->
-                                                <!--                                                                  {% endif %}-->
-                                                <!--                                                                {% endfor %}-->
-                                                <!--                                                              {% endif %}-->
-                                                <!--                                                            </table>-->
-                                                <!--                                                          </div>-->
-                                                <!--                                                        </div>-->
-                                                <!--                                                      </div>-->
-
-                                                <!--                                                    </span>-->
-
-                                                <!--                                                </td>-->
-
-                                                <!-- Call Count -->
+                                                <td class="text-center"><a  href="javascript:void(0);" onclick="add_update_task_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">{{ member.task_count }}</a></td>
                                                 <td class="text-center">
                                                     <a title="Call List" class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.Call_count }}
                                                     </a>
                                                 </td>
                                                 <td></td>
-                                                <!-- Eligibility trst -->
-                                                <!--                                                <td>-->
-                                                <!--                                                    {% if member.ELIG_EXP_DT %}-->
-                                                <!--                                                    {% if member.ELIG_EXP_DT < today %}-->
-                                                <!--                                                    <div align="center">-->
-                                                <!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-danger"></div>-->
-                                                <!--                                                    </div>-->
-                                                <!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
-                                                <!--                                                    {% elif member.ELIG_EXP_DT <= today|add:"30 days" %}-->
-                                                <!--                                                    <div align="center">-->
-                                                <!--                                                        <div style="width:17px;height:17px;border-radius:50%;margin:2px 43px 0px 0px;" class="bg-warning"></div>-->
-                                                <!--                                                    </div>-->
-                                                <!--                                                    {{ member.ELIG_EXP_DT|date:"m/d/Y" }}-->
-                                                <!--                                                    {% endif %}-->
-
-                                                <!--                                                    {% endif %}-->
-                                                <!--                                                </td>-->
                                                 <td class="text-center">
                                                     <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.risk_gap_count }}
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ member.risk_comp_count }}</td>
-                                                <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf }}%</td>
+                                                <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf|floatformat:0 }}%</td>
 
                                                 <td class="text-center">
                                                     <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
@@ -386,23 +307,7 @@
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ member.quality_comp_count }}</td>
-                                                <td class="text-center" style="color: {{ member.quality_perf_color }}">{{ member.quality_perf }}%</td>
-                                                <!--                                                <td>{% if member.third_last_action_date %}-->
-                                                <!--                                                    {{ member.third_last_action_date|date:"m/d/Y" }}-->
-                                                <!--                                                    {% endif %}</td>-->
-                                                <!--                                                <td>{% if member.second_last_action_date %}-->
-                                                <!--                                                    {{ member.second_last_action_date|date:"m/d/Y" }}-->
-                                                <!--                                                    {% endif %}</td>-->
-                                                <!--                                                <td>{% if member.last_action_date %}-->
-                                                <!--                                                    {{ member.last_action_date|date:"m/d/Y" }}-->
-                                                <!--                                                    {% endif %}</td>-->
-                                                <!--                                                <td></td>-->
-
-                                                <!-- Appointment -->
-                                                <!--                                                <td>{% if member.appointment_date %}{{ member.appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
-                                                <!-- RSVP -->
-                                                <!--                                                <td>{% if member.rsvp_appointment_date %}{{ member.rsvp_appointment_date|date:"m/d/Y" }}{% endif %}</td>-->
-                                                <!-- Actions -->
+                                                <td class="text-center" style="color: {{ member.quality_perf_color }}">{{ member.quality_perf|floatformat:0 }}%</td>
                                                 <td class="text-center" >
 
                                                     <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
@@ -554,6 +459,7 @@
 </div>
 
 {% include "include/addactionmodal.html" %}
+{% include "include/taskmodal.html" %}
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -923,9 +829,9 @@
 
 <script type="text/javascript">
     $('#members').DataTable({
-      order: [[6, 'DESC']],  // default sort on 4th column (index 3)
+      order: [[7, 'DESC']],  // default sort on 4th column (index 3)
       columnDefs: [{
-        targets: [5],  // hide multiple columns
+        targets: [6],  // hide multiple columns
         visible: false
       }]
   });
