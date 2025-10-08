@@ -121,7 +121,6 @@ def mywork(request):
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
             #################
             add_action_master_data_result = fetch_add_action_master_data()
-            #print(add_action_master_data)
             add_action_master_data = add_action_master_data_result['data']
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
