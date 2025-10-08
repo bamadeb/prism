@@ -39,172 +39,170 @@
                 <h5 style="font-size:16px; font-weight:500 !important;">| HEDIS: <span style="color:#56c729;">100%</span> | P4P: <span style="color:#56c729;">100%</span> | HCC: <span style="color:#56c729;">40%</span> | CLAIMS: <span style="color:#0d6efd;">333</span> |</h5>
             </div>
             <div class="col-2">
-                <div class="float-end"  style="margin-right:10px;font-size: 16px;">
-                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ member_details.0.FIRST_NAME }}','{{ member_details.0.LAST_NAME }}');" >Add Action</a>
-                </div>
+<!--                <div class="float-end"  style="margin-right:10px;font-size: 16px;">-->
+<!--                    <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; +<a style="cursor: pointer; text-decoration: underline;" onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ member_details.0.FIRST_NAME }}','{{ member_details.0.LAST_NAME }}');" >Add Action</a>-->
+<!--                </div>-->
             </div>
             <div style="clear:both"></div>
         </div>
         <div class="accordionItem accordionItem">
             <div class="row">
-                <div class="col-lg-4">
-                    <div style="background-color:#e4e8ed;" class="px-3 py-1">
-                        <div class="row">
-                            <div class="col px-1">
+                    <div style="background-color:#e4e8ed;" class="p-3">
+
+                            <div class="col-lg-2">
                                 <a href="javascript:void(0);"  data-toggle="modal" data-target="#demographic">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box1">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box1">
                                         <div><i class="fa fa-bar-chart f30"></i><br/>DEMOGRAPHIC</div>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#plan_details">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box2">
-                                        <div>
-                                            <i class="fa fa-pencil-square-o f30"></i><br/>PLAN DETAILS
+                            <div class="col-lg-2">
+                                <a href="javascript:void(0);" onclick="add_update_action_click('{{ member_details.0.medicaid_id }}','{{ member_details.0.FIRST_NAME }}','{{ member_details.0.LAST_NAME }}');">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box2">
+                                        <div >
+                                            <i class="fa fa-plus f30"></i><br/>ADD ACTION
                                         </div>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col px-1">
+                            <div class="col-lg-2">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#add_address" >
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box3">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box3">
                                         <div><i class="fa fa-map-marker f30"></i><br/>ALT ADDRESS</div>
                                     </div>
                                 </a>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col px-1">
+                            <div class="col-lg-2">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#alt_phone">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box4">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box4">
                                         <div><i class="fa fa-phone f30"></i><br/>ALT PHONE</div>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col px-1">
+                            <div class="col-lg-2">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#altLanguage">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box5">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box5">
                                         <div><i class="fa fa-external-link f30"></i><br/>ALT LANGUAGE</div>
                                     </div>
                                 </a>
                             </div>
-                            <div class="col px-1">
+                            <div class="col-lg-2">
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#pcp_list">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box6">
+                                    <div class="box13 d-flex align-items-center justify-content-center py-3 m-0" id="box6">
                                         <div>
                                             <i class="fa fa-list-alt f30"></i><br/>PCP LIST
                                         </div>
                                     </div>
                                 </a>
                             </div>
-                        </div>
                     </div>
-                </div>
 
-                <div class="col-lg-4">
-                    <div style="background-color:#e4e8ed;" class="px-3 py-1">
-                        <div class="row">
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" onclick="addclaim()" data-toggle="modal" data-target="#medical_claim">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box7">
-                                        <div><i class="fa fa-stethoscope f30"></i><br/>MEDICAL CLAIM</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#prism_claim">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box8">
-                                        <div><i class="fa fa-stethoscope" style="font-size:30px;"></i><br/>PRISM CLAIM</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#gift_card">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box13">
-                                        <div><i class="fa fa-gift f30"></i><br/>GIFT CARD</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#rx_claim">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box10">
-                                        <div><i class="fa fa-pencil-square-o f30"></i><br/>Rx CLAIM DETAILS</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a  href="javascript:void(0);" data-toggle="modal" data-target="#hedis_measure">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box11">
-                                        <div><i class="fa fa-folder-open-o f30"></i><br/>VIEW GAPS-IN-CARE</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#cm_risk_mngt">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box12">
-                                        <div><i class="fa fa-circle-o-notch f30"></i><br/> CM RISK ENROLLMENT
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div style="background-color:#e4e8ed;" class="px-3 py-1">
-                        <div class="row">
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#encounters" >
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box15">
-                                        <div><i class="fa fa-list-alt f30"></i><br/>ENCOUNTERS</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">
-                                    <div class="box13 d-flex align-items-center justify-content-center" >
-                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>
-                                    </div>
-                                </a>
-                            </div>
 
-                            <div class="col px-1">
-                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">
-                                    <div class="box13 d-flex align-items-center justify-content-center" >
-                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col px-1">
-                                <a href="javascript:void(0);"  data-toggle="modal" data-target="#indicators_modal">
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box16">
-                                        <div><i class="fa fa-bar-chart f30"></i><br/>INDICATOR</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="" >
-                                    <div class="box13 d-flex align-items-center justify-content-center" id="box17">
-                                        <div><i class="fa fa-list-alt f30"></i><br/>TITLE</div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col px-1">
-                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">
-                                    <div class="box13 d-flex align-items-center justify-content-center" >
-                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>
-                                    </div>
-                                </a>
-                            </div>
+<!--                <div class="col-lg-4">-->
+<!--                    <div style="background-color:#e4e8ed;" class="px-3 py-1">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" onclick="addclaim()" data-toggle="modal" data-target="#medical_claim">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box7">-->
+<!--                                        <div><i class="fa fa-stethoscope f30"></i><br/>MEDICAL CLAIM</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="#prism_claim">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box8">-->
+<!--                                        <div><i class="fa fa-stethoscope" style="font-size:30px;"></i><br/>PRISM CLAIM</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="#gift_card">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box13">-->
+<!--                                        <div><i class="fa fa-gift f30"></i><br/>GIFT CARD</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="#rx_claim">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box10">-->
+<!--                                        <div><i class="fa fa-pencil-square-o f30"></i><br/>Rx CLAIM DETAILS</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a  href="javascript:void(0);" data-toggle="modal" data-target="#hedis_measure">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box11">-->
+<!--                                        <div><i class="fa fa-folder-open-o f30"></i><br/>VIEW GAPS-IN-CARE</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="#cm_risk_mngt">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box12">-->
+<!--                                        <div><i class="fa fa-circle-o-notch f30"></i><br/> CM RISK ENROLLMENT-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-lg-4">-->
+<!--                    <div style="background-color:#e4e8ed;" class="px-3 py-1">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="#encounters" >-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box15">-->
+<!--                                        <div><i class="fa fa-list-alt f30"></i><br/>ENCOUNTERS</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" >-->
+<!--                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
 
-                        </div>
-                    </div>
-                </div>
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" >-->
+<!--                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);"  data-toggle="modal" data-target="#indicators_modal">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box16">-->
+<!--                                        <div><i class="fa fa-bar-chart f30"></i><br/>INDICATOR</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);" data-toggle="modal" data-target="" >-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" id="box17">-->
+<!--                                        <div><i class="fa fa-list-alt f30"></i><br/>TITLE</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+<!--                            <div class="col px-1">-->
+<!--                                <a href="javascript:void(0);"  data-toggle="modal" data-target="">-->
+<!--                                    <div class="box13 d-flex align-items-center justify-content-center" >-->
+<!--                                        <div><i class="fa fa-bar-chart f30"></i><br/>TITLE</div>-->
+<!--                                    </div>-->
+<!--                                </a>-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
             </div>
         </div>
         <div class="row mt-5">
