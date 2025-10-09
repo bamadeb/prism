@@ -1219,8 +1219,7 @@
                         {% for pcp in pcp_list %}
                             <tr>
                                 <td>
-                                    {{ pcp.FIRST_NAME }} {{ pcp.LAST_NAME }}
-                                    ({{ pcp.P_S_FLAG }} : {{ pcp.SPEC_DESC }}), NPI : {{ pcp.NPI_NUM }}
+                                    {{ pcp.PROVIDER_NAME }} , NPI : {{ pcp.PROVIDER_ID }}
                                 </td>
                             </tr>
                         {% endfor %}
