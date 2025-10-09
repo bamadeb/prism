@@ -338,6 +338,16 @@ def mywork(request):
             add_date = activity.get("add_date")
             if isinstance(add_date, str):
                 activity["add_date"] = datetime.fromisoformat(add_date.replace("Z", "+00:00"))
+        # Array for provider
+        providerTinNameMappingArray = {
+            '200807794': 'Mercado Medical Practice',
+            '237082074': 'GPHA',
+            '273160687': 'Dr. Milbourne',
+        }
+        # Example: transform your performancArray to include provider_name
+        for item in performancArray:
+            for pcp_id, vals in item.items():
+                item[pcp_id]['provider_name'] = providerTinNameMappingArray.get(str(pcp_id), '')
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
@@ -353,7 +363,8 @@ def mywork(request):
             'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
             'performancArray': performancArray,
             'totalArray': totalArray,
-            'user_id': user_id
+            'user_id': user_id,
+            'providerTinNameMappingArray': providerTinNameMappingArray
         }
     return render(request, 'mywork.html', context)
 

@@ -8,15 +8,60 @@
     background-color: red;
     width: 14px;
     height: 14px;
-}
+    }
+    .parent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-.green{
+    .green{
 
-    border-radius: 50%;
-    background-color: green;
-    width: 14px;
-    height: 14px;
-}
+        border-radius: 50%;
+        background-color: green;
+        width: 14px;
+        height: 14px;
+    }
+    #members thead tr:first-child th {
+      /* background-color: #f2f2f2;*/
+      text-align: center;
+      font-weight: bold;
+      border-bottom: none !important;
+      padding: 0 !important;
+    }
+  /* Style for the grouped headers */
+  .group-header th {
+    /* background-color: #f5f5f5; */
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+    border-bottom: none !important;
+  }
+
+  /* Contact Info group box */
+  .group-contact {
+    border: 2px solid #4CAF50;
+    border-bottom: none; /* Avoid double border with lower row */
+  }
+
+  /* Performance group box */
+  .group-performance {
+    border: 2px solid #2196F3;
+    border-bottom: none;
+  }
+
+  /* Optional: Style for ungrouped column */
+  .no-group {
+    border: 2px solid #ccc;
+    border-bottom: none;
+  }
+    /* Remove top border from the second header row */
+    #members thead tr:not(.group-header) th {
+      border-top: none !important;
+    }
+    .group-performance-td {
+    border-left: 2px solid #d3cfcf !important;
+    }
 </style>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
@@ -26,151 +71,151 @@
                 <div class="card">
                     <div class="card-body">
                         <div id="accordion" class=" mb-0">
-                                <div id="headingThree">
-                                    <h3 class="mb-0 mt-0 text-center">
-                                        <button style="    font-size: 18px; color:#000;" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            PROJECT OVERVIEW
-                                        </button>
-                                    </h3>
-                                </div>
-                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                                        <div class="row">
-                                            <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+                            <div id="headingThree">
+                                <h3 class="mb-0 mt-0 text-center">
+                                    <button style="    font-size: 18px; color:#000;" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        PROJECT OVERVIEW
+                                    </button>
+                                </h3>
+                            </div>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                <div class="col-xl-6 col-sm-6 mb-xl-0">
+                                    <div class="row">
+                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
 
-                                            <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
-                                            <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf }}% </h4></div>
+                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf|floatformat:0 }}% </h4></div>
 
-                                            <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
-                                            <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf }}% </h4></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                            <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                            <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
-                                            <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf }}% </h4></div>
-
-                                            <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
-                                            <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
-                                            <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf }}% </h4></div>
-                                        </div>
+                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf|floatformat:0 }}% </h4></div>
                                     </div>
-                                    <div class="col-xl-6 col-sm-6 mb-xl-0">
-                                        <table class="table">
-                                            <tr>
-                                                <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <th><h5>{{ pcp_id }}</h5></th>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <th><h5>TOTAL</h5></th>
-                                            </tr>
+                                    <div class="row">
+                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
 
-                                            <tr>
-                                                <td>CONTACTED (PRIORITY)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_call_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_call_color }}">{{ totalArray.priority_call_percentage }}%</span>)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>CONTACTED (OTHERS)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage }}%</span>)</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>RISK GAPS (PRIORITY)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_priority_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_gaps_percentage }}%</span>)</td>
+                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf|floatformat:0 }}% </h4></div>
 
-                                            </tr>
-                                            <tr>
-                                                <td>RISK GAPS (OTHERS)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage }}%</span>)</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>QUALITY GAPS (PRIORITY)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.priority_complete_quality_gaps_count }}/{{ vals.priority_quality_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_quality_gaps_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_priority_complete_quality_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_quality_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_quality_gaps_percentage }}%</span>)</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>QUALITY GAPS (OTHERS)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_complete_quality_gaps_count }}/{{ vals.other_quality_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_quality_gaps_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.total_other_complete_quality_gaps_count|floatformat:0 }}/{{ totalArray.total_other_quality_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_quality_gaps_percentage }}%</span>)</td>
-
-                                            </tr>
-                                            <tr>
-                                                <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>PCP VISIT (PRIORITY)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.priority_pcp_visit_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_pcp_visit_color }}">{{ vals.priority_pcp_visit_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.priority_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_pcp_color }}">{{ totalArray.priority_pcp_percentage }}%</span>)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>PCP VISIT (OTHERS)</td>
-                                                {% for item in performancArray %}
-                                                {% for pcp_id, vals in item.items %}
-                                                <td>{{ vals.other_pcp_visit_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_pcp_visit_color }}">{{ vals.other_pcp_visit_percentage }}%</span>)</td>
-                                                {% endfor %}
-                                                {% endfor %}
-                                                <td>{{ totalArray.other_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_pcp_color }}">{{ totalArray.other_pcp_percentage }}%</span>)</td>
-                                            </tr>
-
-
-                                        </table>
+                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf|floatformat:0 }}% </h4></div>
                                     </div>
                                 </div>
+                                <div class="col-xl-6 col-sm-6 mb-xl-0">
+                                    <table class="table">
+                                        <tr>
+                                            <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <th><h5>{{ vals.provider_name }}</h5></th>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <th><h5>TOTAL</h5></th>
+                                        </tr>
+
+                                        <tr>
+                                            <td>CONTACTED (PRIORITY)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.call_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_color }}">{{ vals.priority_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_call_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_call_color }}">{{ totalArray.priority_call_percentage|floatformat:0 }}%</span>)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>CONTACTED (OTHERS)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.other_call_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_call_color }}">{{ vals.other_call_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_other_call_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_call_color }}">{{ totalArray.other_call_percentage|floatformat:0 }}%</span>)</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>RISK GAPS (PRIORITY)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.priority_complete_gaps_count }}/{{ vals.priority_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_gaps_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_priority_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_gaps_percentage|floatformat:0 }}%</span>)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>RISK GAPS (OTHERS)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.other_complete_gaps_count }}/{{ vals.other_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_gaps_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_other_complete_gaps_count|floatformat:0 }}/{{ totalArray.total_other_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_gaps_percentage|floatformat:0 }}%</span>)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>QUALITY GAPS (PRIORITY)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.priority_complete_quality_gaps_count }}/{{ vals.priority_quality_gaps_count }} (<span style="color:{{ vals.priority_gaps_color }}">{{ vals.priority_quality_gaps_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_priority_complete_quality_gaps_count|floatformat:0 }}/{{ totalArray.total_priority_quality_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_gaps_color }}">{{ totalArray.priority_quality_gaps_percentage|floatformat:0 }}%</span>)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>QUALITY GAPS (OTHERS)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.other_complete_quality_gaps_count }}/{{ vals.other_quality_gaps_count }} (<span style="color:{{ vals.other_gaps_color }}">{{ vals.other_quality_gaps_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.total_other_complete_quality_gaps_count|floatformat:0 }}/{{ totalArray.total_other_quality_gaps_count|floatformat:0 }} (<span style="color:{{ totalArray.other_gaps_color }}">{{ totalArray.other_quality_gaps_percentage|floatformat:0 }}%</span>)</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td colspan="{{ performancArray|length|add:2 }}" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>PCP VISIT (PRIORITY)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.priority_pcp_visit_count }}/{{ vals.priority_count }} (<span style="color:{{ vals.priority_pcp_visit_color }}">{{ vals.priority_pcp_visit_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.priority_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_priority_count|floatformat:0 }} (<span style="color:{{ totalArray.priority_pcp_color }}">{{ totalArray.priority_pcp_percentage|floatformat:0 }}%</span>)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>PCP VISIT (OTHERS)</td>
+                                            {% for item in performancArray %}
+                                            {% for pcp_id, vals in item.items %}
+                                            <td>{{ vals.other_pcp_visit_count }}/{{ vals.other_count }} (<span style="color:{{ vals.other_pcp_visit_color }}">{{ vals.other_pcp_visit_percentage|floatformat:0 }}%</span>)</td>
+                                            {% endfor %}
+                                            {% endfor %}
+                                            <td>{{ totalArray.other_pcp_visit_count|floatformat:0 }}/{{ totalArray.total_other_count|floatformat:0 }} (<span style="color:{{ totalArray.other_pcp_color }}">{{ totalArray.other_pcp_percentage|floatformat:0 }}%</span>)</td>
+                                        </tr>
+
+
+                                    </table>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -260,6 +305,12 @@
                                     <div class="tab-pane show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                         <table class="table table-sm table-borderless" id="members">
                                             <thead>
+                                            <tr class="group-header">
+                                                <th colspan="7"></th>
+                                                <th colspan="3" class="group-performance-td">RISK GAPS</th>
+                                                <th colspan="3" class="group-performance-td">QUALITY GAPS</th>
+                                                <th class="group-performance-td"></th>
+                                            </tr>
                                             <tr>
                                                 <th>#MEMBER ID</th>
                                                 <th>NAME/PHONE</th>
@@ -270,13 +321,13 @@
                                                 <th class="text-center">#CALL</th>
                                                 <th></th>
                                                 <!--                                                <th>ELIGIBILITY</th>-->
-                                                <th class="text-center">RISK GAPS</th>
+                                                <th class="text-center group-performance-td">COUNT</th>
                                                 <th class="text-center">COMPLETED</th>
                                                 <th class="text-center">%</th>
-                                                <th class="text-center">QUALITY GAPS</th>
+                                                <th class="text-center group-performance-td">COUNT</th>
                                                 <th class="text-center">COMPLETED</th>
                                                 <th class="text-center">%</th>
-                                                 <th align="right">ACTION</th>
+                                                <th align="right " class="group-performance-td">ACTION</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -284,7 +335,7 @@
                                             <tr>
                                                 <th class="text-primary"> #{{ member.medicaid_id }}</th>
                                                 <td class="text-primary" style="text-transform:uppercase;">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}<br>{{ member.OTHER_PHONE|default:'' }}</td>
-                                                <td class="text-center"><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div></td>
+                                                <td class="text-center parent" ><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div></td>
                                                 <td class="text-center">{{ member.PRIORITY_FLAG|default:"" }}</td>
                                                 <td class="text-center"><a  href="javascript:void(0);" onclick="add_update_task_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">{{ member.task_count }}</a></td>
                                                 <td class="text-center">
@@ -293,7 +344,7 @@
                                                     </a>
                                                 </td>
                                                 <td></td>
-                                                <td class="text-center">
+                                                <td class="text-center group-performance-td">
                                                     <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.risk_gap_count }}
                                                     </a>
@@ -301,14 +352,14 @@
                                                 <td class="text-center">{{ member.risk_comp_count }}</td>
                                                 <td class="text-center" style="color: {{ member.risk_perf_color }}">{{ member.risk_perf|floatformat:0 }}%</td>
 
-                                                <td class="text-center">
+                                                <td class="text-center group-performance-td">
                                                     <a title="CIH Quality List" class="text-primary" style="cursor:pointer;" onclick="showCIHQualityList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.quality_count }}
                                                     </a>
                                                 </td>
                                                 <td class="text-center">{{ member.quality_comp_count }}</td>
                                                 <td class="text-center" style="color: {{ member.quality_perf_color }}">{{ member.quality_perf|floatformat:0 }}%</td>
-                                                <td class="text-center" >
+                                                <td class="text-center group-performance-td" >
 
                                                     <a target="_blank" href="{% url 'memberdetails' member.medicaid_id %}">
                                                         <i title="Member Details" class="fa fa-eye"></i>
@@ -316,11 +367,11 @@
                                                     <a  href="javascript:void(0);" onclick="add_update_action_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">
                                                         <i title="Add Action" class="fa fa-plus"></i>
                                                     </a>&nbsp;&nbsp;
-                                                    <a target="_blank" href="{% url 'history' member.medicaid_id %}">
-                                                        <i title="Member History" class="fa fa-history"></i>
-                                                        <!--                                                    </a>&nbsp;&nbsp;-->
-                                                        <!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
-                                                        <!--                                               -->
+                                                    <!--                                                    <a target="_blank" href="{% url 'history' member.medicaid_id %}">-->
+                                                    <!--                                                        <i title="Member History" class="fa fa-history"></i></a>-->
+                                                    <!--                                                    &nbsp;&nbsp;-->
+                                                    <!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
+                                                    <!--                                               -->
                                                 </td>
                                             </tr>
                                             {% endfor %}

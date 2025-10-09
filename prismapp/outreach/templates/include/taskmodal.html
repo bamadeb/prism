@@ -88,7 +88,7 @@
           <div class="row mb-3 ">
             <div class="col-sm-12 ">
               <table class="table">
-                <tr>
+                <tr >
                   <th class="text-uppercase">Task Type</th>
                   <th class="text-uppercase">Task Date</th>
                   <th class="text-uppercase">Status</th>
@@ -144,9 +144,10 @@
                       let status = row.status ?? "";
                       let action_note = row.action_note ?? "";
                       let initial = row.initial ?? "";
+                      let bgcolor = row.bg_color ?? "";
 
                       $("#task_action_task_list").append(
-                        "<tr><td>" + action_type + "</td>" +
+                        "<tr  style='color: " + bgcolor + ";'><td>" + action_type + "</td>" +
                         "<td>" + action_date + "</td>" +
                         "<td>" + status + "</td>" +
                         "<td>" + initial + "</td>" +
