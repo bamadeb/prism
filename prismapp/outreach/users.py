@@ -53,32 +53,47 @@ def add_user(request):
 
             insertDataArray = []
             # Collect form data
-            insert_data = {
-                "FistName": request.POST.get("FistName"),
-                "LastName": request.POST.get("LastName"),
-                "role_id": request.POST.get("role_id"),
-                "EmailID": request.POST.get("EmailID"),
-                "Password": request.POST.get("Password"),
-                "member_status": request.POST.get("member_status")
-            }
 
             if request.POST.get("user_id"):
+                update_data = {
+                    "FistName": request.POST.get("FistName"),
+                    "LastName": request.POST.get("LastName"),
+                    "role_id": request.POST.get("role_id"),
+                    "Password": request.POST.get("Password"),
+                    "member_status": request.POST.get("member_status")
+                }
                 dataList1 = {
-                    "updateData": insert_data,
+                    "updateData": update_data,
                     "table_name": "MEM_USERS",
                     "id_field_name": "ID",
                     "id_field_value": request.POST.get("user_id"),
                 }
                 api_call(dataList1, "prismMultiplefieldupdate")
             else:
-
-                insertDataArray.append(insert_data)
-                apidata = {
-                    "table_name": "MEM_USERS",
-                    "insertDataArray": insertDataArray,
+                params = {
+                    "username": request.POST.get("EmailID")
                 }
-                insert = api_call(apidata, "prismMultipleinsert")
-                #print(insert)
+                member_exist = api_call(params, "prismAuthentication")
+                if member_exist.get('data') and len(member_exist['data']) > 0:
+                    messages.error(request, "Username already exists.")
+                    return redirect('users')
+                else:
+                    insert_data = {
+                        "FistName": request.POST.get("FistName"),
+                        "LastName": request.POST.get("LastName"),
+                        "role_id": request.POST.get("role_id"),
+                        "EmailID": request.POST.get("EmailID"),
+                        "Password": request.POST.get("Password"),
+                        "member_status": request.POST.get("member_status")
+                    }
+
+                    insertDataArray.append(insert_data)
+                    apidata = {
+                        "table_name": "MEM_USERS",
+                        "insertDataArray": insertDataArray,
+                    }
+                    insert = api_call(apidata, "prismMultipleinsert")
+                    #print(insert)
 
             return redirect("users")
 

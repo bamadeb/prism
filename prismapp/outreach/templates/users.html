@@ -11,6 +11,11 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                {% if messages %}
+                                  {% for message in messages %}
+                                    <div style="color: red;font-size: 18px;" align="center">{{ message }}</div>
+                                  {% endfor %}
+                                {% endif %}
                                 <div align="right" class="mb-4"> <a onclick="add_user();" style="text-decoration:underline;cursor:pointer;">+ Add User</a></div>
                                         <table class="table table-sm table-borderless" id="members">
                                             <thead>
@@ -31,7 +36,7 @@
                                                         <td class="text-uppercase">{{user.EmailID}}</td>
                                                         <td class="text-uppercase">{{user.ROLE_NAME}}</td>
                                                         <td class="text-uppercase">{{user.status}}</td>
-                                                        <td class="text-uppercase"><a href="javascript:void(0);" onclick="update_user({{user.ID}});">Update</a></td>
+                                                        <td class="text-uppercase"><a title="Update" href="javascript:void(0);" onclick="update_user({{user.ID}});"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
                                                     </tr>
                                                 {% endfor %}
                                             </tbody>
@@ -55,7 +60,7 @@
 </div>
 <!-- Call list modal start -->
 <div class="modal " id="callList" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width:100%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title text-uppercase">ADD / UPDATE USER</h4>
@@ -110,7 +115,6 @@
 
 <script type="text/javascript">
     $('#members').DataTable();
-
     function update_user(id=""){
         $("#gapLoader").show();
         if(id){
@@ -126,6 +130,8 @@
                 $('#Password').val(response[0].Password);
                 $('#member_status').val(response[0].member_status);
                 $('#user_id').val(response[0].ID);
+                $('#EmailID').prop('disabled', true);
+                $('#EmailID').attr('required', false);
                 var myModal = new bootstrap.Modal(document.getElementById('callList'));
                  myModal.show();
                  $("#gapLoader").hide();
@@ -134,6 +140,15 @@
         }
     }
     function add_user(){
+        $('#user_id').val('');
+        $('#FistName').val('');
+        $('#LastName').val('');
+        $('#role_id').val(9);
+        $('#EmailID').val('');
+        $('#Password').val('');
+        $('#member_status').val('0');
+         $('#EmailID').prop('disabled', false);
+         $('#EmailID').attr('required', true);
         var myModal = new bootstrap.Modal(document.getElementById('callList'));
          myModal.show();
          $("#gapLoader").hide();
