@@ -63,6 +63,7 @@
     border-left: 2px solid #d3cfcf !important;
     }
 </style>
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
 
@@ -81,39 +82,17 @@
                             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                                 <div class="col-xl-6 col-sm-6 mb-xl-0">
                                     <div class="row">
-                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf|floatformat:0 }}% </h4></div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf|floatformat:0 }}% </h4></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf|floatformat:0 }}% </h4></div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf|floatformat:0 }}% </h4></div>
+                                        <div class="col-xl-12 col-sm-12 mb-xl-0">
+                                            <div id="userperformance"></div>
+                                        </div>
+                                        <div class="col-xl-12 col-sm-12 mb-xl-0">
+                                            <div id="allperformance"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-sm-6 mb-xl-0">
+                                    <div class="row">
+                                    <div class="col-xl-12 col-sm-12 mb-xl-0">
                                     <table class="table">
                                         <tr>
                                             <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
@@ -214,6 +193,43 @@
 
 
                                     </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf|floatformat:0 }}% </h4></div>
+
+                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf|floatformat:0 }}% </h4></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
+                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
+
+                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf|floatformat:0 }}% </h4></div>
+
+                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
+                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
+                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf|floatformat:0 }}% </h4></div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-sm-6 mb-xl-0">
+
                                 </div>
                             </div>
 
@@ -1073,6 +1089,142 @@ function showCIHQualityList(medicaid_id, member_name) {
         //$('#medicaid_id').val(medicaid_id)
         $("#largeModal").modal('show');
       }
+const chartData = {{ chart_data|safe }};
+
+Highcharts.chart('userperformance', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: 'Own Gaps Performance Weekly',
+        style: {
+            fontSize: '18px',     // 🔹 Title font size
+            fontWeight: 'bold'
+        }
+    },
+    subtitle: {
+        text: ''
+    },
+    credits: {
+        enabled: false           // 🔹 Removes "Highcharts.com"
+    },
+    xAxis: {
+        categories: chartData.categories,
+        title: {
+            text: 'Weeks',
+            style: {
+                fontSize: '14px', // 🔹 X-axis title font size
+                fontWeight: 'bold'
+            }
+        },
+        labels: {
+            style: {
+                fontSize: '13px'  // 🔹 X-axis label font size
+            }
+        }
+    },
+    yAxis: {
+        title: {
+            text: '#Gaps',
+            style: {
+                fontSize: '14px', // 🔹 Y-axis title font size
+                fontWeight: 'bold'
+            }
+        },
+        labels: {
+            style: {
+                fontSize: '13px'  // 🔹 Y-axis label font size
+            }
+        }
+    },
+    legend: {
+        itemStyle: {
+            fontSize: '13px',     // 🔹 Legend font size
+            fontWeight: 'normal'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '12px', // 🔹 Data label font size
+                    fontWeight: 'bold'
+                }
+            },
+            enableMouseTracking: true
+        }
+    },
+    series: chartData.series
+});
+const allchartData = {{ all_chart_data|safe }};
+
+Highcharts.chart('allperformance', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: 'Overview Gaps Performance Weekly',
+        style: {
+            fontSize: '18px',     // 🔹 Title font size
+            fontWeight: 'bold'
+        }
+    },
+    subtitle: {
+        text: ''
+    },
+    credits: {
+        enabled: false           // 🔹 Removes "Highcharts.com"
+    },
+    xAxis: {
+        categories: allchartData.categories,
+        title: {
+            text: 'Weeks',
+            style: {
+                fontSize: '14px', // 🔹 X-axis title font size
+                fontWeight: 'bold'
+            }
+        },
+        labels: {
+            style: {
+                fontSize: '13px'  // 🔹 X-axis label font size
+            }
+        }
+    },
+    yAxis: {
+        title: {
+            text: '#Gaps',
+            style: {
+                fontSize: '14px', // 🔹 Y-axis title font size
+                fontWeight: 'bold'
+            }
+        },
+        labels: {
+            style: {
+                fontSize: '13px'  // 🔹 Y-axis label font size
+            }
+        }
+    },
+    legend: {
+        itemStyle: {
+            fontSize: '13px',     // 🔹 Legend font size
+            fontWeight: 'normal'
+        }
+    },
+    plotOptions: {
+        line: {
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '12px', // 🔹 Data label font size
+                    fontWeight: 'bold'
+                }
+            },
+            enableMouseTracking: true
+        }
+    },
+    series: allchartData.series
+});
 
 </script>
 {% endblock %}
