@@ -27,69 +27,30 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
+            <span class="badge bg-primary badge-number">{{ taskResponse|length }}</span>
           </a><!-- End Notification Icon -->
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications
           blue-border-font">
           <li class="dropdown-header">
-            You have 4 new notifications
+            You have {{ taskResponse|length }} new notifications
             <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
           </li>
           <li>
             <hr class="dropdown-divider">
           </li>
-
-          <li class="notification-item">
+           {% for task in taskResponse %}
+          <li class="notification-item" style="padding:0px;">
             <i class="bi bi-exclamation-circle text-warning"></i>
             <div>
-              <h4>Lorem Ipsum</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>30 min. ago</p>
+              <h5>{{task.task_date}} </h5>
+              <p>{{task.action_note}}</p>
+              <p class="text-uppercase">#{{task.medicaid_id}} ({{task.status}})</p>
             </div>
           </li>
-
           <li>
             <hr class="dropdown-divider">
           </li>
-
-          <li class="notification-item">
-            <i class="bi bi-x-circle text-danger"></i>
-            <div>
-              <h4>Atque rerum nesciunt</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>1 hr. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-check-circle text-success"></i>
-            <div>
-              <h4>Sit rerum fuga</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>2 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
-
-          <li class="notification-item">
-            <i class="bi bi-info-circle text-primary"></i>
-            <div>
-              <h4>Dicta reprehenderit</h4>
-              <p>Quae dolorem earum veritatis oditseno</p>
-              <p>4 hrs. ago</p>
-            </div>
-          </li>
-
-          <li>
-            <hr class="dropdown-divider">
-          </li>
+             {% endfor %}
           <li class="dropdown-footer">
             <a href="#">Show all notifications</a>
           </li>

@@ -344,6 +344,11 @@ def mywork(request):
             '237082074': 'GPHA',
             '273160687': 'Dr. Milbourne',
         }
+
+        param = {"assign_to": user_data.get('ID')}
+        taskResponse = api_call(param, "prismGetMemberUpcommingTaskList")
+        #print(response)
+
         # Example: transform your performancArray to include provider_name
         for item in performancArray:
             for pcp_id, vals in item.items():
@@ -364,6 +369,7 @@ def mywork(request):
             'performancArray': performancArray,
             'totalArray': totalArray,
             'user_id': user_id,
+            'taskResponse': taskResponse['data'],
             'providerTinNameMappingArray': providerTinNameMappingArray
         }
     return render(request, 'mywork.html', context)
@@ -381,6 +387,10 @@ def memberdetails(request, medicaid_id):
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
     #print(member_details)
+    user_data = request.session.get('user_data')
+    param = {"assign_to": user_data.get('ID')}
+    taskResponse = api_call(param, "prismGetMemberUpcommingTaskList")
+
     log_details = []
     if len(member_details) > 0:
         for log in member_details['data']['logDetails']:
@@ -494,6 +504,7 @@ def memberdetails(request, medicaid_id):
         "member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
         "pcp_list": member_details['data']['prismMemberPCPList'],
         "medical_claim_details": member_details['data']['altaddress'],
+        'taskResponse': taskResponse['data'],
         #"risk_details": member_details['data']['prismMembershiprisk'],
         #"problem_list": member_details['data']['prismCrispProblems'],
         "alt_address": member_details['data']['altaddress'],
