@@ -357,6 +357,8 @@ def mywork(request):
                 item[pcp_id]['provider_name'] = providerTinNameMappingArray.get(str(pcp_id), '')
         #Gaps count format for chart used
         gapsCountWeekly = myWorkAllSpace['gapsCountWeekly']
+        #print(gapsCountWeekly.length)
+        print(len(gapsCountWeekly))
         # Group only rows that have valid year & week for weekly grouping (process_count)
         grouped = defaultdict(lambda: {'process_count': 0, 'total_count': 0})
         for item in gapsCountWeekly:
@@ -404,51 +406,44 @@ def mywork(request):
         ############################################
         #Gaps count format for chart used
         gapsCountWeeklyAll = myWorkAllSpace['gapsCountWeeklyAll']
-        #print(myWorkAllSpace)
-        # Group only rows that have valid year & week for weekly grouping (process_count)
-        grouped = defaultdict(lambda: {'process_count': 0, 'total_count': 0})
+        # For gapsCountWeeklyAll
+        grouped_all = defaultdict(lambda: {'process_count': 0, 'total_count': 0})
         for item in gapsCountWeeklyAll:
             year = item.get('year')
             week = item.get('week_number')
             proc = item.get('process_count') or 0
             tot = item.get('total_count') or 0
 
-            # include in grouped only if both year & week present
             if year is not None and week is not None:
-                grouped[(year, week)]['process_count'] += proc
-                grouped[(year, week)]['total_count'] += tot
+                grouped_all[(year, week)]['process_count'] += proc
+                grouped_all[(year, week)]['total_count'] += tot
 
-        # Sort week keys
-        sorted_keys = sorted(grouped.keys())
+        sorted_keys_all = sorted(grouped_all.keys())
+        cumulative_process_all = 0
+        categories_all = []
+        process_series_all = []
 
-        # Build cumulative process series (over sorted weeks)
-        cumulative_process = 0
-        categories = []
-        process_series = []
-        for (year, week) in sorted_keys:
-            cumulative_process += grouped[(year, week)]['process_count']
-            categories.append(f"{year}-W{week}")
-            process_series.append(cumulative_process)
+        for (year, week) in sorted_keys_all:
+            cumulative_process_all += grouped_all[(year, week)]['process_count']
+            categories_all.append(f"{year}-W{week}")
+            process_series_all.append(cumulative_process_all)
 
-        # IMPORTANT: total_sum must include ALL rows, even those with year/week = None
-        total_sum = sum((item.get('total_count') or 0) for item in gapsCountWeekly)
+        total_sum_all = sum((item.get('total_count') or 0) for item in gapsCountWeeklyAll)
+        total_series_all = [total_sum_all] * len(categories_all)
 
-        # Build total_series as a flat line repeated for each category point
-        total_series = [total_sum] * len(categories)
-
-        # If there are no week categories, create a single-point chart so Highcharts won't error
-        if not categories:
-            categories = ['No Weeks']
-            process_series = [0]
-            total_series = [total_sum]
+        if not categories_all:
+            categories_all = ['No Weeks']
+            process_series_all = [0]
+            total_series_all = [total_sum_all]
 
         all_chart_data = {
-            'categories': categories,
+            'categories': categories_all,
             'series': [
-                {'name': 'Process Count', 'data': process_series},
-                {'name': 'Total Count (Target)', 'data': total_series, 'dashStyle': 'ShortDash'}
+                {'name': 'Process Count', 'data': process_series_all},
+                {'name': 'Total Count (Target)', 'data': total_series_all, 'dashStyle': 'ShortDash'}
             ]
         }
+
         context = {
             'members': members_list,
             'pageTitle': "MY WORKSPACE",
