@@ -91,6 +91,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="password" name="Password" id="Password"  class="form-control text-uppercase" placeholder="Password" required>
+                                    <span><img onclick="password_view_click('Password','password_view_image');" id="password_view_image" style="width: 27px;    float: right;    position: relative;    bottom: 27px;    right: 6px;" src="https://www.supersalesblitz.com/static/images/view-cross.svg"></span>
                                 </div>
                                 <div class="col-sm-4">
                                     <select class="form-control text-uppercase" name="member_status" id="member_status" required>
@@ -114,6 +115,20 @@
 <!-- Call list modal end -->
 
 <script type="text/javascript">
+ function password_view_click(input_id,view_icon_id){
+   var input_type = $("#"+input_id).attr('type');
+   //alert(input_type);
+   if(input_type=="password"){
+     $("#"+input_id).attr('type', 'text');
+     $("#"+view_icon_id).attr("src","/static/images/view-icon.svg");
+     $("#"+view_icon_id).css('bottom', '30px');
+   }else{
+     $("#"+input_id).attr('type', 'password');
+     $("#"+view_icon_id).attr("src","/static/images/view-cross.svg");
+     $("#"+view_icon_id).css('bottom', '27px');
+   }
+ }
+
     $('#members').DataTable();
     function update_user(id=""){
         $("#gapLoader").show();

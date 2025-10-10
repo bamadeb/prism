@@ -119,7 +119,7 @@
                                             <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
                                             {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
-                                            <th><h5>{{ vals.provider_name }}</h5></th>
+                                            <th><h5 class="text-uppercase" title="{{ vals.provider_name }}">{{ vals.provider_name|slice:":5" }}..</h5></th>
                                             {% endfor %}
                                             {% endfor %}
                                             <th><h5>TOTAL</h5></th>
@@ -232,12 +232,12 @@
 
                                 <!-- Nav Tabs -->
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>
-                                    </li>
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>-->
+<!--                                    </li>-->
+<!--                                    <li class="nav-item" role="presentation">-->
+<!--                                        <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>-->
+<!--                                    </li>-->
                                 </ul>
                                 <!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
                                 <!--          <li class="nav-item" role="presentation">-->
@@ -314,7 +314,7 @@
                                             <tr>
                                                 <th>#MEMBER ID</th>
                                                 <th>NAME/PHONE</th>
-                                                <th class="text-center">PCP</th>
+                                                <th class="text-center">PCP VISIT</th>
                                                 <!--                                                <th>ALERT</th>-->
                                                 <th class="text-center">PRIORITY</th>
                                                 <th class="text-center">#TASK</th>
@@ -880,7 +880,9 @@
 
 <script type="text/javascript">
     $('#members').DataTable({
-      order: [[7, 'DESC']],  // default sort on 4th column (index 3)
+      order: [[7, 'DESC']],
+      language: { search: "", searchPlaceholder: 'Search...' },
+
       columnDefs: [{
         targets: [6],  // hide multiple columns
         visible: false
