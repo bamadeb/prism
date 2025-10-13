@@ -5,7 +5,13 @@
     .red{
 
     border-radius: 50%;
-    background-color: red;
+    background-color: #dc3545;
+    width: 14px;
+    height: 14px;
+    }
+    .yellow{
+    border-radius: 50%;
+    background-color: #ffc107;
     width: 14px;
     height: 14px;
     }
@@ -18,7 +24,7 @@
     .green{
 
         border-radius: 50%;
-        background-color: green;
+        background-color: #198754;
         width: 14px;
         height: 14px;
     }
@@ -351,9 +357,12 @@
                                             <tr>
                                                 <th class="text-primary"> #{{ member.medicaid_id }}</th>
                                                 <td class="text-primary" style="text-transform:uppercase;">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}<br>{{ member.OTHER_PHONE|default:'' }}</td>
-                                                <td class="text-center parent" ><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div></td>
+                                                <td class="text-center parent" ><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div><div class="ms-1"> {{ member.PCP_VISIT_DATE|default:"" }}</div></td>
                                                 <td class="text-center">{{ member.PRIORITY_FLAG|default:"" }}</td>
-                                                <td class="text-center"><a  href="javascript:void(0);" onclick="add_update_task_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">{{ member.upcoming_task_date|default:"N/A" }}</a></td>
+                                                <td class="text-center">
+                                                    <a class="text-center parent"><div class="{{ member.task_color }}"></div></a>
+                                                    <a  href="javascript:void(0);" onclick="add_update_task_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');"> {{ member.upcoming_task_date|default:"N/A" }}</a>
+                                                    </td>
                                                 <td class="text-center">
                                                     <a title="Call List" class="text-primary" style="cursor:pointer;" onclick="showCallList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.Call_count }}
