@@ -82,7 +82,7 @@ def login(request):
                     elif user_data[0].get('role_id', None) == 7:
                         return redirect('/users/')
                     elif user_data[0].get('role_id', None) == 20:
-                        return redirect('/users/')
+                        return redirect('/mywork/')
                     elif user_data[0].get('role_id', None) == 10:
                         return redirect('/users/')
 
@@ -108,22 +108,37 @@ def mywork(request):
     if not request.session.get('is_logged_in', False):  # Check session value
         return render(request, 'login.html')
     else:
-        # print(request.session.get('user_data'))
+
         user_data = request.session.get('user_data')
+        user_id = None
+        #################
+        add_action_master_data_result = fetch_add_action_master_data()
+        add_action_master_data = add_action_master_data_result['data']
+        navigatorList = add_action_master_data['navigatorList']
+        #print(navigatorList[0]['ID'])
         if user_data:  # make sure it exists
-            user_id = user_data.get('ID')
+            role_id = user_data.get('role_id')
+            #print(request.POST.get("selected_navigator"))
+            if role_id == 7 or role_id == 20:
+                #print(request.POST.get("selected_navigator"))
+                selected_navigator = request.POST.get("selected_navigator")
+                if selected_navigator:
+                    user_id = selected_navigator
+                else:
+                    user_id = navigatorList[0]['ID']
+            if role_id == 9:
+                user_id = user_data.get('ID')
         data = {
             "user_id": user_id
         }
+        print(data)
         try:
             #################
             #now = timezone.now()  # gets current datetime with timezone support
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
-            #################
-            add_action_master_data_result = fetch_add_action_master_data()
-            add_action_master_data = add_action_master_data_result['data']
+
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:
