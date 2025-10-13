@@ -440,3 +440,10 @@ width:40px;height:40px;background-color:#F00;color:#000;padding:8px;font-weight:
 .mrright{
   float:left; margin-right: 20px;
 }
+
+.darrow {
+  appearance: auto;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  background-image: none !important;
+}

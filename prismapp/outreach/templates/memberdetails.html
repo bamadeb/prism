@@ -473,7 +473,7 @@
                         </div>
                         <div class="col-lg-4 mt-3" >
                             <label for="assign_to"><strong>ASSIGNED TO</strong></label>
-                            <select id="assign_to" name="assign_to"  class="form-control form-select">
+                            <select id="assign_to" name="assign_to"  class="form-control form-select darrow">
                                 <option value="">SELECT</option>
                                 {% for user in assign_to_user %}
                                     <option value="{{ user.ID }}"
@@ -616,7 +616,7 @@
                         <input type="hidden" name="member_id"  id="member_id" value="{{medicaid_id}}">
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
+                            <select class="form-control form-select darrow" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
                                 <option value="">SELECT ALERT</option>
                                 {% for alert in alertList %}
                                   <option value="{{ alert.id }}">{{ alert.alert }}</option>
@@ -624,13 +624,13 @@
                             </select>
                         </div>
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
+                            <select class="form-control form-select darrow" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
                                 <option value="">SELECT TYPE</option>
                             </select>
                         </div>
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
+                            <select class="form-control form-select darrow" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
                                 <option value="">SELECT STATUS</option>
                                  {% for alertStatus in alert_statusList %}
                                   <option value="{{ alertStatus.id }}">
@@ -640,7 +640,7 @@
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3" style="display:none;" id="assign_user_id_field">
-                            <select class="form-control form-select"  name="assign_user_id" id="assign_user_id">
+                            <select class="form-control form-select darrow"  name="assign_user_id" id="assign_user_id">
                                 <option value="">SELECT USER</option>
                                 {% for assign in assign_to_user %}
                                   <option value="{{ assign.ID }}">

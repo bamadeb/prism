@@ -80,14 +80,14 @@
                                     <input type="text" name="LastName" id="LastName"   class="form-control text-uppercase" placeholder="Last Name" required>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <select class="form-control text-uppercase" name="role_id" id="role_id" required>
+                                    <select class="form-control text-uppercase darrow" name="role_id" id="role_id" required>
                                         {% for role in role_list %}
                                         <option value="{{role.ID}}">{{role.ROLE_NAME}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <select class="form-control text-uppercase" name="member_status" id="member_status" required>
+                                    <select class="form-control text-uppercase darrow" name="member_status" id="member_status" required>
                                         <option value="0">Active</option>
                                         <option value="1">Inactive</option>
                                     </select>

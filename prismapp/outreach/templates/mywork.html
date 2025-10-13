@@ -750,7 +750,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select" name="action_result_id" id="action_result_id" required>
+                                            <select class="form-select darrow" name="action_result_id" id="action_result_id" required>
                                                 <option value="">Status</option>
                                             </select>
                                         </div>
@@ -758,7 +758,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select" name="action_status" id="action_status" required>
+                                            <select class="form-select darrow" name="action_status" id="action_status" required>
                                                 <option value="Scheduled">Scheduled</option>
                                                 <option value="Success">Success</option>
                                                 <option value="Failure">Failure</option>
@@ -778,7 +778,7 @@
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-select" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
+                                                        <select class="form-select darrow" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
                                                             <option value="">SELECT ALERT</option>
                                                             {% for visit in member_need_visit %}
                                                             <option value="{{ visit.alert_id }}/{{ visit.id }}">
@@ -788,7 +788,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select" name="visit_alert_status_id">
+                                                        <select class="form-select darrow" name="visit_alert_status_id">
                                                             {% for alertStatus in alert_statusList %}
                                                             {% if alertStatus.id == 28 %}
                                                             <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>

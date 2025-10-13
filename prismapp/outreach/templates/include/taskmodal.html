@@ -54,7 +54,7 @@
                   <input placeholder="Task Date" type="text" name="task_date"  id="task_date"  class="form-control datepicker text-uppercase" required>
                 </div>
                 <div class="col-sm-4 mt-4">
-                  <select class="form-control" style="text-transform: uppercase;" name="task_assign_to" id="task_assign_to"  required>
+                  <select class="form-control darrow" style="text-transform: uppercase;" name="task_assign_to" id="task_assign_to"  required>
                     <option value="">ASSIGN TO</option>
                     {% for value in navigatorList %}
                     <option value="{{ value.ID }}">
@@ -64,7 +64,7 @@
                   </select>
                 </div>
                 <div class="col-sm-4 mt-4">
-                  <select class="form-control" style="text-transform: uppercase;" name="task_status" id="task_status" required>
+                  <select class="form-control darrow" style="text-transform: uppercase;" name="task_status" id="task_status" required>
                     <option value="Open">OPEN</option>
                     <option value="In-Process">IN-PROCESS</option>
                     <option value="Successful">SUCCESSFUL</option>
