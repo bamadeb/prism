@@ -130,7 +130,7 @@
         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
           <div class="d-flex justify-content-between align-items-center">
             <div><img src="{% static '/images/noimage.jpg' %}" alt="Profile" class="rounded-circle"></div>
-            <div class="d-none d-md-block dropdown-toggle ps-2"> {{request.session.user_data.FistName}} {{request.session.user_data.LastName}} ({{request.session.user_data.ROLE_NAME}})</div>
+            <div class="d-none d-md-block dropdown-toggle ps-2 text-capitalize"> {{request.session.user_data.FistName}} {{request.session.user_data.LastName}} ({{request.session.user_data.ROLE_NAME}})</div>
           </div>
         </a> <!-- End Profile Iamge Icon -->
 
