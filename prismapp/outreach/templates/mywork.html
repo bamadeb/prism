@@ -68,6 +68,10 @@
     .group-performance-td {
     border-left: 2px solid #d3cfcf !important;
     }
+  .table-header-color {
+    background-color: #f5f5f5;
+    }
+
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
@@ -89,18 +93,106 @@
                                 <div class="col-xl-6 col-sm-6 mb-xl-0">
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12 mb-xl-0">
-                                            <div id="userperformance"></div>
+                                            <div class="row">
+                                                <div class="col-xl-12 col-sm-12 mb-xl-0">
+                                                <table class="table text-uppercase">
+
+                                                    <tr class="table-header-color">
+                                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">RISK</h4></th>
+
+                                                        <th><h5 class="text-uppercase">Gaps</h5></th>
+                                                        <th><h5 class="text-uppercase">Completed</h5></th>
+                                                        <th><h5 class="text-uppercase">Performance</h5></th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>Overall (PRIORITY)</td>
+
+                                                        <td width="20%">{{ overallSummary.priority_risk_count }}</td>
+                                                        <td width="20%">{{ overallSummary.priority_risk_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ overallSummary.priority_risk_perf_color }}">{{ overallSummary.priority_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (OTHERS)</td>
+
+                                                        <td>{{ overallSummary.other_risk_count }}</td>
+                                                        <td>{{ overallSummary.other_risk_comp_count }}</td>
+                                                        <td style="color: {{ overallSummary.other_risk_perf_color }}">{{ overallSummary.other_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (PRIORITY)</td>
+
+                                                        <td width="20%">{{ ownSummary.priority_risk_count }}</td>
+                                                        <td width="20%">{{ ownSummary.priority_risk_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.priority_risk_perf_color }}">{{ ownSummary.priority_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (OTHERS)</td>
+
+                                                        <td>{{ ownSummary.other_risk_count }}</td>
+                                                        <td>{{ ownSummary.other_risk_comp_count }}</td>
+                                                        <td style="color: {{ ownSummary.other_risk_perf_color }}">{{ ownSummary.other_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+<!--                                                    <tr>-->
+<!--                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>-->
+<!--                                                    </tr>-->
+                                                    <tr class="table-header-color">
+                                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4></th>
+
+                                                        <th><h5 class="text-uppercase">Gaps</h5></th>
+                                                        <th><h5 class="text-uppercase">Completed</h5></th>
+                                                        <th><h5 class="text-uppercase">Performance</h5></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (PRIORITY)</td>
+
+                                                        <td width="20%">{{ overallSummary.priority_quality_count }}</td>
+                                                        <td width="20%">{{ overallSummary.priority_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ overallSummary.priority_quality_perf_color }}">{{ overallSummary.priority_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (OTHERS)</td>
+
+                                                        <td>{{ overallSummary.other_quality_count }}</td>
+                                                        <td>{{ overallSummary.other_quality_comp_count }}</td>
+                                                        <td style="color: {{ overallSummary.other_quality_perf_color }}">{{ overallSummary.other_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>My Own (PRIORITY)</td>
+
+                                                        <td width="20%">{{ ownSummary.priority_quality_count }}</td>
+                                                        <td width="20%">{{ ownSummary.priority_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.priority_quality_perf_color }}">{{ ownSummary.priority_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (OTHERS)</td>
+
+                                                        <td width="20%">{{ ownSummary.other_quality_count }}</td>
+                                                        <td width="20%">{{ ownSummary.other_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.other_quality_perf_color }}">{{ ownSummary.other_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+
+                                                </table>
+                                                </div>
+                                            </div>
+
+
                                         </div>
-                                        <div class="col-xl-12 col-sm-12 mb-xl-0">
-                                            <div id="allperformance"></div>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="col-xl-6 col-sm-6 mb-xl-0">
                                     <div class="row">
                                     <div class="col-xl-12 col-sm-12 mb-xl-0">
                                     <table class="table">
-                                        <tr>
+                                        <tr class="table-header-color">
                                             <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
                                             {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
@@ -201,38 +293,7 @@
                                     </table>
                                     </div>
                                 </div>
-                                <div class="row">
-                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
 
-                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.risk_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.risk_perf_color }}">{{ overallSummary.risk_perf|floatformat:0 }}% </h4></div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.risk_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.risk_perf_color }}">{{ ownSummary.risk_perf|floatformat:0 }}% </h4></div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Completed</h5> </div>
-                                        <div class="col-3 text-center text-uppercase"><h5>Performance</h5> </div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>Overall</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ overallSummary.quality_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ overallSummary.quality_perf_color }}">{{ overallSummary.quality_perf|floatformat:0 }}% </h4></div>
-
-                                        <div class="col-3 text-center text-uppercase"><h4>My Own</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_count }}</h4></div>
-                                        <div class="col-3 text-center"><h4>{{ ownSummary.quality_comp_count }}</h4> </div>
-                                        <div class="col-3 text-center"><h4 style="color: {{ ownSummary.quality_perf_color }}">{{ ownSummary.quality_perf|floatformat:0 }}% </h4></div>
-                                    </div>
                                 </div>
                                 <div class="col-xl-6 col-sm-6 mb-xl-0">
 
@@ -1087,153 +1148,17 @@ function showCIHQualityList(medicaid_id, member_name) {
     });
   }
 }
-     function addAction(medicaid_id) {
-        //alert(medicaid_id);
-        $('#action_id').val(5);
-        $('#panel_id').val(2);
-        $('#action_date').val('');
-        $('#medicaid_id').val(medicaid_id)
-        $('#appointment_medicaid_id').val(medicaid_id)
-        $('#rsvp_appointment_medicaid_id').val(medicaid_id)
-        //$('#medicaid_id').val(medicaid_id)
-        $("#largeModal").modal('show');
-      }
-const chartData = {{ chart_data|safe }};
-
-Highcharts.chart('userperformance', {
-    chart: {
-        type: 'line'
-    },
-    title: {
-        text: 'Own Gaps Performance Weekly',
-        style: {
-            fontSize: '18px',     // 🔹 Title font size
-            fontWeight: 'bold'
-        }
-    },
-    subtitle: {
-        text: ''
-    },
-    credits: {
-        enabled: false           // 🔹 Removes "Highcharts.com"
-    },
-    xAxis: {
-        categories: chartData.categories,
-        title: {
-            text: 'Weeks',
-            style: {
-                fontSize: '14px', // 🔹 X-axis title font size
-                fontWeight: 'bold'
-            }
-        },
-        labels: {
-            style: {
-                fontSize: '13px'  // 🔹 X-axis label font size
-            }
-        }
-    },
-    yAxis: {
-        title: {
-            text: '#Gaps',
-            style: {
-                fontSize: '14px', // 🔹 Y-axis title font size
-                fontWeight: 'bold'
-            }
-        },
-        labels: {
-            style: {
-                fontSize: '13px'  // 🔹 Y-axis label font size
-            }
-        }
-    },
-    legend: {
-        itemStyle: {
-            fontSize: '13px',     // 🔹 Legend font size
-            fontWeight: 'normal'
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontSize: '12px', // 🔹 Data label font size
-                    fontWeight: 'bold'
-                }
-            },
-            enableMouseTracking: true
-        }
-    },
-    series: chartData.series
-});
-const allchartData = {{ all_chart_data|safe }};
-
-Highcharts.chart('allperformance', {
-    chart: {
-        type: 'line'
-    },
-    title: {
-        text: 'Overview Gaps Performance Weekly',
-        style: {
-            fontSize: '18px',     // 🔹 Title font size
-            fontWeight: 'bold'
-        }
-    },
-    subtitle: {
-        text: ''
-    },
-    credits: {
-        enabled: false           // 🔹 Removes "Highcharts.com"
-    },
-    xAxis: {
-        categories: allchartData.categories,
-        title: {
-            text: 'Weeks',
-            style: {
-                fontSize: '14px', // 🔹 X-axis title font size
-                fontWeight: 'bold'
-            }
-        },
-        labels: {
-            style: {
-                fontSize: '13px'  // 🔹 X-axis label font size
-            }
-        }
-    },
-    yAxis: {
-        title: {
-            text: '#Gaps',
-            style: {
-                fontSize: '14px', // 🔹 Y-axis title font size
-                fontWeight: 'bold'
-            }
-        },
-        labels: {
-            style: {
-                fontSize: '13px'  // 🔹 Y-axis label font size
-            }
-        }
-    },
-    legend: {
-        itemStyle: {
-            fontSize: '13px',     // 🔹 Legend font size
-            fontWeight: 'normal'
-        }
-    },
-    plotOptions: {
-        line: {
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontSize: '12px', // 🔹 Data label font size
-                    fontWeight: 'bold'
-                }
-            },
-            enableMouseTracking: true
-        }
-    },
-    series: allchartData.series
-});
+function addAction(medicaid_id) {
+    //alert(medicaid_id);
+    $('#action_id').val(5);
+    $('#panel_id').val(2);
+    $('#action_date').val('');
+    $('#medicaid_id').val(medicaid_id)
+    $('#appointment_medicaid_id').val(medicaid_id)
+    $('#rsvp_appointment_medicaid_id').val(medicaid_id)
+    //$('#medicaid_id').val(medicaid_id)
+    $("#largeModal").modal('show');
+}
 
 </script>
 {% endblock %}
