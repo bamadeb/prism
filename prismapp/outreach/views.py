@@ -108,7 +108,7 @@ def mywork(request):
     if not request.session.get('is_logged_in', False):  # Check session value
         return render(request, 'login.html')
     else:
-
+        pageTitle ="MY WORKSPACE"
         user_data = request.session.get('user_data')
         user_id = None
         #################
@@ -121,17 +121,19 @@ def mywork(request):
             #print(request.POST.get("selected_navigator"))
             if role_id == 7 or role_id == 20:
                 #print(request.POST.get("selected_navigator"))
+                pageTitle = "DASHBOARD"
                 selected_navigator = request.POST.get("selected_navigator")
                 if selected_navigator:
                     user_id = selected_navigator
                 else:
                     user_id = navigatorList[0]['ID']
             if role_id == 9:
+                pageTitle = "MY WORKSPACE"
                 user_id = user_data.get('ID')
         data = {
             "user_id": user_id
         }
-        print(data)
+        #print(data)
         try:
             #################
             #now = timezone.now()  # gets current datetime with timezone support
@@ -373,7 +375,7 @@ def mywork(request):
 
         context = {
             'members': members_list,
-            'pageTitle': "MY WORKSPACE",
+            'pageTitle': pageTitle,
             'source': 'mywork',
             'projectName': settings.PROJECT_NAME,
             'sel_panel_list': add_action_master_data['actionActivityCategory'],
