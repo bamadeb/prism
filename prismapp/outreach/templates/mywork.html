@@ -62,6 +62,10 @@
     .group-performance-td {
     border-left: 2px solid #d3cfcf !important;
     }
+  .table-header-color {
+    background-color: #f5f5f5;
+    }
+
 </style>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
@@ -84,57 +88,96 @@
                                     <div class="row">
                                         <div class="col-xl-12 col-sm-12 mb-xl-0">
                                             <div class="row">
-                                                <div class="col-4 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">RISK</h4> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Completed</h5> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Performance</h5> </div>
+                                                <div class="col-xl-12 col-sm-12 mb-xl-0">
+                                                <table class="table text-uppercase">
 
-                                                <div class="col-4 text-center text-uppercase"><h4>Overall (PRIORITY)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.priority_risk_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.priority_risk_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ overallSummary.priority_risk_perf_color }}">{{ overallSummary.priority_risk_perf|floatformat:0 }}% </h4></div>
+                                                    <tr class="table-header-color">
+                                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">RISK</h4></th>
 
-                                                <div class="col-4 text-center text-uppercase"><h4>Overall (OTHERS)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.other_risk_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.other_risk_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ overallSummary.other_risk_perf_color }}">{{ overallSummary.other_risk_perf|floatformat:0 }}% </h4></div>
+                                                        <th><h5 class="text-uppercase">Gaps</h5></th>
+                                                        <th><h5 class="text-uppercase">Completed</h5></th>
+                                                        <th><h5 class="text-uppercase">Performance</h5></th>
+                                                    </tr>
 
-                                                <div class="col-4 text-center text-uppercase"><h4>My Own (PRIORITY)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.priority_risk_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.priority_risk_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ ownSummary.priority_risk_perf_color }}">{{ ownSummary.priority_risk_perf|floatformat:0 }}% </h4></div>
+                                                    <tr>
+                                                        <td>Overall (PRIORITY)</td>
 
-                                                <div class="col-4 text-center text-uppercase"><h4>My Own (OTHERS)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.other_risk_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.other_risk_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ ownSummary.other_risk_perf_color }}">{{ ownSummary.other_risk_perf|floatformat:0 }}% </h4></div>
+                                                        <td width="20%">{{ overallSummary.priority_risk_count }}</td>
+                                                        <td width="20%">{{ overallSummary.priority_risk_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ overallSummary.priority_risk_perf_color }}">{{ overallSummary.priority_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (OTHERS)</td>
+
+                                                        <td>{{ overallSummary.other_risk_count }}</td>
+                                                        <td>{{ overallSummary.other_risk_comp_count }}</td>
+                                                        <td style="color: {{ overallSummary.other_risk_perf_color }}">{{ overallSummary.other_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (PRIORITY)</td>
+
+                                                        <td width="20%">{{ ownSummary.priority_risk_count }}</td>
+                                                        <td width="20%">{{ ownSummary.priority_risk_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.priority_risk_perf_color }}">{{ ownSummary.priority_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (OTHERS)</td>
+
+                                                        <td>{{ ownSummary.other_risk_count }}</td>
+                                                        <td>{{ ownSummary.other_risk_comp_count }}</td>
+                                                        <td style="color: {{ ownSummary.other_risk_perf_color }}">{{ ownSummary.other_risk_perf|floatformat:0 }}%</td>
+                                                    </tr>
+<!--                                                    <tr>-->
+<!--                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>-->
+<!--                                                    </tr>-->
+                                                    <tr class="table-header-color">
+                                                        <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4></th>
+
+                                                        <th><h5 class="text-uppercase">Gaps</h5></th>
+                                                        <th><h5 class="text-uppercase">Completed</h5></th>
+                                                        <th><h5 class="text-uppercase">Performance</h5></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (PRIORITY)</td>
+
+                                                        <td width="20%">{{ overallSummary.priority_quality_count }}</td>
+                                                        <td width="20%">{{ overallSummary.priority_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ overallSummary.priority_quality_perf_color }}">{{ overallSummary.priority_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Overall (OTHERS)</td>
+
+                                                        <td>{{ overallSummary.other_quality_count }}</td>
+                                                        <td>{{ overallSummary.other_quality_comp_count }}</td>
+                                                        <td style="color: {{ overallSummary.other_quality_perf_color }}">{{ overallSummary.other_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="4" style="border-top: 2px solid #000; padding: 0; margin: 0; line-height: 0;"></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>My Own (PRIORITY)</td>
+
+                                                        <td width="20%">{{ ownSummary.priority_quality_count }}</td>
+                                                        <td width="20%">{{ ownSummary.priority_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.priority_quality_perf_color }}">{{ ownSummary.priority_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>My Own (OTHERS)</td>
+
+                                                        <td width="20%">{{ ownSummary.other_quality_count }}</td>
+                                                        <td width="20%">{{ ownSummary.other_quality_comp_count }}</td>
+                                                        <td width="20%" style="color: {{ ownSummary.other_quality_perf_color }}">{{ ownSummary.other_quality_perf|floatformat:0 }}%</td>
+                                                    </tr>
+
+                                                </table>
+                                                </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-4 text-center text-uppercase"><h4 style="text-decoration:underline;    font-weight: bold !important;">QUALITY</h4> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Gaps</h5> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Completed</h5> </div>
-                                                <div class="col-2 text-center text-uppercase"><h5>Performance</h5> </div>
 
-                                                <div class="col-4 text-center text-uppercase"><h4>Overall (PRIORITY)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.priority_quality_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.priority_quality_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ overallSummary.priority_quality_perf_color }}">{{ overallSummary.priority_quality_perf|floatformat:0 }}% </h4></div>
 
-                                                <div class="col-4 text-center text-uppercase"><h4>Overall (OTHERS)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.other_quality_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ overallSummary.other_quality_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ overallSummary.other_quality_perf_color }}">{{ overallSummary.other_quality_perf|floatformat:0 }}% </h4></div>
-
-                                                <div class="col-4 text-center text-uppercase"><h4>My Own (PRIORITY)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.priority_quality_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.priority_quality_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ ownSummary.priority_quality_perf_color }}">{{ ownSummary.priority_quality_perf|floatformat:0 }}% </h4></div>
-
-                                                <div class="col-4 text-center text-uppercase"><h4>My Own (OTHERS)</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.other_quality_count }}</h4></div>
-                                                <div class="col-2 text-center"><h4>{{ ownSummary.other_quality_comp_count }}</h4> </div>
-                                                <div class="col-2 text-center"><h4 style="color: {{ ownSummary.other_quality_perf_color }}">{{ ownSummary.other_quality_perf|floatformat:0 }}% </h4></div>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -143,7 +186,7 @@
                                     <div class="row">
                                     <div class="col-xl-12 col-sm-12 mb-xl-0">
                                     <table class="table">
-                                        <tr>
+                                        <tr class="table-header-color">
                                             <th><h4 class="text-uppercase" style="text-decoration:underline;    font-weight: bold !important;">WORK OVERVIEW</h4></th>
                                             {% for item in performancArray %}
                                             {% for pcp_id, vals in item.items %}
