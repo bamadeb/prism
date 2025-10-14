@@ -88,7 +88,7 @@ def processmember(request):
 
                 # --- Insert Members ---
                 for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-                    print(f"Processing MEM_MEMBERS batch {batch_num}, rows: {len(batch)}")
+                    #print(f"Processing MEM_MEMBERS batch {batch_num}, rows: {len(batch)}")
                     apidata = {
                         "table_name": "MEM_MEMBERS_TEMP",
                         "insertDataArray": batch,
@@ -124,7 +124,7 @@ def processmember(request):
                 member["DT_OF_BIRTH"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
     #print(logList)
     return render(request, 'processmember.html', {
-        'pageTitle': "PROCESS MEMBER",
+        'pageTitle': "PROCESS MEMBER FILE",
         'session_id': session_id,
         'tempMember' : tempMemberList,
         'totalTempMemberCount' : totalRecords,
@@ -197,7 +197,7 @@ def processriskgap(request):
 
                 # --- Insert Members ---
                 for batch_num, batch in enumerate(chunked(insertDataArray, 1000), start=1):
-                    print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
+                    #print(f"Processing MEM_RISK_GAP_TEMP batch {batch_num}, rows: {len(batch)}")
                     apidata = {
                         "table_name": "MEM_RISK_GAP_TEMP",
                         "insertDataArray": batch,
@@ -234,7 +234,7 @@ def processriskgap(request):
                 member["RELEVANT_DATE"] = datetime.fromisoformat(RELEVANT_DATE.replace("Z", "+00:00"))
     #print(logList)
     return render(request, 'processriskgap.html', {
-        'pageTitle': "PROCESS RISK GAPS",
+        'pageTitle': "PROCESS RISK GAPS FILE",
         'session_id': session_id,
         'tempRiskGapsList' : tempRiskGapsList,
         'totalTempRiskGapsCount' : totalRecords,
@@ -323,7 +323,7 @@ def processquality(request):
                     }
                     insertresult = api_call(apidata, "prismMultipleRowInsert")
                     #insertR = insertresult.json()
-                    print(insertresult)
+                    #print(insertresult)
             else:
                 messages.success(
                     request,
@@ -354,7 +354,7 @@ def processquality(request):
                 quality["Date_of_Birth"] = datetime.fromisoformat(dob.replace("Z", "+00:00"))
     #print(tempQualityGapsList)
     return render(request, 'processquality.html', {
-        'pageTitle': "PROCESS QUALITY GAPS",
+        'pageTitle': "PROCESS QUALITY GAPS FILE",
         'session_id': session_id,
         'tempQualityGapsList' : tempQualityGapsList,
         'totalTempQualityGapsCount' : totalRecords,

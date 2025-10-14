@@ -113,6 +113,7 @@ def mywork(request):
         user_id = None
         #################
         add_action_master_data_result = fetch_add_action_master_data()
+        #print(add_action_master_data_result)
         add_action_master_data = add_action_master_data_result['data']
         navigatorList = add_action_master_data['navigatorList']
         #print(navigatorList[0]['ID'])
@@ -140,7 +141,7 @@ def mywork(request):
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
-
+            #print(myWorkSpaceResult)
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:
