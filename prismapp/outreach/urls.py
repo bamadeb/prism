@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api, users, dataupload
+from . import views, api, users, dataupload, fileprocesslog
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -33,6 +33,8 @@ urlpatterns = [
     path('processmember/', dataupload.processmember, name='processmember'),
     path('processriskgap/', dataupload.processriskgap, name='processriskgap'),
     path('processquality/', dataupload.processquality, name='processquality'),
+    path('fileprocesslogreport/', fileprocesslog.processlogreport, name='fileprocesslog'),
+
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),
     path("api/get_vendor_list/", api.get_vendor_list, name="get_vendor_list"),
@@ -46,6 +48,8 @@ urlpatterns = [
     path('api/get_member_task_list/', api.get_member_task_list, name='get_member_task_list'),
     path('api/get_member_gaps_list/', api.get_member_gaps_list, name='get_member_gaps_list'),
     path('api/get_task_details/', api.get_task_details, name='get_task_details'),
+    path('api/get_process_list_by_type/', api.get_process_list_by_type, name='get_process_list_by_type'),
+    path('api/get_log_details_by_session_id/', api.get_log_details_by_session_id, name='get_log_details_by_session_id'),
 
     ### Users
     path('users/', users.users, name='users'),

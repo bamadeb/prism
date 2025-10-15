@@ -40,135 +40,135 @@
                                     <input type="hidden" name="update_action_id" id="update_action_id" >
                                     <input type="hidden" name="add_action_source" id="add_action_source" value="{{ source }}" >
 
-                                     <div class="row mt-3">
-                                         <div class="col-sm-6 mt-3 border rounded p-3">
-                                             <div class="mb-2 text-uppercase"><h4><b>Action</b></h4></div>
-                                             <div class="row ">
-                                             <div class="col-sm-3">
-                                                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Category:</label>
-                                             </div>
-                                             <div class="col-sm-9">
-                                                 {% for reagon in sel_panel_list %}
-                                                 <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="action_id" id="action_id" value="{{ reagon.id }}" onclick="set_scheduled_action_status(this.value)" {% if reagon.id == 11 %}checked{% endif %}>
-                                                      <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ reagon.Panel_Name }}</label>
-                                                 </div>
-                                                 {% endfor %}
-                                             </div>
-                                             <div class="col-sm-3 mt-4">
-                                                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Type:</label>
-                                             </div>
-                                             <div class="col-sm-9 mt-4">
-                                                 {% for type in sel_panel_type %}
-                                                 <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="panel_id" id="panel_id" value="{{ type.id }}" {% if type.id == 2 %}checked{% endif %}>
-                                                      <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
-                                                 </div>
-                                                 {% endfor %}
-                                             </div>
-                                            <div class="col-sm-3 mt-4">
-                                                <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker text-uppercase" required>
-                                            </div>
-                                             <div class="col-sm-3 mt-4">
-                                                <select class="form-control form-select text-uppercase darrow" name="action_status" id="action_status" required style=" text-transform: uppercase;">
-                                                    <option value="Scheduled">Scheduled</option>
-                                                    <option value="Success">Success</option>
-                                                    <option value="Failure">Failure</option>
-                                                </select>
-                                              </div>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-6 mt-3 border rounded p-3">
+                                            <div class="mb-2 text-uppercase"><h4><b>Action</b></h4></div>
+                                            <div class="row ">
+                                                <div class="col-sm-3">
+                                                    <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Category:</label>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    {% for reagon in sel_panel_list %}
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="action_id" id="action_id" value="{{ reagon.id }}" onclick="set_scheduled_action_status(this.value)" {% if reagon.id == 11 %}checked{% endif %}>
+                                                        <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ reagon.Panel_Name }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-sm-3 mt-4">
+                                                    <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Type:</label>
+                                                </div>
+                                                <div class="col-sm-9 mt-4">
+                                                    {% for type in sel_panel_type %}
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="panel_id" id="panel_id" value="{{ type.id }}" {% if type.id == 2 %}checked{% endif %}>
+                                                        <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-sm-3 mt-4">
+                                                    <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker text-uppercase" required>
+                                                </div>
+                                                <div class="col-sm-3 mt-4">
+                                                    <select class="form-control form-select text-uppercase darrow" name="action_status" id="action_status" required style=" text-transform: uppercase;">
+                                                        <option value="Scheduled">Scheduled</option>
+                                                        <option value="Success">Success</option>
+                                                        <option value="Failure">Failure</option>
+                                                    </select>
+                                                </div>
                                                 <div class="col-sm-6 mt-4">
                                                     <select class="form-control form-select text-uppercase darrow" name="action_result_id" id="action_result_id" required>
                                                         <option value=""> -- ACTION STATUS --</option>
                                                     </select>
                                                 </div>
-                                             <div class="col-sm-12 mt-4">
-                                                <textarea class="form-control " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
+                                                <div class="col-sm-12 mt-4">
+                                                    <textarea class="form-control " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
+                                                </div>
+                                                <div class="col-sm-12 mt-4">
+                                                    <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-12 mt-4">
-                                                <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
-                                            </div>
-                                             </div>
-                                         </div>
-                                         <div class="col-sm-6 mt-3 border rounded p-3" >
-                                             <div class="mb-2 text-uppercase"><h4><b>Next Activity</b></h4></div>
+                                        </div>
+                                        <div class="col-sm-6 mt-3 border rounded p-3" >
+                                            <div class="mb-2 text-uppercase"><h4><b>Next Activity</b></h4></div>
                                             <div class="row ">
-                                             <div class="col-sm-3 mt-4">
-                                                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Type:</label>
-                                             </div>
-                                             <div class="col-sm-9 mt-4">
-                                                 {% for type in sel_panel_type %}
-                                                 <div class="form-check form-check-inline">
-                                                      <input class="form-check-input" type="radio" name="next_panel_id" id="next_panel_id" value="{{ type.id }}" >
-                                                      <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
-                                                 </div>
-                                                 {% endfor %}
-                                             </div>
-                                             <div class="col-sm-3 mt-4">
-                                                  <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Date:</label>
-                                             </div>
-                                            <div class="col-sm-3 mt-4">
-                                                <input placeholder="Next Action Date" type="text" name="next_action_date"  id="next_action_date"  class="form-control datepicker text-uppercase" required>
-                                            </div>
-                                            <div class="col-sm-12 mt-4">
-                                                <textarea class="form-control " name="next_action_note" id="next_action_note"  placeholder="Type your text..."></textarea>
-                                            </div>
-                                            <div class="col-sm-12 mt-4">
-                                                <table class="table">
-                                                    <tr>
-                                                        <th class="text-uppercase">Task Type</th>
-                                                        <th class="text-uppercase">Task Date</th>
-                                                        <th class="text-uppercase">Status</th>
-                                                        <th class="text-uppercase">Assign To</th>
-                                                        <th class="text-uppercase">Note</th>
-                                                    </tr>
-                                                    <tbody id="action_task_list">
+                                                <div class="col-sm-3 mt-4">
+                                                    <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Type:</label>
+                                                </div>
+                                                <div class="col-sm-9 mt-4">
+                                                    {% for type in sel_panel_type %}
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="next_panel_id" id="next_panel_id" value="{{ type.id }}" >
+                                                        <label class="form-check-label text-uppercase" style="font-weight:100;"> {{ type.action_type }}</label>
+                                                    </div>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="col-sm-3 mt-4">
+                                                    <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Date:</label>
+                                                </div>
+                                                <div class="col-sm-3 mt-4">
+                                                    <input placeholder="Next Action Date" type="text" name="next_action_date"  id="next_action_date"  class="form-control datepicker text-uppercase" >
+                                                </div>
+                                                <div class="col-sm-12 mt-4">
+                                                    <textarea class="form-control " name="next_action_note" id="next_action_note"  placeholder="Type your text..."></textarea>
+                                                </div>
+                                                <div class="col-sm-12 mt-4">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th class="text-uppercase">Task Type</th>
+                                                            <th class="text-uppercase">Task Date</th>
+                                                            <th class="text-uppercase">Status</th>
+                                                            <th class="text-uppercase">Assign To</th>
+                                                            <th class="text-uppercase">Note</th>
+                                                        </tr>
+                                                        <tbody id="action_task_list">
 
-                                                    </tbody>
-                                                </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            </div>
-                                         </div>
+                                        </div>
 
                                         <div class="col-sm-6 mt-3 border rounded p-3" >
                                             <div class="col-sm-12 mt-4">
                                                 <div class="mb-2 text-uppercase"><h4><b>Risk Gaps</b></h4></div>
-                                            <div class="multiselect">
-<!--                                                <div class="selectBox" onclick="showCheckboxes('checkboxes')">-->
-<!--                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">-->
-<!--                                                    <option value=""> &#45;&#45; Select Risk Gaps &#45;&#45; </option>-->
-<!--                                                  </select>-->
-<!--                                                  <div class="overSelect"></div>-->
-<!--                                                </div>-->
-                                                <div  id="checkboxes" class=" p-3">
+                                                <div class="multiselect">
+                                                    <!--                                                <div class="selectBox" onclick="showCheckboxes('checkboxes')">-->
+                                                    <!--                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">-->
+                                                    <!--                                                    <option value=""> &#45;&#45; Select Risk Gaps &#45;&#45; </option>-->
+                                                    <!--                                                  </select>-->
+                                                    <!--                                                  <div class="overSelect"></div>-->
+                                                    <!--                                                </div>-->
+                                                    <div  id="checkboxes" class=" p-3">
 
+                                                    </div>
                                                 </div>
-                                              </div>
 
 
                                             </div>
                                         </div>
 
 
-                                         <div class="col-sm-6 mt-3 border rounded p-3" >
+                                        <div class="col-sm-6 mt-3 border rounded p-3" >
 
-                                         <div class="col-sm-12 mt-4">
-                                             <div class="mb-2 text-uppercase"><h4><b>Quality Gaps</b></h4></div>
-                                             <div class="multiselect">
-<!--                                                <div class="selectBox" onclick="showCheckboxes('checkboxes1')">-->
-<!--                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">-->
-<!--                                                    <option value=""> &#45;&#45; Select Quality Gaps &#45;&#45; </option>-->
-<!--                                                  </select>-->
-<!--                                                  <div class="overSelect"></div>-->
-<!--                                                </div>-->
-                                                <div id="checkboxes1" class=" p-3">
+                                            <div class="col-sm-12 mt-4">
+                                                <div class="mb-2 text-uppercase"><h4><b>Quality Gaps</b></h4></div>
+                                                <div class="multiselect">
+                                                    <!--                                                <div class="selectBox" onclick="showCheckboxes('checkboxes1')">-->
+                                                    <!--                                                  <select class="form-control form-select text-uppercase" style="font-weight:100;">-->
+                                                    <!--                                                    <option value=""> &#45;&#45; Select Quality Gaps &#45;&#45; </option>-->
+                                                    <!--                                                  </select>-->
+                                                    <!--                                                  <div class="overSelect"></div>-->
+                                                    <!--                                                </div>-->
+                                                    <div id="checkboxes1" class=" p-3">
 
 
+                                                    </div>
                                                 </div>
-                                              </div>
 
 
+                                            </div>
                                         </div>
-                                         </div>
                                     </div>
                                     <div class="row mb-3 mt-4">
                                         <div class="col-sm-12" align="right">
