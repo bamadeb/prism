@@ -125,5 +125,14 @@ def get_task_details(request):
         return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+@csrf_exempt
+def get_dept_users(request):
+    if request.method == "POST":
+        department_id = request.POST.get("department_id")
+        params = {"department_id": department_id}
+        response = api_call(params, "prismGetusersbydeptid")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 

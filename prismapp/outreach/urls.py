@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api, users, dataupload
+from . import views, api, users, dataupload, refer
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -21,7 +21,7 @@ urlpatterns = [
     path('update_member_info/', views.update_member_info, name='update_member_info'),
     path('starperformance/', views.star_performance, name='starperformance'),
     path('history/<str:medicaid_id>', views.memberhistory, name='history'),
-    # path('contact_us/', views.contact_us, name='contact_us'),
+    path('add_referral/', refer.add_referral, name='add_referral'),
     # path('admin_login/', views.admin_login, name='admin_login'),
     # path('leaderboard/', views.leaderboard, name='leaderboard'),
     # path('admin_score_history/<int:employee_id>/', views.admin_score_history, name='admin_score_history'),
@@ -46,6 +46,7 @@ urlpatterns = [
     path('api/get_member_task_list/', api.get_member_task_list, name='get_member_task_list'),
     path('api/get_member_gaps_list/', api.get_member_gaps_list, name='get_member_gaps_list'),
     path('api/get_task_details/', api.get_task_details, name='get_task_details'),
+    path('api/get_dept_users/', api.get_dept_users, name='get_dept_users'),
 
     ### Users
     path('users/', users.users, name='users'),

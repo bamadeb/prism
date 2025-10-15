@@ -386,6 +386,8 @@ def mywork(request):
             'recent_activity': recentActivity,
             'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
             'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
+            'departmentList': myWorkAllSpace['departmentList'],
+            'refared_member_list': myWorkAllSpace['referralList'],
             'performancArray': performancArray,
             'totalArray': totalArray,
             'user_id': user_id,

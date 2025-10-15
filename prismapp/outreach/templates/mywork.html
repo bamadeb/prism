@@ -332,18 +332,25 @@
             <!-- Left side columns -->
             <div class="col-lg-12">
                 <div class="row">
+                     <div class="col-2">
+
+                <select CLASS="form-control darrow" onchange="get_action(this.value)" id="action_ids">
+                    <option VALUE="">ACTION</option>
+                    <option VALUE="1">TRANSFER</option>
+                </select>
+            </div>
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
 
                                 <!-- Nav Tabs -->
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-<!--                                    <li class="nav-item" role="presentation">-->
-<!--                                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>-->
-<!--                                    </li>-->
-<!--                                    <li class="nav-item" role="presentation">-->
-<!--                                        <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="task" aria-selected="false">TASKS</button>-->
-<!--                                    </li>-->
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">MEMBERS</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="referred-tab" data-bs-toggle="tab" data-bs-target="#referred" type="button" role="tab" aria-controls="task" aria-selected="false">TRANSFER</button>
+                                    </li>
                                 </ul>
                                 <!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
                                 <!--          <li class="nav-item" role="presentation">-->
@@ -382,9 +389,7 @@
 
                                             <tr class="gradeX trbg">
                                                 <td align="center">
-                                                    <div style="border-radius:50%;
-              background-color:{{ task.color }};
-              width:14px;height:14px;">
+                                                    <div style="border-radius:50%;background-color:{{ task.color }}; width:14px;height:14px;">
                                                     </div>
                                                 </td>
 
@@ -418,15 +423,13 @@
                                                 <th class="group-performance-td"></th>
                                             </tr>
                                             <tr>
+                                                <th><input type="checkbox" id="allcheckbox" class="form-check-input"></th>
                                                 <th>#MEMBER ID</th>
                                                 <th>NAME/PHONE</th>
                                                 <th class="text-center">PCP VISIT</th>
-                                                <!--                                                <th>ALERT</th>-->
                                                 <th class="text-center">PRIORITY</th>
                                                 <th class="text-center">#TASK</th>
                                                 <th class="text-center">#CALL</th>
-                                                <th></th>
-                                                <!--                                                <th>ELIGIBILITY</th>-->
                                                 <th class="text-center group-performance-td">COUNT</th>
                                                 <th class="text-center">COMPLETED</th>
                                                 <th class="text-center">%</th>
@@ -439,6 +442,7 @@
                                             <tbody>
                                             {% for member in members %}
                                             <tr>
+                                                  <th class="text-primary"> <input type="checkbox" class="form-check-input rowCheckbox" value="{{ member.medicaid_id }}"> </th>
                                                 <th class="text-primary"> #{{ member.medicaid_id }}</th>
                                                 <td class="text-primary" style="text-transform:uppercase;">{{ member.FIRST_NAME }} {{ member.LAST_NAME }}<br>{{ member.OTHER_PHONE|default:'' }}</td>
                                                 <td class="text-center parent" ><div class="{% if member.PCP_VISIT_FLAG == 1 %}green{% else %}red{% endif %}"></div><div class="ms-1"> {{ member.PCP_VISIT_DATE|default:"" }}</div></td>
@@ -452,7 +456,6 @@
                                                         {{ member.Call_count }}
                                                     </a>
                                                 </td>
-                                                <td></td>
                                                 <td class="text-center group-performance-td">
                                                     <a title="Gap List" class="text-primary" style="cursor:pointer;" onclick="showGapList('{{ member.medicaid_id }}','{{ member.FIRST_NAME }} {{ member.LAST_NAME }}');">
                                                         {{ member.risk_gap_count }}
@@ -502,11 +505,11 @@
                                             </thead>
                                             <tbody>
                                             {% for ref in refared_member_list %}
-                                            <tr>
+                                            <tr class="text-uppercase">
                                                 <td><a href="javascript:void(0);">#{{ ref.medicaid_id }}</a></td>
-                                                <td>{{ ref.user_name }}</td>
-                                                <td>{{ ref.medical_user }}</td>
-                                                <td>{% if ref.add_date %}{{ ref.add_date|date:"m/d/Y" }}{% endif %}</td>
+                                                <td>{{ ref.refer_by_name }}</td>
+                                                <td>{{ ref.refer_to_name }}</td>
+                                                <td>{{ ref.added_date }}</td>
                                                 <td>{{ ref.referring_reason }}</td>
                                             </tr>
                                             {% endfor %}
@@ -987,25 +990,88 @@
 </div>
 <!-- End Add Action Modal -->
 
+<!-- Gap list modal start -->
+
+<div class="modal " id="transfer" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-uppercase" id="member_count">TRANSFER</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="noconfirm()"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/add_referral/" method="post" onsubmit="frm_submit()">
+                    {% csrf_token %}
+                    <input type="hidden" id="ref_medicaid_id" name="ref_medicaid_id">
+                     <div class="row">
+                         <div class="col-6 mb-2">
+                             <select CLASS="form-control darrow text-uppercase" name="department_id" onchange="get_dept_user(this.value)" required>
+                                 <option VALUE="">SELECT DEPARTMENT</option>
+                                  {% for dept in departmentList %}
+                                 <option VALUE="{{dept.id}}">{{dept.department}}</option>
+                                 {% endfor %}
+                             </select>
+                         </div>
+                         <div class="col-6 mb-2">
+                             <select CLASS="form-control darrow text-uppercase" name="referral_user_id" id="referral_user_id" required>
+                                 <option VALUE="">SELECT USER</option>
+                             </select>
+                         </div>
+                         <div class="col-12 mb-4">
+                             <textarea CLASS="form-control text-uppercase" name="referring_reason" placeholder="REFERRAL REASON" required></textarea>
+                         </div>
+                         <div class="col-12" align="right">
+                            <input type="submit" value="Submit" class="btn btn-primary">
+                         </div>
+                     </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call list modal end -->
+
+<!-- Button to trigger confirm -->
+<div class="modal " id="ref_confirm" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" >Confirm Action</h5>
+                <button type="button" class="btn-close" onclick="noconfirm()"></button>
+              </div>
+
+              <div class="modal-body">
+                Are you sure you want to transfer the member(s)?
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="noconfirm()" >No</button>
+                <button type="button" class="btn btn-success" onclick="yesconfirm()">Yes</button>
+              </div>
+        </div>
+    </div>
+</div>
+
 
 <script type="text/javascript">
     $('#members').DataTable({
-      order: [[7, 'DESC']],
+      order: [[8, 'DESC']],
       language: { search: "", searchPlaceholder: 'Search...' },
 
-      columnDefs: [{
-        targets: [6],  // hide multiple columns
-        visible: false
-      }]
+<!--      columnDefs: [{-->
+<!--        targets: [7],  // hide multiple columns-->
+<!--        visible: false-->
+<!--      }]-->
   });
-    $('#tasks').DataTable();
-    $('#transferList').DataTable();
+    $('#tasks').DataTable({language: { search: "", searchPlaceholder: 'Search...' },});
+    $('#transferList').DataTable({language: { search: "", searchPlaceholder: 'Search...' },});
     $('#transportation_prior_list_table_id').DataTable();
 
 
 function showCallList(medicaid_id, member_name) {
   if (medicaid_id) {
-    // ✅ Show loader
     $("#gapLoader").show();
 
     $.ajax({
@@ -1042,7 +1108,6 @@ function showCallList(medicaid_id, member_name) {
           );
         }
 
-        // ✅ Bootstrap 5 modal show
         $('#nameCallList').text(member_name);
         $('#idCallList').text(medicaid_id);
         var myModal = new bootstrap.Modal(document.getElementById('callList'));
@@ -1052,7 +1117,6 @@ function showCallList(medicaid_id, member_name) {
         alert("Action Result Not found.");
       },
       complete: function () {
-        // ✅ Always hide loader after request
         $("#gapLoader").hide();
       }
     });
@@ -1062,9 +1126,7 @@ function showCallList(medicaid_id, member_name) {
 
 function showGapList(medicaid_id, member_name) {
   if (medicaid_id) {
-    // ✅ Show loader
     $("#gapLoader").show();
-
     $.ajax({
       type: "POST",
       url: "{% url 'get_gap_list' %}",   // Django URL
@@ -1102,7 +1164,6 @@ function showGapList(medicaid_id, member_name) {
           );
         }
 
-        // ✅ Bootstrap 5 modal show
         $('#nameGapList').text(member_name);
         $('#idGapList').text(medicaid_id);
         var myModal = new bootstrap.Modal(document.getElementById('gapList'));
@@ -1112,7 +1173,6 @@ function showGapList(medicaid_id, member_name) {
         alert("Action Result Not found.");
       },
       complete: function () {
-        // ✅ Hide loader after success/error
         $("#gapLoader").hide();
       }
     });
@@ -1120,7 +1180,6 @@ function showGapList(medicaid_id, member_name) {
 }
 function showCIHQualityList(medicaid_id, member_name) {
   if (medicaid_id) {
-    // ✅ Show loader
     $("#gapLoader").show();
 
     $.ajax({
@@ -1155,7 +1214,6 @@ function showCIHQualityList(medicaid_id, member_name) {
           );
         }
 
-        // ✅ Bootstrap 5 modal show
         $('#nameQualityList').text(member_name);
         $('#idQualityList').text(medicaid_id);
 
@@ -1166,7 +1224,6 @@ function showCIHQualityList(medicaid_id, member_name) {
         alert("Action Result Not found.");
       },
       complete: function () {
-        // ✅ Always hide loader after request
         $("#gapLoader").hide();
       }
     });
@@ -1186,6 +1243,97 @@ function addAction(medicaid_id) {
 function navigator_change(){
     $("#navigatorForm").submit();
 }
+
+$(document).ready(function() {
+    $('#allcheckbox').on('click', function() {
+        var isChecked = $(this).is(':checked');
+        $('.rowCheckbox').prop('checked', isChecked);
+    });
+
+    $(document).on('click', '.rowCheckbox', function() {
+        let totalCheckboxes = $('.rowCheckbox').length;
+        let totalChecked = $('.rowCheckbox:checked').length;
+        $('#allcheckbox').prop('checked', totalCheckboxes === totalChecked);
+    });
+});
+
+function get_action(action_id){
+    if ($('.rowCheckbox:checked').length === 0) {
+        $('#action_ids').val('');
+        alert("Please select at least one checkbox.");
+        return false;
+    }else{
+        if(action_id == 1){
+            var myModal = new bootstrap.Modal(document.getElementById('ref_confirm'));
+            myModal.show();
+        }
+    }
+}
+    function get_dept_user(department_id){
+    $.ajax({
+      type: "POST",
+      url: "{% url 'get_dept_users' %}",
+      data: {
+        department_id: department_id
+      },
+      success: function (response) {
+        if (response.statusCode === 200 && response.data.length > 0) {
+        console.log(response);
+          $("#referral_user_id").empty();
+          response.data.forEach((row, i) => {
+            let ID = row.ID ?? "";
+            let FistName = row.FistName ?? "";
+            let LastName = row.LastName ?? "";
+            $("#referral_user_id").append(
+              "<option value='" + ID + "'>" + FistName + " " + LastName + "</option>"
+            );
+          });
+        } else {
+          $("#referral_user_id").html("<option>SELECT USER</option>");
+        }
+      },
+      error: function () {
+        alert("Action Result Not found.");
+      },
+      complete: function () {
+        $("#gapLoader").hide();
+      }
+    });
+    }
+
+    function yesconfirm(){
+        let modal = bootstrap.Modal.getInstance(document.getElementById('ref_confirm'));
+        modal.hide();
+
+        $('#department_id').val('');
+        $('#referral_user_id').val('');
+        $('#referring_reason').val('');
+        $('#ref_medicaid_id').val('');
+        let selected = [];
+        $('.rowCheckbox:checked').each(function () {
+            selected.push($(this).val());
+        });
+        $('#ref_medicaid_id').val(selected.join(','));
+
+        if(selected.length == 1){
+            $('#member_count').html(selected.length+' member selected for transfer.');
+        }else{
+            $('#member_count').html(selected.length+' members selected for transfer.');
+        }
+
+        var myModal = new bootstrap.Modal(document.getElementById('transfer'));
+        myModal.show();
+    }
+    function noconfirm(){
+        let modal = bootstrap.Modal.getInstance(document.getElementById('ref_confirm'));
+        modal.hide();
+        $('#action_ids').val('');
+        $('.rowCheckbox').prop('checked', false);
+        $('#allcheckbox').prop('checked', false);
+    }
+    function frm_submit(){
+        $("#gapLoader").show();
+    }
 </script>
 {% endblock %}
 
