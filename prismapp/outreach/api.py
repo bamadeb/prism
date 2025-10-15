@@ -135,4 +135,24 @@ def get_dept_users(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@csrf_exempt
+def get_process_list_by_type(request):
+    if request.method == "POST":
+        log_for = request.POST.get("log_for")
+        params = {"log_for": log_for}
+        response = api_call(params, "prismFileProcesslistByType")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+@csrf_exempt
+def get_log_details_by_session_id(request):
+    if request.method == "POST":
+        session_id = request.POST.get("session_id")
+        params = {"session_id": session_id}
+        response = api_call(params, "prismFileProcessLoglistBySession")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 

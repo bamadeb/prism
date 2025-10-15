@@ -1,0 +1,200 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: FILE PROCESS LOG REPORT {% endblock %}
+{% load static %}
+{% block body %}
+
+<main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <!-- Upload form -->
+                            <div class="col-lg-12">
+                                <form method="post" action="/processmember/" enctype="multipart/form-data" id="process_member_action" onsubmit="show_loder();">
+                                    {% csrf_token %}
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-lg-3 text-uppercase">
+                                            <select class="form-control form-select text-uppercase darrow" name="process_type" id="process_type" required onchange="getProcessList(this.value);">
+                                                <option value=""> -- SELECT PROCESS TYPE --</option>
+                                                <option value="Member Process">Member File Process</option>
+                                                <option value="Risk Gaps Process">Risk Gaps File Process</option>
+                                                <option value="Quality Gaps Process">Quality Gaps File Process</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-3 text-uppercase">
+                                            <select class="form-control form-select text-uppercase darrow" name="process_list" id="process_list" required onchange="get_log_details(this.value);">
+                                                <option value=""> -- SELECT PROCESS --</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-lg-4 text-uppercase">
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                    <table  class="table">
+                        <thead>
+                        <tr>
+                            <th>Sl No</th>
+                            <th>PROCESS MESSAGE</th>
+                            <th>COUNT</th>
+                            <th>DATE</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="log_message_tbody">
+                            <tr><td colspan='4' class='text-center'>No records found</td></tr>
+                        </tbody>
+
+                    </table>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+            </div>
+        </div>
+
+
+    </section>
+</main>
+{% include "include/processingloder.html" %}
+<!-- End #main -->
+<script>
+    function getProcessList(log_for) {
+      if (log_for) {
+        // ✅ Show loader
+        $("#spinLoader").show();
+
+        $.ajax({
+          type: "POST",
+          url: "{% url 'get_process_list_by_type' %}",   // Django URL
+          data: { log_for: log_for },
+          success: function (response) {
+            if (response.statusCode === 200 && response.data.length > 0) {
+               $("#process_list").empty();
+                $("#process_list").append(
+                        "<option value=''>-- SELECT PROCESS --</option>"
+                );
+              response.data.forEach((row, i) => {
+                let SESSION_ID = row.SESSION_ID ?? "";
+                let MIN_LOG_DATE = row.MIN_LOG_DATE ?? "";
+                let display_date_time = get_date_fime_formated(row.MIN_LOG_DATE);
+                $("#process_list").append(
+                        "<option value='" + SESSION_ID + "'>" + display_date_time + "</option>"
+                );
+              });
+            } else {
+                $("#process_list").empty();
+                $("#process_list").append(
+                        "<option value=''>-- SELECT PROCESS --</option>"
+                );
+            }
+          },
+          error: function () {
+            alert("Process List Result Not found.");
+          },
+          complete: function () {
+            // ✅ Always hide loader after request
+            $("#spinLoader").hide();
+          }
+        });
+      }
+    }
+    function get_log_details(session_id){
+      if (session_id) {
+        // ✅ Show loader
+        $("#spinLoader").show();
+
+        $.ajax({
+          type: "POST",
+          url: "{% url 'get_log_details_by_session_id' %}",   // Django URL
+          data: { session_id: session_id },
+          success: function (response) {
+            if (response.statusCode === 200 && response.data.length > 0) {
+                  $("#log_message_tbody").empty();
+
+                  response.data.forEach((row, i) => {
+
+                    let action_date = get_date_fime_formated(row.LOG_DATE);
+                    let MESSAGE = row.MESSAGE ?? "";
+                    let RECORD_COUNT = row.RECORD_COUNT ?? "";
+                    //let action_note = row.action_note ?? "";
+
+                    $("#log_message_tbody").append(
+                      "<tr><td>" + (i + 1) + "</td>" +
+                      "<td>" + MESSAGE + "</td>" +
+                      "<td>" + RECORD_COUNT + "</td>" +
+                      "<td>" + action_date + "</td></tr>"
+                    );
+                  });
+            } else {
+                $("#log_message_tbody").empty();
+                $("#log_message_tbody").html(
+                        "<tr><td colspan='4' class='text-center'>No records found</td></tr>"
+                      );
+            }
+          },
+          error: function () {
+            alert("Process List Result Not found.");
+          },
+          complete: function () {
+            // ✅ Always hide loader after request
+            $("#spinLoader").hide();
+          }
+        });
+      }else{
+            $("#log_message_tbody").empty();
+            $("#log_message_tbody").html(
+                    "<tr><td colspan='4' class='text-center'>No records found</td></tr>"
+                  );
+      }
+    }
+    function get_date_fime_formated(date_str){
+                let mydate = new Date(date_str);
+                    let hours = mydate.getHours();
+                    let minutes = mydate.getMinutes();
+                    let seconds = mydate.getSeconds();
+                    let ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // the hour '0' should be '12'
+
+                    // Pad single digits with leading zeros
+                    minutes = minutes.toString().padStart(2, '0');
+                    seconds = seconds.toString().padStart(2, '0');
+
+                    let action_date =
+                      (mydate.getMonth() + 1) + "/" +
+                      mydate.getDate() + "/" +
+                      mydate.getFullYear() + " " +
+                      hours + ":" + minutes + ":" + seconds + " " + ampm;
+                      return action_date;
+    }
+</script>
+
+
+{% endblock %}
+
+{% block js %}
+
+
+
+{% endblock %}

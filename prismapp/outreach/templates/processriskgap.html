@@ -14,7 +14,7 @@
                          <div class="row align-items-center">
     <!-- Upload form -->
     <div class="col-lg-6">
-        <form method="post" action="/processriskgap/" enctype="multipart/form-data" id="process_member_action">
+        <form method="post" action="/processriskgap/" enctype="multipart/form-data" id="process_member_action" onsubmit="show_loder();">
                   {% csrf_token %}
             <div class="row g-2 align-items-center">
                 <div class="col-lg-4 text-uppercase">
@@ -32,17 +32,17 @@
     {% if totalTempRiskGapsCount > 0 %}
     <!-- Member info -->
     <div class="col-lg-3">
-        Total {{ totalTempRiskGapsCount }} risk gaps are to be processed
-        {% if error_count > 0 %}<br> Find {{ error_count }} error record{% endif %}
-        <br>Find {{ exist_count }} duplicate risk gaps
+        Total risk gaps: {{ totalTempRiskGapsCount }}
+        {% if error_count > 0 %}<br>Error record(s): {{ error_count }} {% endif %}
+        {% if exist_count > 0 %}<br>Existing risk gaps: {{ exist_count }} {% endif %}
     </div>
 
     <!-- Process form -->
     <div class="col-lg-2">
-        <form method="post" action="/processriskgap/">
+        <form method="post" action="/processriskgap/" onsubmit="show_loder();">
             {% csrf_token %}
             <input type="hidden" name="session_id" value="{{ session_id }}">
-            <button type="submit" class="btn btn-success w-100" name="processBTN">Process</button>
+            <button type="submit" class="btn btn-success w-100" name="processBTN" id="processBTN">Process</button>
         </form>
     </div>
     {% else %}
@@ -130,18 +130,20 @@
          <div class="col-lg-6">
            <div class="card">
                <div class="card-body">
-                        <h3>Process Log Details</h3>
+                        <h3 class="text-uppercase">Risk Gaps File Upload Process Details</h3>
                        <table class="table table-sm table-borderless" id="tempMemberList1">
                            <thead>
                            <tr>
-                               <th>Log</th>
-                               <th>Date</th>
+                               <th>PROCESS MESSAGE</th>
+                               <th>COUNT</th>
+                               <th>DATE/TIME</th>
                            </tr>
                            </thead>
                            <tbody>
                            {% for log in logList %}
                            <tr {% if log.LOG_TYPE == "Error" %} style="color: red;" {% endif %}>
                                <td>{{ log.MESSAGE }}</td>
+                               <td>{{ log.RECORD_COUNT|default_if_none:"" }}</td>
                                <td>{{ log.LOG_DATE }}</td>
                            </tr>
                            {% endfor %}
@@ -158,6 +160,7 @@
     </section>
 </main>
 <!-- End #main -->
+{% include "include/processingloder.html" %}
 <script>
     $('#tempRiskGapsList').DataTable();
 </script>
