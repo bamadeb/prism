@@ -49,6 +49,7 @@ urlpatterns = [
     path('api/get_member_task_list/', api.get_member_task_list, name='get_member_task_list'),
     path('api/get_member_gaps_list/', api.get_member_gaps_list, name='get_member_gaps_list'),
     path('api/get_task_details/', api.get_task_details, name='get_task_details'),
+    path('api/get_dept_users/', api.get_dept_users, name='get_dept_users'),
     path('api/get_process_list_by_type/', api.get_process_list_by_type, name='get_process_list_by_type'),
     path('api/get_log_details_by_session_id/', api.get_log_details_by_session_id, name='get_log_details_by_session_id'),
 
