@@ -697,9 +697,9 @@ font-family: 'Roboto';}
   align-items: center;
   font-size: 15px;
   font-weight: 200;
-  color: #4154f1;
+  color: #fff;
   transition: 0.3;
-  background: #f6f9ff;
+  /*background: #f6f9ff;*/
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -707,7 +707,7 @@ font-family: 'Roboto';}
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #1569c7;
+  color: #fff;
 }
 
 .sidebar-nav .nav-link.collapsed {

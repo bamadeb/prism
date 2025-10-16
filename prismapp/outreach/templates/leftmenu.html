@@ -10,16 +10,16 @@
     <div class="offcanvas-body">
 
         <ul class="sidebar-nav" id="sidebar-nav">
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
-<!--                    <i class="fa fa-flag"></i>-->
-<!--                    <span>Home</span>-->
-<!--                </a>-->
-<!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
+            <!--                    <i class="fa fa-flag"></i>-->
+            <!--                    <span>Home</span>-->
+            <!--                </a>-->
+            <!--            </li>-->
             {% if request.session.user_data.role_id == 9 %}
             <li class="nav-item">
                 <a class="nav-link collapsed text-decoration-none" href="/mywork/">
-                     <i class="fa fa-building"></i>
+                    <i class="fa fa-building"></i>
                     <span class="text-uppercase">My Workspeace</span>
                 </a>
             </li>
@@ -29,19 +29,19 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed text-decoration-none" href="/mywork/">
-                     <i class="fa fa-tachometer"></i>
+                    <i class="fa fa-tachometer"></i>
                     <span class="text-uppercase">Dashboard</span>
                 </a>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed text-decoration-none" href="/starperformance/">
-                      <i class="fa fa-flag"></i>
+                    <i class="fa fa-flag"></i>
                     <span class="text-uppercase">Star Performance</span>
                 </a>
             </li>
 
-             {% endif %}
+            {% endif %}
             {% if request.session.user_data.role_id == 7 %}
             <li class="nav-item">
                 <a class="nav-link collapsed text-decoration-none" href="/users/">
@@ -49,55 +49,30 @@
                     <span class="text-uppercase">USERS MANAGE</span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed text-decoration-none" href="/processmember/">
-                    <i class="fa fa-upload"></i>
-                    <span class="text-uppercase">Process Member File</span>
+
+            <li class="nav-item" style="background-color:transparent!important;">
+                <a class="nav-link text-decoration-none d-flex justify-content-between align-items-center"
+                   data-bs-toggle="collapse" href="#reportsSubmenu" role="button"
+                   aria-expanded="false" aria-controls="reportsSubmenu">
+        <span><i class="fa fa-file me-2"></i>
+        <span class="text-uppercase">Process File</span></span>
+                    <i class="fa fa-chevron-down small"></i>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed text-decoration-none" href="/processriskgap/">
-                      <i class="fa fa-upload"></i>
-                    <span class="text-uppercase">Process Risk Gaps File</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed text-decoration-none" href="/processquality/">
-                      <i class="fa fa-upload"></i>
-                    <span class="text-uppercase">Process Quality Gaps File</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed text-decoration-none" href="/fileprocesslogreport/">
-                      <i class="fa fa-upload"></i>
-                    <span class="text-uppercase">File Process Log Report</span>
-                </a>
+                <ul class="list-unstyled ps-4 collapse ps-0" id="reportsSubmenu">
+                    <li class="my-2"><a href="/processmember/" class="nav-link text-decoration-none"><i class="fa fa-upload"></i>
+                        <span class="text-uppercase">Process Member File</span></a></li>
+                    <li class="my-2"><a href="/processriskgap/" class="nav-link text-decoration-none"><i class="fa fa-upload"></i>
+                        <span class="text-uppercase">Process Risk Gaps File</span></a></li>
+                    <li class="my-2"><a href="/processquality/" class="nav-link text-decoration-none"><i class="fa fa-upload"></i>
+                        <span class="text-uppercase">Process Quality Gaps File</span></a></li>
+                    <li class="my-2"><a href="/fileprocesslogreport/" class="nav-link text-decoration-none"><i class="fa fa-flag"></i>
+                        <span class="text-uppercase">File Process Log Report</span></a></li>
+                </ul>
             </li>
             {% endif %}
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
-<!--                    <i class="fa fa-flag"></i>-->
-<!--                    <span>Healthcare Application</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
-<!--                    <i class="fa fa-flag"></i>-->
-<!--                    <span>Lead Management</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
-<!--                    <i class="fa fa-flag"></i>-->
-<!--                    <span>Outreach Target Report</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link collapsed" href="javascript:void(0);">-->
-<!--                    <i class="fa fa-flag"></i>-->
-<!--                    <span>Member Recertification</span>-->
-<!--                </a>-->
-<!--            </li>-->
+
+
+
         </ul>
 
     </div>
