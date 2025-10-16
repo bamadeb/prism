@@ -388,6 +388,7 @@ def mywork(request):
             'overallSummary': myWorkAllSpace['overallRiskQualitySummary'],
             'ownSummary': myWorkAllSpace['ownRiskQualitySummary'],
             'departmentList': myWorkAllSpace['departmentList'],
+            'planList': myWorkAllSpace['planList'],
             'refared_member_list': myWorkAllSpace['referralList'],
             'performancArray': performancArray,
             'totalArray': totalArray,
@@ -411,9 +412,9 @@ def memberdetails(request, medicaid_id):
     birth_date = None
     member_details = api_call(params,"prismMemberAllDetails")
     #print(member_details)
-    user_data = request.session.get('user_data')
-    param = {"assign_to": user_data.get('ID')}
-    taskResponse = api_call(param, "prismGetMemberUpcommingTaskList")
+    # user_data = request.session.get('user_data')
+    # param = {"assign_to": user_data.get('ID')}
+    # taskResponse = api_call(param, "prismGetMemberUpcommingTaskList")
 
     log_details = []
     if len(member_details) > 0:
@@ -528,7 +529,8 @@ def memberdetails(request, medicaid_id):
         "member_alt_language_details": member_details['data']['prismMemberaltlanguage'],
         "pcp_list": member_details['data']['prismMemberPCPList'],
         "medical_claim_details": member_details['data']['altaddress'],
-        'taskResponse': taskResponse['data'],
+        "benefitsList": member_details['data']['benefitsList'],
+        #'taskResponse': taskResponse['data'],
         #"risk_details": member_details['data']['prismMembershiprisk'],
         #"problem_list": member_details['data']['prismCrispProblems'],
         "alt_address": member_details['data']['altaddress'],

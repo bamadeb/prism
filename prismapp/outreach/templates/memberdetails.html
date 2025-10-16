@@ -134,7 +134,7 @@
                                 </a>
                             </div>
                             <div class="col-lg-1" style="padding: 0px 5px 0px 5px;">
-                                <a href="javascript:void(0);" >
+                                <a href="javascript:void(0);" data-toggle="modal" data-target="#benefits">
                                     <div class="box13 d-flex align-items-center justify-content-center py-3 m-0">
                                         <div>
                                             <i class="fa fa-circle-o-notch f30"></i><br/>BENEFITS
@@ -1231,6 +1231,52 @@
 
 
                     </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PCP LIST MODAL --->
+
+
+<!-- START BENEFITS MODAL --->
+<div class="modal fade" id="benefits" tabindex="-1" data-backdrop="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">BENEFITS</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                    {% if benefitsList %}
+                        {% for benefit in benefitsList %}
+                            {% ifchanged benefit.plan_name %}
+                                {% if not forloop.first %}
+                                    </ul></td></tr>
+                                {% endif %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ benefit.plan_name }}</strong>  ({{ benefit.start_date }} - {{ benefit.end_date }})
+                                        <ul>
+                            {% endifchanged %}
+                                            <li>
+                                               <a href="{% static 'sample_file/' %}{{ benefit.file_name }}" download>{{ benefit.file_name }}</a>
+                                            </li>
+                            {% if forloop.last %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" align="center">No Record Available.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
                 </table>
 
             </div>

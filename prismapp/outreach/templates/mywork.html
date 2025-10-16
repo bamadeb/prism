@@ -333,12 +333,20 @@
             <div class="col-lg-12">
                 <div class="row">
                      <div class="col-2">
+                        <select CLASS="form-control darrow" onchange="get_action(this.value)" id="action_ids">
+                            <option VALUE="">ACTION</option>
+                            <option VALUE="1">TRANSFER</option>
+                             <option VALUE="2">ASSIGN PLAN</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        {% if messages %}
+                          {% for message in messages %}
+                            <div style="color: red;font-size: 18px;" align="center">{{ message }}</div>
+                          {% endfor %}
+                        {% endif %}
+                    </div>
 
-                <select CLASS="form-control darrow" onchange="get_action(this.value)" id="action_ids">
-                    <option VALUE="">ACTION</option>
-                    <option VALUE="1">TRANSFER</option>
-                </select>
-            </div>
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
@@ -1055,6 +1063,43 @@
 </div>
 
 
+<!-- Button to trigger confirm -->
+<div class="modal " id="plan" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" >ADD PLAN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body">
+                   <form action="/add_plan/" method="post" onsubmit="frm_submit()">
+                        {% csrf_token %}
+                        <input type="hidden" id="plan_medicaid_id" name="plan_medicaid_id">
+                  <div class="row">
+                       <div class="col-12 mb-3">
+                            <select CLASS="form-control darrow text-uppercase" name="plan_id" id="plan_id" required>
+                                 <option VALUE="">SELECT PLAN</option>
+                                 {% for plan in planList %}
+                                 <option VALUE="{{plan.id}}">{{plan.plan_name}} ({{plan.start_date}} - {{plan.end_date}})</option>
+                                 {% endfor %}
+                             </select>
+                       </div>
+
+                       <div class="col-12" align="right">
+                            <button type="submit" class="btn btn-success" >Submit</button>
+                       </div>
+                  </div>
+                   </form>
+
+              </div>
+
+
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     $('#members').DataTable({
       order: [[8, 'DESC']],
@@ -1265,6 +1310,18 @@ function get_action(action_id){
     }else{
         if(action_id == 1){
             var myModal = new bootstrap.Modal(document.getElementById('ref_confirm'));
+            myModal.show();
+        }
+        if(action_id == 2){
+            $('#plan_id').val('');
+            $('#plan_medicaid_id').val('');
+
+            let selected = [];
+            $('.rowCheckbox:checked').each(function () {
+                selected.push($(this).val());
+            });
+            $('#plan_medicaid_id').val(selected.join(','));
+            var myModal = new bootstrap.Modal(document.getElementById('plan'));
             myModal.show();
         }
     }

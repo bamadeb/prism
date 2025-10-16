@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api, users, dataupload, fileprocesslog, refer
+from . import views, api, users, dataupload, fileprocesslog, refer, plan
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('starperformance/', views.star_performance, name='starperformance'),
     path('history/<str:medicaid_id>', views.memberhistory, name='history'),
     path('add_referral/', refer.add_referral, name='add_referral'),
+    path('add_plan/', plan.add_plan, name='add_plan'),
     # path('contact_us/', views.contact_us, name='contact_us'),
     # path('admin_login/', views.admin_login, name='admin_login'),
     # path('leaderboard/', views.leaderboard, name='leaderboard'),

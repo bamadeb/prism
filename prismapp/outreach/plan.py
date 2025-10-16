@@ -2,6 +2,7 @@ import random
 import requests ,json,re
 import urllib3,os,secrets,string
 from django.conf import settings
+from django.contrib import messages
 
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -13,21 +14,33 @@ def api_call(params, funName):
     response = requests.post(api_url, json=params)
     return response.json()
 
-def add_referral(request):
+def add_plan(request):
     if request.method == "POST":
         #print(request.POST)
         #return HttpResponse("Not allowed")
 
-        ref_medicaid_id = request.POST.get('ref_medicaid_id', '')
-        department_id = request.POST.get('department_id', '')
-        referring_reason = request.POST.get('referring_reason', '')
-        referral_to = request.POST.get('referral_user_id', '')
+        plan_medicaid_id = request.POST.get('plan_medicaid_id', '')
+        plan_id = request.POST.get('plan_id', '')
 
         user_data = request.session.get('user_data', {})
         referral_by = user_data.get('ID')
 
+
         # Split medicaid IDs into list
-        medicaid_ids = ref_medicaid_id.split(',') if ref_medicaid_id else []
+        medicaid_ids = plan_medicaid_id.split(',') if plan_medicaid_id else []
+
+        for medicaid_id in medicaid_ids:
+            medicaid_id = medicaid_id.strip()
+            params = {
+                "medicaid_id": medicaid_id,
+                "plan_id": plan_id
+            }
+            plan_exist = api_call(params, "prismPlanexist")
+            print(plan_exist)
+            if plan_exist.get('data') and len(plan_exist['data']) > 0:
+                messages.error(request, "Plan already exists for member: #"+ medicaid_id)
+                return redirect('mywork')
+
 
         insertDataArray = []
         loginsertDataArray = []
@@ -37,43 +50,29 @@ def add_referral(request):
 
             # Referral insert data
             insert_data = {
+                "plan_id": plan_id,
                 "medicaid_id": medicaid_id,
-                "department_id": department_id,
-                "referring_reason": referring_reason,
-                "refer_to": referral_to,
-                "refer_by": referral_by
+                "added_by": referral_by
             }
             insertDataArray.append(insert_data)
 
             # System log insert data
             loginsert_data = {
                 "medicaid_id": medicaid_id,
-                "log_name": 'MEMBER REFERRAL',
-                "log_details": f'MEMBER REFERRAL TO {referral_to}',
+                "log_name": 'ASSIGN PLAN',
+                "log_details": f'ASSIGN PLAN TO {medicaid_id}',
                 "log_status": 'Success',
                 "log_by": referral_by,
-                "action_type": 'REFERRAL',
+                "action_type": 'ASSIGN PLAN',
             }
             loginsertDataArray.append(loginsert_data)
 
-            # Update Care Coordinator
-            update_data = {
-                "Care_Coordinator_id": referral_to
-            }
-            update_payload = {
-                "updateData": update_data,
-                "table_name": "MEM_OUTREACH_MEMBERS",
-                "id_field_name": "medicaid_id",
-                "id_field_value": medicaid_id,
-            }
-            api_call(update_payload, "prismMultiplefieldupdate")
-
         # Insert referrals
-        referral_payload = {
-            "table_name": "MEM_REFERRING",
+        plan_payload = {
+            "table_name": "MEM_PLAN_MEMBERS",
             "insertDataArray": insertDataArray,
         }
-        api_call(referral_payload, "prismMultipleinsert")
+        api_call(plan_payload, "prismMultipleinsert")
 
         # Insert logs
         log_payload = {
@@ -83,6 +82,4 @@ def add_referral(request):
         api_call(log_payload, "prismMultipleinsert")
 
     return redirect("mywork")
-
-
 
