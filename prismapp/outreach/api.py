@@ -155,4 +155,14 @@ def get_log_details_by_session_id(request):
 
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+@csrf_exempt
+def get_benefits(request):
+    if request.method == "POST":
+        medicaid_id = request.POST.get("medicaid_id")
+        params = {"medicaid_id": medicaid_id}
+        response = api_call(params, "pismGetbenefits")
+        return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
 

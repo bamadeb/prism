@@ -1263,7 +1263,9 @@
                                         <ul>
                             {% endifchanged %}
                                             <li>
-                                               <a href="{% static 'sample_file/' %}{{ benefit.file_name }}" download>{{ benefit.file_name }}</a>
+                                             <a href="/media/uploads/{{ benefit.file_name|urlencode }}" target="_blank">
+                                                    {{ benefit.file_name }}
+                                                </a>
                                             </li>
                             {% if forloop.last %}
                                         </ul>
@@ -1283,7 +1285,7 @@
         </div>
     </div>
 </div>
-<!-- END PCP LIST MODAL --->
+<!-- END BENEFITS MODAL --->
 
 <!-- START CM RISK MANAGEMENT MODAL --->
 <div class="modal fade" id="cm_risk_mngt" tabindex="-1" data-backdrop="false">

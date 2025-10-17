@@ -549,6 +549,7 @@ def memberdetails(request, medicaid_id):
         "log_details": log_details,
         "birth_date": birth_date,
         "medicaid_id": medicaid_id,
+
     })
 
 @csrf_exempt

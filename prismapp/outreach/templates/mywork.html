@@ -487,9 +487,7 @@
                                                     <a  href="javascript:void(0);" onclick="add_update_action_click('{{ member.medicaid_id }}','{{ member.FIRST_NAME }}','{{ member.LAST_NAME }}');">
                                                         <i title="Add Action" class="fa fa-plus"></i>
                                                     </a>&nbsp;&nbsp;
-                                                    <!--                                                    <a target="_blank" href="{% url 'history' member.medicaid_id %}">-->
-                                                    <!--                                                        <i title="Member History" class="fa fa-history"></i></a>-->
-                                                    <!--                                                    &nbsp;&nbsp;-->
+                                                    <a  href="javascript:void(0);" onclick="benefits('{{ member.medicaid_id }}');">P</a>
                                                     <!--                                                    <a href="javascript:void(0);" onclick="addAction('{{ member.medicaid_id }}');" class="text-primary">+<i class="fa fa-phone"></i></a>-->
                                                     <!--                                               -->
                                                 </td>
@@ -1068,12 +1066,12 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" >ADD PLAN</h5>
+                <h5 class="modal-title" >ASSIGN PLAN</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
 
               <div class="modal-body">
-                   <form action="/add_plan/" method="post" onsubmit="frm_submit()">
+                   <form action="/assign_plan/" method="post" onsubmit="frm_submit()">
                         {% csrf_token %}
                         <input type="hidden" id="plan_medicaid_id" name="plan_medicaid_id">
                   <div class="row">
@@ -1087,7 +1085,7 @@
                        </div>
 
                        <div class="col-12" align="right">
-                            <button type="submit" class="btn btn-success" >Submit</button>
+                            <button type="submit" class="btn btn-primary" >Submit</button>
                        </div>
                   </div>
                    </form>
@@ -1098,6 +1096,33 @@
         </div>
     </div>
 </div>
+
+
+<!-- START BENEFITS MODAL --->
+<div class="modal " id="benefits" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" >BENEFITS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <div class="modal-body">
+                  <table class="table">
+                    <tbody  id="benefitsList">
+
+                    </tbody>
+                </table>
+
+
+              </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- END BENEFITS MODAL --->
 
 
 <script type="text/javascript">
@@ -1335,7 +1360,6 @@ function get_action(action_id){
       },
       success: function (response) {
         if (response.statusCode === 200 && response.data.length > 0) {
-        console.log(response);
           $("#referral_user_id").empty();
           response.data.forEach((row, i) => {
             let ID = row.ID ?? "";
@@ -1391,6 +1415,61 @@ function get_action(action_id){
     function frm_submit(){
         $("#gapLoader").show();
     }
+
+   function benefits(medicaid_id) {
+   // alert(medicaid_id);
+    $("#gapLoader").show();
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'get_benefits' %}",
+        data: {
+            medicaid_id: medicaid_id,
+            csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        success: function (response) {
+            if (response.statusCode === 200 && response.data.length > 0) {
+                $("#benefitsList").empty();
+
+                let previousPlan = "";
+
+                response.data.forEach((row, i) => {
+                    let plan_name = row.plan_name ?? "";
+                    let plan_id = row.plan_id ?? "";
+                    let start_date = row.start_date ?? "";
+                    let end_date = row.end_date ?? "";
+                    let file_name = row.file_name ?? "";
+
+                    if (plan_id !== previousPlan) {
+
+                        if (previousPlan !== "") {
+                            $("#benefitsList").append("</td></tr>");
+                        }
+                        $("#benefitsList").append(" <tr><td><strong>" + plan_name + "</strong> (" + start_date + " - " + end_date + ") ");
+                        previousPlan = plan_id;
+                    }
+                    $("#benefitsList").append("<ul><li> <a href='/media/uploads/"+file_name+"' target='_blank'> " + file_name + "   </a>  </li></ul>");
+                    if (i === response.data.length - 1) {
+                        $("#benefitsList").append("</ul></td></tr>");
+                    }
+                });
+            } else {
+                $("#benefitsList").html(" <tr><td colspan='3' align='center'>No Record Available.</td></tr>");
+            }
+        },
+        error: function () {
+            alert("Action Result Not found.");
+        },
+        complete: function () {
+            var myModal = new bootstrap.Modal(document.getElementById('benefits'));
+            myModal.show();
+            $("#gapLoader").hide();
+        }
+    });
+
+}
+
+
 </script>
 {% endblock %}
 

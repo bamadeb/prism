@@ -22,7 +22,9 @@ urlpatterns = [
     path('starperformance/', views.star_performance, name='starperformance'),
     path('history/<str:medicaid_id>', views.memberhistory, name='history'),
     path('add_referral/', refer.add_referral, name='add_referral'),
+    path('assign_plan/', plan.assign_plan, name='assign_plan'),
     path('add_plan/', plan.add_plan, name='add_plan'),
+    path('plans/', plan.plans, name='plans'),
     # path('contact_us/', views.contact_us, name='contact_us'),
     # path('admin_login/', views.admin_login, name='admin_login'),
     # path('leaderboard/', views.leaderboard, name='leaderboard'),
@@ -53,6 +55,7 @@ urlpatterns = [
     path('api/get_dept_users/', api.get_dept_users, name='get_dept_users'),
     path('api/get_process_list_by_type/', api.get_process_list_by_type, name='get_process_list_by_type'),
     path('api/get_log_details_by_session_id/', api.get_log_details_by_session_id, name='get_log_details_by_session_id'),
+    path('api/get_benefits/', api.get_benefits, name='get_benefits'),
 
     ### Users
     path('users/', users.users, name='users'),
