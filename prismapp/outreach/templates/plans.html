@@ -69,7 +69,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                 <form method="post" action="/add_plan/" enctype="multipart/form-data">
+                 <form onsubmit="frm_submit()" method="post" action="/add_plan/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="edit_plan_id" id="edit_plan_id">
                             <input type="hidden" name="plan_document_id" id="plan_document_id">
@@ -120,6 +120,9 @@
 
 <script type="text/javascript">
     $('#members').DataTable({language: { search: "", searchPlaceholder: 'Search...' }});
+    function frm_submit(){
+        $("#gapLoader").show();
+    }
     function add_plan(){
         $('#file_name').attr('required', true);
         $('#l_plan_id').show();
@@ -151,6 +154,7 @@
         myModal.show();
 
     }
+
  </script>
 {% endblock %}
 

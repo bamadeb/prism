@@ -123,7 +123,7 @@ def add_plan(request):
         file_extension = os.path.splitext(file_name)
 
     if request.method == "POST":
-        print(request.POST)
+        #print(request.POST)
         #print(request.FILES)
         #return HttpResponse("Not allowed")
         insert_data_array = []
@@ -162,7 +162,7 @@ def add_plan(request):
                 "id_field_name": "id",
                 "id_field_value": plan_document_id,
             }
-            print(dataList2)
+            #print(dataList2)
             api_call(dataList2, "prismMultiplefieldupdate")
         else:
             if plan_id == 0:
