@@ -554,7 +554,7 @@ def memberdetails(request, medicaid_id):
 
 @csrf_exempt
 def add_action(request):
-    print(request.POST)
+    #print(request.POST)
     #return HttpResponse("Not allowed")
 
     # 1. Check login session
@@ -683,7 +683,7 @@ def add_action(request):
                     "Source": request.POST.getlist("Source_quality")[i],
                 }
                 if quality_gap_id[i] and quality_gap_id[i].strip() != '' and quality_gap_id[i].strip().lower() != 'null':
-                    print(quality_gap_id[i])
+                    #print(quality_gap_id[i])
                     params = {
                         "updateData": quality_data,
                         "table_name": "MEM_GAP_OBSERVATION_DATA",
@@ -693,7 +693,7 @@ def add_action(request):
                     api_call(params, "prismMultiplefieldupdate")
 
                 else:
-                    print(qid)
+                    #print(qid)
                     insertqualityDataArray.append(quality_data)
             apiparam = {
                 "table_name": "MEM_GAP_OBSERVATION_DATA",
