@@ -390,14 +390,64 @@
                                 <div class="form-check text-uppercase mb-2">
                                     <input type="checkbox"
                                            name="quality_id"
-                                           onclick="add_update_observation('${quality.SUB_MEASURE}', 'quality')"
                                            id="quality_id_${index}"
                                            value="${quality.SUB_MEASURE}"
                                            class="form-check-input me-2"
                                            ${quality.PROCESS_STATUS === 1 ? 'checked' : ''}>
+                                           <span> <a style="cursor:pointer;" onclick="add_update_observation('${quality.SUB_MEASURE}', 'quality','${index}')">${quality.MEASURE_NAME.trim()}</a></span>
+                                        </div>
+                                        <div style="display:none;" id="obs_field_list_quality${index}">
+                                         <input type="hidden" name="gap_code_quality" value="${quality.SUB_MEASURE}">
+                                         <input type="hidden" name="type_quality" value="quality" >
+                                          <input type="hidden" name="quality_gap_id" value="${quality.id}">
+                                        <div class="row">
+                                            <div class="col-2 mb-2">
+                                                <input value="${quality.ObservationDate || ''}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker text-uppercase" >
+                                            </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${quality.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${quality.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${quality.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${quality.Observation_Code_Set || ''}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${quality.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${quality.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${quality.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${quality.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${quality.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type_quality"  class="form-control text-uppercase" >
+                                             </div>
+                                            <div class="col-2 mb-2">
+                                                <input value="${quality.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag_quality"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${quality.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI_quality"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${quality.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code_quality"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${quality.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name_quality"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${quality.Source || ''}" placeholder="Source" title="Source" type="text" name="Source_quality"  class="form-control text-uppercase" >
+                                            </div>
 
-                                                ${quality.MEASURE_NAME.trim()}
-
+                                        </div>
                                         </div>
                                     `;
                             });
@@ -588,7 +638,12 @@ $(document).ready(function(){
         $('#observation').toggle();
     }
     function add_update_observation(code,type,index){
-        $('#obs_field_list'+index).show();
+        if(type == 'risk'){
+            $('#obs_field_list'+index).toggle();
+        }
+        if(type == 'quality'){
+            $('#obs_field_list_quality'+index).toggle();
+        }
     }
 
     function loader(){
