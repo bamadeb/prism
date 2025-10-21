@@ -31,7 +31,7 @@
 
                         <div class="tab-content">
                             <div id="tab1" class="tab-pane fade in active">
-                                <form action="/add_action/" name="add_action" id="add_action"  enctype="multipart/form-data" method="post" >
+                                <form action="/add_action/" name="add_action" id="add_action"  enctype="multipart/form-data" method="post" onsubmit="loader();" >
                                     {% csrf_token %}
                                     <input type="hidden" name="action_type_source" id="action_type_source" value="Member Action">
                                     <input type="hidden" name="medicaid_id" id="medicaid_id" value="{{medicaid_id}}" >
@@ -43,8 +43,8 @@
                                     <div class="row mx-0">
                                         <div class="col-sm-6 mt-3 p-2 mt-3 ">
                                             <div class="border rounded p-3">
-                                                <div class="mb-2 text-uppercase"><h4><b>Action</b></h4></div>
-                                                <div class="row ">
+                                                <div class="mb-2 text-uppercase" style="cursor:pointer" onclick="action_view();"><h4><b>Action</b></h4></div>
+                                                <div class="row" id="action_view" style="display:none;">
                                                     <div class="col-sm-3">
                                                         <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Category:</label>
                                                     </div>
@@ -83,7 +83,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
-                                                        <textarea class="form-control " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
+                                                        <textarea class="form-control text-uppercase " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
                                                         <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
@@ -96,8 +96,8 @@
 
                                         <div class="col-sm-6 mt-3 p-2 mt-3 ">
                                             <div class="border rounded p-3">
-                                                <div class="mb-2 text-uppercase"><h4><b>Next Activity</b></h4></div>
-                                                <div class="row ">
+                                                <div class="mb-2 text-uppercase" style="cursor:pointer" onclick="next_activity();"><h4><b>Next Activity</b></h4></div>
+                                                <div class="row" style="display:none;" id="next_activity">
                                                     <div class="col-sm-3 mt-4">
                                                         <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Type:</label>
                                                     </div>
@@ -136,11 +136,11 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-6 p-2 ">
+                                        <div class="col-sm-12 p-2 ">
                                             <div class="border rounded p-3">
                                                 <div class=" mt-4">
-                                                    <div class="mb-2 text-uppercase"><h4><b>Risk Gaps</b></h4></div>
-                                                    <div class="multiselect">
+                                                    <div class="mb-2 text-uppercase" style="cursor:pointer" onclick="risk_gap();"><h4><b>Risk Gaps</b></h4></div>
+                                                    <div class="multiselect"  id="risk_gap">
                                                         <div  id="checkboxes" class=" p-3">
                                                         </div>
                                                     </div>
@@ -150,11 +150,11 @@
                                         </div>
 
 
-                                        <div class="col-sm-6 p-2 ">
+                                        <div class="col-sm-12 p-2 ">
                                             <div class="border rounded p-3">
                                                 <div class=" mt-4">
-                                                    <div class="mb-2 text-uppercase"><h4><b>Quality Gaps</b></h4></div>
-                                                    <div class="multiselect">
+                                                    <div class="mb-2 text-uppercase" style="cursor:pointer" onclick="quality_gap();"><h4><b>Quality Gaps</b></h4></div>
+                                                    <div class="multiselect"  id="quality_gap">
                                                         <div id="checkboxes1" class=" p-3">
                                                         </div>
                                                     </div>
@@ -162,6 +162,8 @@
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <div class="row mb-3 mt-4">
                                         <div class="col-sm-12" align="right">
                                             <button type="submit" class="btn btn-primary" >SUBMIT</button>
@@ -323,6 +325,8 @@
         $('#display_last_name').html(last_name)
         $('#display_medicaid_id').html(medicaid_id)
         $('#medicaid_id').val(medicaid_id)
+
+
         //alert(action_id);
         if(medicaid_id){
             $("#gapLoader").show();
@@ -386,6 +390,7 @@
                                 <div class="form-check text-uppercase mb-2">
                                     <input type="checkbox"
                                            name="quality_id"
+                                           onclick="add_update_observation('${quality.SUB_MEASURE}', 'quality')"
                                            id="quality_id_${index}"
                                            value="${quality.SUB_MEASURE}"
                                            class="form-check-input me-2"
@@ -415,8 +420,61 @@
                                                value="${gap.DIAG_CODE}"
                                                class="form-check-input me-2"
                                                ${gap.PROCESS_STATUS === 1 ? 'checked' : ''}>
-                                        ${gap.DIAG_DESC}
+                                       <span> <a style="cursor:pointer;" onclick="add_update_observation('${gap.DIAG_CODE}', 'risk','${index}')">${gap.DIAG_DESC}</a></span>
                                     </div>
+                                    <div style="display:none;" id="obs_field_list${index}">
+                                         <input type="hidden" name="gap_code" value="${gap.DIAG_CODE}">
+                                         <input type="hidden" name="type" value="risk" >
+                                         <input type="hidden" name="risk_gap_id" value="${gap.id}">
+                                        <div class="row">
+                                            <div class="col-2 mb-2">
+                                                <input value="${gap.ObservationDate || ''}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker text-uppercase" >
+                                            </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${gap.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${gap.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${gap.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${gap.Observation_Code_Set || ''}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${gap.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${gap.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                  <input value="${gap.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${gap.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name"  class="form-control text-uppercase" >
+                                             </div>
+                                             <div class="col-2 mb-2">
+                                                 <input value="${gap.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type"  class="form-control text-uppercase" >
+                                             </div>
+                                            <div class="col-2 mb-2">
+                                                <input value="${gap.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${gap.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${gap.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${gap.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name"  class="form-control text-uppercase" >
+                                            </div>
+                                            <div class="col-2 mb-2">
+                                                 <input value="${gap.Source || ''}" placeholder="Source" title="Source" type="text" name="Source"  class="form-control text-uppercase" >
+                                            </div>
+
+                                        </div>
+                                        </div>
                                 `;
                             });
                         } else {
@@ -513,4 +571,28 @@ $(document).ready(function(){
  set_scheduled_action_status(11);
 
 });
+    function action_view(){
+        $('#action_view').toggle();
+    }
+     function next_activity(){
+        $('#next_activity').toggle();
+    }
+
+    function risk_gap(){
+        $('#risk_gap').toggle();
+    }
+    function quality_gap(){
+        $('#quality_gap').toggle();
+    }
+    function observation(){
+        $('#observation').toggle();
+    }
+    function add_update_observation(code,type,index){
+        $('#obs_field_list'+index).show();
+    }
+
+    function loader(){
+        $("#gapLoader").show();
+    }
+
 </script>

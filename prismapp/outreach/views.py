@@ -554,14 +554,15 @@ def memberdetails(request, medicaid_id):
 
 @csrf_exempt
 def add_action(request):
+    print(request.POST)
+    #return HttpResponse("Not allowed")
+
     # 1. Check login session
     if not request.session.get('is_logged_in'):
         return redirect('login')
 
     if request.method == "POST":
         try:
-            # print(request.POST)
-            # return HttpResponse("Not allowed")
             action_id = request.POST.get("update_action_id")
             insertDataArray1 = []
             if not action_id:
@@ -659,14 +660,72 @@ def add_action(request):
 
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
+            types = request.POST.getlist("type")
+            observation_dates = request.POST.getlist("Observation_Date")
+            observation_years = request.POST.getlist("Observation_Year")
+            observation_codes = request.POST.getlist("Observation_Code")
+            cpt_modifiers = request.POST.getlist("CPT_Code_Modifier")
+            observation_code_sets = request.POST.getlist("Observation_Code_Set")
+            observation_results = request.POST.getlist("Observation_Result")
+            provider_npis = request.POST.getlist("Service_Provider_NPI")
+            provider_taxonomies = request.POST.getlist("Service_Provider_Taxonomy_Code")
+            provider_names = request.POST.getlist("Service_Provider_Name")
+            provider_types = request.POST.getlist("Service_Provider_Type")
+            provider_rx_flags = request.POST.getlist("Service_Provider_RxProviderFlag")
+            group_npis = request.POST.getlist("Provider_Group_NPI")
+            group_taxonomies = request.POST.getlist("Provider_Group_Taxonomy_Code")
+            group_names = request.POST.getlist("Provider_Group_Name")
+            sources = request.POST.getlist("Source")
+            risk_gap_id = request.POST.getlist("risk_gap_id")
             #print(gap_ids)
             paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
             rr = api_call(paramsunset, "prismUnSetgapStatus")
             #print(rr)
             #return HttpResponse("Stopped after print: {}".format(rr))
-            for gid in gap_ids:
+            insertriskDataArray = []
+            for i, gid in enumerate(gap_ids):
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
+
+                ###  Risk gap Observation data updated
+                risk_data = {
+                    "medicaid_id": request.POST.get("medicaid_id"),
+                    "Type": types[i],
+                    "Gap_Code": gid,
+                    "Observation_Date": observation_dates[i],
+                    "Observation_Year": observation_years[i],
+                    "Observation_Code": observation_codes[i],
+                    "CPT_Code_Modifier": cpt_modifiers[i],
+                    "Observation_Code_Set": observation_code_sets[i],
+                    "Observation_Result": observation_results[i],
+                    "Service_Provider_NPI": provider_npis[i],
+                    "Service_Provider_Taxonomy_Code": provider_taxonomies[i],
+                    "Service_Provider_Name": provider_names[i],
+                    "Service_Provider_Type": provider_types[i],
+                    "Service_Provider_RxProviderFlag": provider_rx_flags[i],
+                    "Provider_Group_NPI": group_npis[i],
+                    "Provider_Group_Taxonomy_Code": group_taxonomies[i],
+                    "Provider_Group_Name": group_names[i],
+                    "Source": sources[i],
+                }
+                if risk_gap_id[i] and risk_gap_id[i].strip() != '' and risk_gap_id[i].strip().lower() != 'null':
+                    print(risk_gap_id[i])
+                    params = {
+                        "updateData": risk_data,
+                        "table_name": "MEM_GAP_OBSERVATION_DATA",
+                        "id_field_name": "id",
+                        "id_field_value": risk_gap_id[i],
+                    }
+                    api_call(params, "prismMultiplefieldupdate")
+
+                else:
+                    print(gid)
+                    insertriskDataArray.append(risk_data)
+            apiparam = {
+                "table_name": "MEM_GAP_OBSERVATION_DATA",
+                "insertDataArray": insertriskDataArray,
+            }
+            api_call(apiparam, "prismMultipleinsert")
 
             # Always return after POSTadd_action_source
             add_action_source = request.POST.getlist("add_action_source")
