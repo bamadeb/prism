@@ -153,7 +153,8 @@ def add_plan(request):
                 handle_uploaded_file(request.FILES['file_name'])
                 update_data1 = {
                     "file_name": uploaded_file.name,
-                    "file_type": file_extension[1]
+                    "file_type": file_extension[1],
+                    "status": status
                 }
 
             dataList2 = {
