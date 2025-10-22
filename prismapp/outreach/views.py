@@ -554,8 +554,8 @@ def memberdetails(request, medicaid_id):
 
 @csrf_exempt
 def add_action(request):
-    #print(request.POST)
-    #return HttpResponse("Not allowed")
+    print(request.POST)
+    return HttpResponse("Not allowed")
 
     # 1. Check login session
     if not request.session.get('is_logged_in'):
