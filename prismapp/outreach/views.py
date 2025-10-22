@@ -662,11 +662,12 @@ def add_action(request):
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
                 ###  Quality gap Observation data updated
+                obs_date_quality = request.POST.getlist("Observation_Date_quality")[i]
                 quality_data = {
                     "medicaid_id": request.POST.get("medicaid_id"),
                     "Type": request.POST.getlist("type_quality")[i],
                     "Gap_Code": qid,
-                    "Observation_Date": request.POST.getlist("Observation_Date_quality")[i],
+                    "Observation_Date": obs_date_quality if obs_date_quality else 'NULL',
                     "Observation_Year": request.POST.getlist("Observation_Year_quality")[i],
                     "Observation_Code": request.POST.getlist("Observation_Code_quality")[i],
                     "CPT_Code_Modifier": request.POST.getlist("CPT_Code_Modifier_quality")[i],
@@ -713,11 +714,12 @@ def add_action(request):
                 api_call(paramsupdate, "prismUpdategapStatus")
 
                 ###  Risk gap Observation data updated
+                obs_date = request.POST.getlist("Observation_Date")[i]
                 risk_data = {
                     "medicaid_id": request.POST.get("medicaid_id"),
                     "Type": request.POST.getlist("type")[i],
                     "Gap_Code": gid,
-                    "Observation_Date": request.POST.getlist("Observation_Date")[i],
+                    "Observation_Date": obs_date if obs_date else 'NULL',
                     "Observation_Year": request.POST.getlist("Observation_Year")[i],
                     "Observation_Code": request.POST.getlist("Observation_Code")[i],
                     "CPT_Code_Modifier": request.POST.getlist("CPT_Code_Modifier")[i],

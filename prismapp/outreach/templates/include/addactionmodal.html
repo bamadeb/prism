@@ -112,11 +112,11 @@
                                                     <div class="col-sm-3 mt-4">
                                                         <label class="form-label text-uppercase" style="border:none;font-weight:100;">Next Activity Date:</label>
                                                     </div>
-                                                    <div class="col-sm-3 mt-4">
+                                                    <div class="col-sm-4 mt-4">
                                                         <input placeholder="Next Action Date" type="text" name="next_action_date"  id="next_action_date"  class="form-control datepicker text-uppercase" >
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
-                                                        <textarea class="form-control " name="next_action_note" id="next_action_note"  placeholder="Type your text..."></textarea>
+                                                        <textarea class="form-control text-uppercase" name="next_action_note" id="next_action_note"  placeholder="Type your text..."></textarea>
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
                                                         <table class="table">
@@ -325,6 +325,15 @@
         $('#display_last_name').html(last_name)
         $('#display_medicaid_id').html(medicaid_id)
         $('#medicaid_id').val(medicaid_id)
+
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        const formattedDate = (today.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                          today.getDate().toString().padStart(2, '0') + '/' +
+                          today.getFullYear();
+
+        //alert(formattedDate);
+        $('#next_action_date').val(formattedDate);
 
 
         //alert(action_id);
