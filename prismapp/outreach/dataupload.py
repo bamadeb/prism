@@ -27,6 +27,7 @@ def processmember(request):
     logList = {}
     if request.POST.get("session_id"):
         session_id = request.POST.get("session_id")
+        #print(session_id)
         process_btn = request.POST.get("processBTN")  # name of your button
         data = {
             'session_id': session_id

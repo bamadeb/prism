@@ -555,7 +555,7 @@ def memberdetails(request, medicaid_id):
 @csrf_exempt
 def add_action(request):
     print(request.POST)
-    return HttpResponse("Not allowed")
+    #return HttpResponse("Not allowed")
 
     # 1. Check login session
     if not request.session.get('is_logged_in'):
@@ -653,6 +653,7 @@ def add_action(request):
             medicaid_id = request.POST.get("medicaid_id")
             quality_ids = request.POST.getlist("quality_id")
             quality_gap_id = request.POST.getlist("quality_gap_id")
+            gap_code_qualitys = request.POST.getlist("gap_code_quality")
 
             paramsunsetq = {"medicaid_id": medicaid_id, "action_id": action_id}
             api_call(paramsunsetq, "prismUnSetqualityStatus")
@@ -661,13 +662,13 @@ def add_action(request):
                 qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
                 api_call(qualityupdate, "prismUpdatequalityStatus")
 
-                ###  Quality gap Observation data updated
-                obs_date_quality = request.POST.getlist("Observation_Date_quality")[i]
+            ###  Risk gap Observation data updated
+            for i, qcode in enumerate(gap_code_qualitys):
                 quality_data = {
                     "medicaid_id": request.POST.get("medicaid_id"),
                     "Type": request.POST.getlist("type_quality")[i],
-                    "Gap_Code": qid,
-                    "Observation_Date": obs_date_quality if obs_date_quality else 'NULL',
+                    "Gap_Code": qcode,
+                    "Observation_Date": request.POST.getlist("Observation_Date_quality")[i],
                     "Observation_Year": request.POST.getlist("Observation_Year_quality")[i],
                     "Observation_Code": request.POST.getlist("Observation_Code_quality")[i],
                     "CPT_Code_Modifier": request.POST.getlist("CPT_Code_Modifier_quality")[i],
@@ -677,14 +678,16 @@ def add_action(request):
                     "Service_Provider_Taxonomy_Code": request.POST.getlist("Service_Provider_Taxonomy_Code_quality")[i],
                     "Service_Provider_Name": request.POST.getlist("Service_Provider_Name_quality")[i],
                     "Service_Provider_Type": request.POST.getlist("Service_Provider_Type_quality")[i],
-                    "Service_Provider_RxProviderFlag": request.POST.getlist("Service_Provider_RxProviderFlag_quality")[i],
+                    "Service_Provider_RxProviderFlag": request.POST.getlist("Service_Provider_RxProviderFlag_quality")[
+                        i],
                     "Provider_Group_NPI": request.POST.getlist("Provider_Group_NPI_quality")[i],
                     "Provider_Group_Taxonomy_Code": request.POST.getlist("Provider_Group_Taxonomy_Code_quality")[i],
                     "Provider_Group_Name": request.POST.getlist("Provider_Group_Name_quality")[i],
                     "Source": request.POST.getlist("Source_quality")[i],
                 }
-                if quality_gap_id[i] and quality_gap_id[i].strip() != '' and quality_gap_id[i].strip().lower() != 'null':
-                    #print(quality_gap_id[i])
+                if quality_gap_id[i] and quality_gap_id[i].strip() != '' and quality_gap_id[
+                    i].strip().lower() != 'null':
+                    print('Quality: '+quality_gap_id[i])
                     params = {
                         "updateData": quality_data,
                         "table_name": "MEM_GAP_OBSERVATION_DATA",
@@ -694,7 +697,7 @@ def add_action(request):
                     api_call(params, "prismMultiplefieldupdate")
 
                 else:
-                    #print(qid)
+                    print('Quality: '+qcode)
                     insertqualityDataArray.append(quality_data)
             apiparam = {
                 "table_name": "MEM_GAP_OBSERVATION_DATA",
@@ -702,24 +705,26 @@ def add_action(request):
             }
             api_call(apiparam, "prismMultipleinsert")
 
+
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
+            gap_codes = request.POST.getlist("gap_code")
             risk_gap_id = request.POST.getlist("risk_gap_id")
             paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
             api_call(paramsunset, "prismUnSetgapStatus")
 
             insertriskDataArray = []
-            for i, gid in enumerate(gap_ids):
+            for j,gid in enumerate(gap_ids):
                 paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
                 api_call(paramsupdate, "prismUpdategapStatus")
 
                 ###  Risk gap Observation data updated
-                obs_date = request.POST.getlist("Observation_Date")[i]
+            for i, gcode in enumerate(gap_codes):
                 risk_data = {
                     "medicaid_id": request.POST.get("medicaid_id"),
                     "Type": request.POST.getlist("type")[i],
-                    "Gap_Code": gid,
-                    "Observation_Date": obs_date if obs_date else 'NULL',
+                    "Gap_Code": gcode,
+                    "Observation_Date": request.POST.getlist("Observation_Date")[i],
                     "Observation_Year": request.POST.getlist("Observation_Year")[i],
                     "Observation_Code": request.POST.getlist("Observation_Code")[i],
                     "CPT_Code_Modifier": request.POST.getlist("CPT_Code_Modifier")[i],
@@ -736,7 +741,7 @@ def add_action(request):
                     "Source": request.POST.getlist("Source")[i],
                 }
                 if risk_gap_id[i] and risk_gap_id[i].strip() != '' and risk_gap_id[i].strip().lower() != 'null':
-                    #print(risk_gap_id[i])
+                    print(risk_gap_id[i])
                     risk_data['updated_date'] = date.today().strftime("%Y-%m-%d")
                     params = {
                         "updateData": risk_data,
@@ -748,7 +753,7 @@ def add_action(request):
 
                 else:
                     risk_data['added_date'] = date.today().strftime("%Y-%m-%d")
-                    #print(gid)
+                    print(gcode)
                     insertriskDataArray.append(risk_data)
             apiparam = {
                 "table_name": "MEM_GAP_OBSERVATION_DATA",

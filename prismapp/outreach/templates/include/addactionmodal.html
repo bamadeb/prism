@@ -395,6 +395,12 @@
 
                         if (qualityList.length > 0) {
                             $.each(qualityList, function (index, quality) {
+                                if (quality.ObservationDate === null) {
+                                    var ObservationDate = '';
+                                }else{
+                                    var ObservationDate = quality.ObservationDate;
+                                }
+
                                 html += `
                                 <div class="form-check text-uppercase mb-2">
                                     <input type="checkbox"
@@ -411,7 +417,7 @@
                                           <input type="hidden" name="quality_gap_id" value="${quality.id}">
                                         <div class="row">
                                             <div class="col-2 mb-2">
-                                                <input value="${quality.ObservationDate || ''}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker text-uppercase" >
+                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker text-uppercase" >
                                             </div>
                                              <div class="col-2 mb-2">
                                                   <input value="${quality.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year_quality"  class="form-control text-uppercase" >
@@ -471,6 +477,11 @@
 
                         if (gapList.length > 0) {
                             $.each(gapList, function (index, gap) {
+                            if (gap.ObservationDate === null) {
+                                var ObservationDate = '';
+                            }else{
+                                var ObservationDate = gap.ObservationDate;
+                            }
                                 html += `
                                     <div class="text-uppercase mb-2">
                                         <input type="checkbox"
@@ -487,7 +498,7 @@
                                          <input type="hidden" name="risk_gap_id" value="${gap.id}">
                                         <div class="row">
                                             <div class="col-2 mb-2">
-                                                <input value="${gap.ObservationDate || ''}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker text-uppercase" >
+                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}"  placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker text-uppercase" >
                                             </div>
                                              <div class="col-2 mb-2">
                                                   <input value="${gap.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year"  class="form-control text-uppercase" >
