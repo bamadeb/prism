@@ -1,0 +1,108 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: {{pageTitle}} {% endblock %}
+{% load static %}
+{% block body %}
+
+<main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
+    <section class="section dashboard">
+        <div class="row">
+            <!-- Left side columns -->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <!-- Upload form -->
+                            <div class="col-lg-12">
+                                <form method="post" action="/gapsreport/" enctype="multipart/form-data" id="process_member_action" onsubmit="show_loder();">
+                                    {% csrf_token %}
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-lg-4"></div>
+                                        <div class="col-lg-2">
+                                           <input type="text" value="{{start_date}}" name="start_date"  class="form-control text-uppercase datepicker" placeholder="Start Date" required value>
+                                        </div>
+                                        <div class="col-lg-2">
+                                             <input type="text" value="{{end_date}}" name="end_date"  class="form-control text-uppercase datepicker" placeholder="End Date" required>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <button type="submit" class="btn btn-primary">SEARCH</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                    <table  class="table" id="gaps">
+                        <thead>
+                        <tr>
+                            <th>MEDICAID ID</th>
+                            <th>TYPE</th>
+                            <th>DIAG CODE</th>
+                            <th>DIAG DESC</th>
+                            <th>Observation Date</th>
+                            <th>Observation Year</th>
+                            <th>Observation Code</th>
+                            <th>CPT Code Modifier</th>
+                            <th>Observation Code Set</th>
+                            <th>Observation Result</th>
+                            <th>Service Provider NPI</th>
+                            <th>Service Provider Taxonomy Code</th>
+                            <th>Service Provider Name</th>
+                            <th>Service Provider Type</th>
+                            <th>Service Provider RxProviderFlag</th>
+                            <th>Provider Group NPI</th>
+                            <th>Provider Group Taxonomy Code</th>
+                            <th>Provider Group Name</th>
+                            <th>Source</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in user_list %}
+                            <tr>
+                                <td>{{user.RECIP_NO}}</td>
+                                <td>{{user.TYPE}}</td>
+                                <td>{{user.DIAG_CODE}}</td>
+                                <td>{{user.DIAG_DESC}}</td>
+                                <td>{{user.ObservationDate}}</td>
+                                <td>{{user.Observation_Year}}</td>
+                                <td>{{user.Observation_Code}}</td>
+                                <td>{{user.CPT_Code_Modifier}}</td>
+                                <td>{{user.Observation_Code_Set}}</td>
+                                <td>{{user.Observation_Result}}</td>
+                                <td>{{user.Service_Provider_NPI}}</td>
+                                <td>{{user.Service_Provider_Taxonomy_Code}}</td>
+                                <td>{{user.Service_Provider_Name}}</td>
+                                <td>{{user.Service_Provider_Type}}</td>
+                                <td>{{user.Service_Provider_RxProviderFlag}}</td>
+                                <td>{{user.Provider_Group_NPI}}</td>
+                                <td>{{user.Provider_Group_Taxonomy_Code}}</td>
+                                <td>{{user.Provider_Group_Name}}</td>
+                                <td>{{user.Source}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</main>
+<script>
+    $('#gaps').DataTable({language: { search: "", searchPlaceholder: 'Search...' }});
+</script>
+{% endblock %}
+
+

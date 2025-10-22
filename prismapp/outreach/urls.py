@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views, api, users, dataupload, fileprocesslog, refer, plan
+from . import views, api, users, dataupload, fileprocesslog, refer, plan, reports
 
 urlpatterns = [
     path('', views.login, name='login'),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('processriskgap/', dataupload.processriskgap, name='processriskgap'),
     path('processquality/', dataupload.processquality, name='processquality'),
     path('fileprocesslogreport/', fileprocesslog.processlogreport, name='fileprocesslog'),
+    path('gapsreport/', reports.gapsreport, name='gapsreport'),
 
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),

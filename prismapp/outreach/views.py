@@ -735,6 +735,7 @@ def add_action(request):
                 }
                 if risk_gap_id[i] and risk_gap_id[i].strip() != '' and risk_gap_id[i].strip().lower() != 'null':
                     #print(risk_gap_id[i])
+                    risk_data['updated_date'] = date.today().strftime("%Y-%m-%d")
                     params = {
                         "updateData": risk_data,
                         "table_name": "MEM_GAP_OBSERVATION_DATA",
@@ -744,6 +745,7 @@ def add_action(request):
                     api_call(params, "prismMultiplefieldupdate")
 
                 else:
+                    risk_data['added_date'] = date.today().strftime("%Y-%m-%d")
                     #print(gid)
                     insertriskDataArray.append(risk_data)
             apiparam = {
