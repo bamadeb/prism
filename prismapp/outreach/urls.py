@@ -39,6 +39,7 @@ urlpatterns = [
     path('processquality/', dataupload.processquality, name='processquality'),
     path('fileprocesslogreport/', fileprocesslog.processlogreport, name='fileprocesslog'),
     path('gapsreport/', reports.gapsreport, name='gapsreport'),
+    path('risk_profile/', reports.risk_profile, name='risk_profile'),
 
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),

@@ -1,0 +1,117 @@
+{% extends 'basic.html' %}
+{% block title%} PRISM  :: {{pageTitle}} {% endblock %}
+{% load static %}
+{% block body %}
+ }
+<main id="main" class="main">
+  <section class="section">
+    <div class="row align-items-top">
+      <div class="col-lg-12">
+
+        <!-- Default Card -->
+        <div class="card">
+          <div class="card-body">
+            <form method="post" action="/risk_profile/">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-lg-4">
+                  <select name="user_id" class="form-control darrow" style="text-transform: uppercase;">
+                    <option value="">ALL USER</option>
+                    {% for user in user_list %}
+                    <option value="{{ user.ID }}" {% if user.ID == user_id %}selected{% endif %}>
+                      {{ user.FistName }} {{ user.LastName }}
+                    </option>
+                    {% endfor %}
+
+                  </select>
+                </div>
+                <div class="col-lg-4">
+                  <button type="submit" id="btnsubmit" class="btn btn-primary">Search</button>
+                </div>
+              </div>
+
+            </form></div>
+
+        </div>
+        <div class="">
+          <table class="table table-sm" id="member_risk_profile_table">
+            <thead>
+            <tr>
+              <th>USER</th>
+              <th>MEMBER</th>
+              <th>CATEGORY</th>
+              <th width="10%">SUB-CATEGORY</th>
+              <th width="20%">SPECIFIC</th>
+              {% for to_date in toDateArray %}
+              <th>{{ to_date }}</th>
+              {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for key, mainarray1 in tabarray.items %}
+            {% if key %}
+            <tr>
+              <td style="color:#0d6efd; font-weight:bold;" class="text-uppercase">{{ key }}</td>
+              <td style="color:#0d6efd; font-weight:bold;"></td>
+              <td colspan="6" style="color:#0d6efd; font-weight:bold;"></td>
+            </tr>
+            {% endif %}
+<!--<pre>{{member_total_risk_array}}</pre>-->
+            {% for subkey, mainarray in mainarray1.items %}
+            <tr>
+              <td style="color:#0d6efd; font-weight:bold;"></td>
+              <td style="color:#0d6efd; font-weight:bold;" class="text-uppercase">{{ subkey }}</td>
+              <td colspan="6" style="font-weight:bold;font-size: 20px;">
+                {% for member_name, value in member_total_risk_array.items %}
+                    {% if member_name == subkey %}
+                     TOTAL: {{value}}
+                    {% endif %}
+                {% endfor %}
+
+              </td>
+            </tr>
+
+            {% for k, risk in mainarray.items %}
+            <tr>
+              <td></td>
+              <td></td>
+              <td>{{ risk.risk_category }}</td>
+              <td>{{ risk.sub_category_name }}</td>
+              <td>{{ k }}
+              {% for to_date in toDateArray %}
+               {% for key, datewise in risk.data.items %}
+                  {% if datewise.to_date == to_date %}
+                    {% if datewise.level == 'Low' %}
+                        <td> <div class="bg-success" style="width:30px;height:20px;border-radius:35%;color:#fff;text-align:center;">{{ datewise.score }}</div></td>
+                    {% elif datewise.level == 'Medium' %}
+                        <td> <div class="bg-warning" style="width:30px;height:20px;border-radius:35%;color:#fff;text-align:center;">{{ datewise.score }}</div></td>
+                    {% elif datewise.level == 'High' %}
+                       <td>  <div class="bg-danger" style="width:30px;height:20px;border-radius:35%;color:#fff;text-align:center;">{{ datewise.score }}</div></td>
+                    {% endif %}
+                  {% endif %}
+               {% endfor %}
+              {% endfor %}
+            </tr>
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
+
+
+
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div><!-- End Default Card -->
+  </section>
+</main>
+
+<script type="text/javascript">
+   $('#members').DataTable({language: { search: "", searchPlaceholder: 'Search...' }});
+</script>
+
+{% endblock %}
+
+
