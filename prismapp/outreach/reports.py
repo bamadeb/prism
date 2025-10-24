@@ -66,6 +66,7 @@ def risk_profile(request):
     monthly_score_data = member_details_monthly_score['data']['riskSummary']
     #print(monthly_score_data)
     t_date = ''
+    last_date = ''
 
     for key, monthly_score in enumerate(monthly_score_data):
         level = monthly_score.get('level')
@@ -86,7 +87,7 @@ def risk_profile(request):
             # Now you can safely add
             memberTotalRiskArray[member_name][monthly_score['to_date']] += monthly_score['score']
 
-            print(memberTotalRiskArray[member_name])
+            #print(memberTotalRiskArray[member_name])
             # --- Assign values ---
             data_dict = category_array[care_coordinator][member_name][subcat2_name]['data']
             data_dict[key] = {
