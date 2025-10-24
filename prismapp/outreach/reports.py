@@ -65,7 +65,7 @@ def risk_profile(request):
     member_details_monthly_score = api_call(params, "prismMemberriskprofile")
     monthly_score_data = member_details_monthly_score['data']['riskSummary']
     #print(monthly_score_data)
-
+    t_date = ''
 
     for key, monthly_score in enumerate(monthly_score_data):
         level = monthly_score.get('level')
@@ -80,8 +80,13 @@ def risk_profile(request):
             category_array[care_coordinator][member_name].setdefault(subcat2_name, {'data': {}})
 
             # --- Total risk by member ---
-            memberTotalRiskArray[member_name] = memberTotalRiskArray.get(member_name, 0) + monthly_score['score']
+            memberTotalRiskArray.setdefault(member_name, {})  # ensure the member exists
+            memberTotalRiskArray[member_name].setdefault(monthly_score['to_date'], 0)  # ensure the date exists
 
+            # Now you can safely add
+            memberTotalRiskArray[member_name][monthly_score['to_date']] += monthly_score['score']
+
+            print(memberTotalRiskArray[member_name])
             # --- Assign values ---
             data_dict = category_array[care_coordinator][member_name][subcat2_name]['data']
             data_dict[key] = {
@@ -89,6 +94,8 @@ def risk_profile(request):
                 'score': monthly_score['score'],
                 'level': monthly_score['level'],
             }
+
+            t_date = monthly_score['to_date']
 
             # --- Assign sort value based on level ---
             if level == 'High':
@@ -124,7 +131,7 @@ def risk_profile(request):
         sorted_categorywise = dict(
             sorted(categorywise_sort_array.items(), key=lambda item: item[1].get('score', 0), reverse=True)
         )
-
+        last_date = to_date_array[-1]
 
         newarray = {}
         for key, categorywise in sorted_categorywise.items():
@@ -145,5 +152,6 @@ def risk_profile(request):
         'toDateArray': to_date_array,
         'tabarray': farray,
         'member_total_risk_array': memberTotalRiskArray,
-        'user_id': request.POST.get("user_id")
+        'user_id': request.POST.get("user_id"),
+        'last_date': last_date,
     })
