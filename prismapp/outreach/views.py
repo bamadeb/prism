@@ -1161,7 +1161,7 @@ def add_member_alt_address(request):
     except Exception as e:
         return HttpResponse(str(e), status=500)
 
-    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}")
+    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}/")
 
 def add_member_alt_phone(request):
     if not request.session.get("is_logged_in", False):
@@ -1204,7 +1204,7 @@ def add_member_alt_phone(request):
     except Exception as e:
         return HttpResponse(str(e), status=500)
 
-    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}")
+    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}/")
 
 
 def add_member_alt_pnone(request):
@@ -1253,7 +1253,7 @@ def add_member_alt_pnone(request):
     except Exception as e:
         return HttpResponse(str(e), status=500)
 
-    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}")
+    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}/")
 
 
 def add_member_alt_language(request):
@@ -1308,7 +1308,7 @@ def add_member_alt_language(request):
     except Exception as e:
         return HttpResponse(str(e), status=500)
 
-    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}")
+    return redirect(f"/memberdetails/{request.POST.get("medicaid_id")}/")
 
 
 def add_prisim_claim(request):
