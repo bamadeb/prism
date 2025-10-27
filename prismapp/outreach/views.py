@@ -77,7 +77,7 @@ def login(request):
                     #
                     # # Make the API call to insert the data into the activity log table
                     # requests.post(settings.API_URL + "vegasinsertdataintable", json=data_list)
-                    if user_data[0].get('role_id', None) == 9:
+                    if user_data[0].get('role_id', None) == 9 or user_data[0].get('role_id', None) == 21:
                         return redirect('/mywork/')
                     elif user_data[0].get('role_id', None) == 7:
                         return redirect('/users/')
@@ -110,6 +110,7 @@ def mywork(request):
     else:
         pageTitle ="MY WORKSPACE"
         user_data = request.session.get('user_data')
+        print(user_data)
         user_id = None
         #################
         add_action_master_data_result = fetch_add_action_master_data()
@@ -120,7 +121,7 @@ def mywork(request):
         if user_data:  # make sure it exists
             role_id = user_data.get('role_id')
             #print(request.POST.get("selected_navigator"))
-            if role_id == 7 or role_id == 20:
+            if role_id == 7 or role_id == 20 or role_id == 21:
                 #print(request.POST.get("selected_navigator"))
                 pageTitle = "DASHBOARD"
                 selected_navigator = request.POST.get("selected_navigator")
@@ -128,7 +129,7 @@ def mywork(request):
                     user_id = selected_navigator
                 else:
                     user_id = navigatorList[0]['ID']
-            if role_id == 9:
+            if role_id == 9 or role_id == 21:
                 pageTitle = "MY WORKSPACE"
                 user_id = user_data.get('ID')
         data = {
@@ -141,7 +142,7 @@ def mywork(request):
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
-            #print(myWorkSpaceResult)
+            print(myWorkSpaceResult)
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:

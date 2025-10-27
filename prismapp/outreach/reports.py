@@ -63,8 +63,9 @@ def risk_profile(request):
         params = {}
 
     member_details_monthly_score = api_call(params, "prismMemberriskprofile")
+    #print(member_details_monthly_score)
     monthly_score_data = member_details_monthly_score['data']['riskSummary']
-    #print(monthly_score_data)
+
     t_date = ''
     last_date = ''
 
