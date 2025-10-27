@@ -401,7 +401,7 @@ def mywork(request):
 
 def logoutuser(request):
     logout(request)
-    return redirect('/login')
+    return redirect('/login/')
 
 def memberdetails(request, medicaid_id):
     if not request.session.get('is_logged_in', False):
