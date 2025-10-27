@@ -387,13 +387,14 @@
                     medicaid_id: medicaid_id
                 },
                 success: function (response) {
-                    console.log(response.data.prismQualityList);
+                    //console.log(response.data.prismQualityList);
                     if (response.statusCode === 200) {
                       //$("#action_task_list").empty();
                        var qualityList = response.data.prismQualityList;
                        var html = '';
 
                         if (qualityList.length > 0) {
+
                             $.each(qualityList, function (index, quality) {
                                 if (quality.ObservationDate === null) {
                                     var ObservationDate = '';
@@ -419,9 +420,7 @@
                                             <div class="col-2 mb-2">
                                                 <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker text-uppercase" >
                                             </div>
-                                             <div class="col-2 mb-2">
-                                                  <input value="${quality.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year_quality"  class="form-control text-uppercase" >
-                                             </div>
+
                                              <div class="col-2 mb-2">
                                                  <input value="${quality.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code_quality"  class="form-control text-uppercase" >
                                              </div>
@@ -458,10 +457,9 @@
                                             <div class="col-2 mb-2">
                                                  <input value="${quality.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name_quality"  class="form-control text-uppercase" >
                                             </div>
-                                            <div class="col-2 mb-2">
-                                                 <input value="${quality.Source || ''}" placeholder="Source" title="Source" type="text" name="Source_quality"  class="form-control text-uppercase" >
+                                            <div class="col-10 mb-2">
+                                                <textarea name="quality_note" placeholder="Note" title="Note"  class="form-control text-uppercase" style="height: 36px;">${quality.note || ''}</textarea>
                                             </div>
-
                                         </div>
                                         </div>
                                     `;
@@ -474,6 +472,7 @@
                         $('#checkboxes1').html(html);
                         var gapList = response.data.prismGapList;
                         var html = '';
+
 
                         if (gapList.length > 0) {
                             $.each(gapList, function (index, gap) {
@@ -500,9 +499,6 @@
                                             <div class="col-2 mb-2">
                                                 <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}"  placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker text-uppercase" >
                                             </div>
-                                             <div class="col-2 mb-2">
-                                                  <input value="${gap.Observation_Year || ''}" placeholder="Observation Year" title="Observation Year" type="text" name="Observation_Year"  class="form-control text-uppercase" >
-                                             </div>
                                              <div class="col-2 mb-2">
                                                  <input value="${gap.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code"  class="form-control text-uppercase" >
                                              </div>
@@ -539,8 +535,8 @@
                                             <div class="col-2 mb-2">
                                                  <input value="${gap.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name"  class="form-control text-uppercase" >
                                             </div>
-                                            <div class="col-2 mb-2">
-                                                 <input value="${gap.Source || ''}" placeholder="Source" title="Source" type="text" name="Source"  class="form-control text-uppercase" >
+                                            <div class="col-10 mb-2">
+                                                <textarea name="risk_note" placeholder="Note" title="Note"  class="form-control text-uppercase" style="height: 36px;">${gap.note || ''}</textarea>
                                             </div>
 
                                         </div>
@@ -553,6 +549,7 @@
 
                         // Append generated HTML inside #checkboxes div
                         $('#checkboxes').html(html);
+                        $(".datepicker").datepicker();
 
                     }
                     $("#gapLoader").hide();
