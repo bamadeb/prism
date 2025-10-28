@@ -166,7 +166,7 @@ def download_users_csv(request):
 
     # Read dates from GET parameters or use defaults
     start_date = request.GET.get("start_date", startdate.strftime("%m/%d/%Y"))
-    end_date = request.GET.get("end_date", enddate.strftime("%m/%d/%Y")) 
+    end_date = request.GET.get("end_date", enddate.strftime("%m/%d/%Y"))
 
     params = {
         "start_date": start_date,
@@ -216,7 +216,7 @@ def download_users_csv(request):
 
     # Create HTTP response with CSV data
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="gaps_observation_data.csv"'
+    response['Content-Disposition'] = 'attachment; filename="risk_gaps_observation_data.csv"'
 
     writer = csv.writer(response)
     writer.writerow(header)   # Write headers first
