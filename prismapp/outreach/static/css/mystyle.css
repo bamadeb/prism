@@ -447,3 +447,30 @@ width:40px;height:40px;background-color:#F00;color:#000;padding:8px;font-weight:
   -moz-appearance: menulist;
   background-image: none !important;
 }
+
+.ui-datepicker .ui-datepicker-prev span,
+.ui-datepicker .ui-datepicker-next span {
+  display: block !important;
+  background-size: contain !important;
+  background-repeat: no-repeat;
+  text-indent: -9999px; /* hide text */
+}
+.ui-datepicker .ui-datepicker-prev::after {
+  content: "<";
+  position: absolute;
+  left: 8px;
+  top: 3px;
+  font-weight: bold;
+}
+
+.ui-datepicker .ui-datepicker-next::after {
+  content: ">";
+  position: absolute;
+  right: 8px;
+  top: 3px;
+  font-weight: bold;
+}
+    .ui-datepicker .ui-datepicker-header {
+  position: relative;
+  z-index: 2;
+}
