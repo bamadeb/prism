@@ -40,6 +40,7 @@ urlpatterns = [
     path('fileprocesslogreport/', fileprocesslog.processlogreport, name='fileprocesslog'),
     path('gapsreport/', reports.gapsreport, name='gapsreport'),
     path('risk_profile/', reports.risk_profile, name='risk_profile'),
+    path('download-users-csv/', reports.download_users_csv, name='download_users_csv'),
 
     # client api list
     path("api/get_scheduled_action_status/", api.get_scheduled_action_status, name="get_scheduled_action_status"),

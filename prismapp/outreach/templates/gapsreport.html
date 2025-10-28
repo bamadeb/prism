@@ -12,7 +12,7 @@
                     <div class="card-body">
                         <div class="row align-items-center">
                             <!-- Upload form -->
-                            <div class="col-lg-12">
+                            <div class="col-lg-10">
                                 <form method="post" action="/gapsreport/" enctype="multipart/form-data" id="process_member_action" onsubmit="show_loder();">
                                     {% csrf_token %}
                                     <div class="row g-2 align-items-center">
@@ -29,11 +29,11 @@
                                     </div>
                                 </form>
                             </div>
-
+                            <div class="col-lg-2">
+                                 <a href="{% url 'download_users_csv' %}?start_date={{ start_date }}&end_date={{ end_date }}"   class="btn btn-primary">DOWNLOAD CSV</a>
+                            </div>
 
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -48,21 +48,21 @@
                             <th>TYPE</th>
                             <th>DIAG CODE</th>
                             <th>DIAG DESC</th>
-                            <th>Observation Date</th>
-                            <th>Observation Year</th>
-                            <th>Observation Code</th>
-                            <th>CPT Code Modifier</th>
-                            <th>Observation Code Set</th>
-                            <th>Observation Result</th>
-                            <th>Service Provider NPI</th>
-                            <th>Service Provider Taxonomy Code</th>
-                            <th>Service Provider Name</th>
-                            <th>Service Provider Type</th>
-                            <th>Service Provider RxProviderFlag</th>
-                            <th>Provider Group NPI</th>
-                            <th>Provider Group Taxonomy Code</th>
-                            <th>Provider Group Name</th>
-                            <th>Source</th>
+                            <th class="text-uppercase">Observation Date</th>
+                            <th class="text-uppercase">Observation Year</th>
+                            <th class="text-uppercase">Observation Code</th>
+                            <th class="text-uppercase">CPT Code Modifier</th>
+                            <th class="text-uppercase">Observation Code Set</th>
+                            <th class="text-uppercase">Observation Result</th>
+                            <th class="text-uppercase">Service Provider NPI</th>
+                            <th class="text-uppercase">Service Provider Taxonomy Code</th>
+                            <th class="text-uppercase">Service Provider Name</th>
+                            <th class="text-uppercase">Service Provider Type</th>
+                            <th class="text-uppercase">Service Provider RxProviderFlag</th>
+                            <th class="text-uppercase">Provider Group NPI</th>
+                            <th class="text-uppercase">Provider Group Taxonomy Code</th>
+                            <th class="text-uppercase">Provider Group Name</th>
+                            <th class="text-uppercase">Source</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -72,7 +72,11 @@
                                 <td>{{user.TYPE}}</td>
                                 <td>{{user.DIAG_CODE}}</td>
                                 <td>{{user.DIAG_DESC}}</td>
-                                <td>{{user.ObservationDate}}</td>
+                                <td>{% if user.ObservationDate|stringformat:"s" == "01/01/1900" %}
+                                  {% else %}
+                                    {{ user.ObservationDate }}
+                                  {% endif %}
+                                </td>
                                 <td>{{user.Observation_Year}}</td>
                                 <td>{{user.Observation_Code}}</td>
                                 <td>{{user.CPT_Code_Modifier}}</td>
