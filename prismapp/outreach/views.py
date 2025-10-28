@@ -110,7 +110,7 @@ def mywork(request):
     else:
         pageTitle ="MY WORKSPACE"
         user_data = request.session.get('user_data')
-        print(user_data)
+        #print(user_data)
         user_id = None
         #################
         add_action_master_data_result = fetch_add_action_master_data()
