@@ -49,114 +49,129 @@ def risk_profile(request):
     if not request.session.get('is_logged_in', False):
         return render(request, 'login.html')
 
-    memberTotalRiskArray = {}
+    # ---- Initialize data structures ----
     category_array = {}
-    categorywise_sort_array = {}
+    member_total_risk = {}
+    risk_grouped = {}
     toDateArray = []
-    to_date_array = []
-    farray = []
+    flat_category_array = {}
+    flat_for_template = []  # ✅ Added flattened version
 
+    # ---- Prepare API parameters ----
+    params = {}
     if request.POST.get("user_id"):
-        params = {
-            "user_id": request.POST.get("user_id")
-        }
-    else:
-        params = {}
+        params["user_id"] = request.POST.get("user_id")
 
+    # ---- API data ----
     member_details_monthly_score = api_call(params, "prismMemberriskprofile")
-    #print(member_details_monthly_score)
-    monthly_score_data = member_details_monthly_score['data']['riskSummary']
+    monthly_score_data = member_details_monthly_score["data"]["riskSummary"]
+    user_list = member_details_monthly_score["data"]["userlist"]
 
-    t_date = ''
-    last_date = ''
+    # ---- Build structured data ----
+    for row in monthly_score_data:
+        care_user = row.get("Care_Coordinator_name", "UNKNOWN")
+        member = row.get("member_name", "UNKNOWN")
+        medicaid_id = row.get("medicaid_id")
+        category = row.get("risk_category")
+        subcat = row.get("sub_category_name")
+        specific = row.get("sub_category2_name")
+        date_str = row.get("to_date", "")
+        score = row.get("score", 0)
+        level = row.get("level", "N/A")
 
-    for key, monthly_score in enumerate(monthly_score_data):
-        level = monthly_score.get('level')
-        if level:
-            care_coordinator = monthly_score['Care_Coordinator_name']
-            member_name = monthly_score['member_name']
-            subcat2_name = monthly_score['sub_category2_name']
+        # ---- Date clean ----
+        date_clean = date_str.split("T")[0] if "T" in date_str else date_str
+        if date_clean not in toDateArray:
+            toDateArray.append(date_clean)
 
-            # Initialize nested dicts as needed
-            category_array.setdefault(care_coordinator, {})
-            category_array[care_coordinator].setdefault(member_name, {})
-            category_array[care_coordinator][member_name].setdefault(subcat2_name, {'data': {}})
+        # ---- Member total by month ----
+        member_total_risk.setdefault(care_user, {})
+        member_total_risk[care_user].setdefault(medicaid_id, {})
+        member_total_risk[care_user][medicaid_id].setdefault(date_clean, 0)
+        member_total_risk[care_user][medicaid_id][date_clean] += score
 
-            # --- Total risk by member ---
-            memberTotalRiskArray.setdefault(member_name, {})  # ensure the member exists
-            memberTotalRiskArray[member_name].setdefault(monthly_score['to_date'], 0)  # ensure the date exists
+        # ---- Build nested category data ----
+        category_array.setdefault(care_user, {})
+        category_array[care_user].setdefault(medicaid_id, {})
+        category_array[care_user][medicaid_id].setdefault(category, {})
+        category_array[care_user][medicaid_id][category].setdefault(subcat, {})
+        category_array[care_user][medicaid_id][category][subcat].setdefault(specific, {})
 
-            # Now you can safely add
-            memberTotalRiskArray[member_name][monthly_score['to_date']] += monthly_score['score']
+        category_array[care_user][medicaid_id][category][subcat][specific][date_clean] = {
+            "score": score,
+            "level": level,
+        }
 
-            #print(memberTotalRiskArray[member_name])
-            # --- Assign values ---
-            data_dict = category_array[care_coordinator][member_name][subcat2_name]['data']
-            data_dict[key] = {
-                'to_date': monthly_score['to_date'],
-                'score': monthly_score['score'],
-                'level': monthly_score['level'],
-            }
+    # ---- Sort dates chronologically ----
+    toDateArray = sorted(set(toDateArray), key=lambda d: datetime.strptime(d, "%m-%Y"))
+    last_date = toDateArray[-1] if toDateArray else None
 
-            t_date = monthly_score['to_date']
+    # ---- Flatten data for easy template iteration ----
+    for care_user, member_dict in category_array.items():
+        for medicaid_id, cat_dict in member_dict.items():
+            flat_category_array.setdefault(care_user, {})
+            flat_category_array[care_user].setdefault(medicaid_id, [])
 
-            # --- Assign sort value based on level ---
-            if level == 'High':
-                sort_value = 3
-            elif level == 'Medium':
-                sort_value = 2
-            elif level == 'Low':
-                sort_value = 1
+            for category, subcats in cat_dict.items():
+                for subcat, specifics in subcats.items():
+                    for specific, scores in specifics.items():
+                        score_list = [
+                            {
+                                "date": d,
+                                "score": v.get("score", "-"),
+                                "level": v.get("level", "N/A")
+                            }
+                            for d, v in scores.items()
+                        ]
+                        flat_category_array[care_user][medicaid_id].append({
+                            "category": category,
+                            "sub_category": subcat,
+                            "specific": specific,
+                            "scores_list": score_list,
+                        })
+                        # ✅ Add flattened entry
+                        flat_for_template.append({
+                            "user": care_user,
+                            "member_id": medicaid_id,
+                            "items": [{
+                                "category": category,
+                                "sub_category": subcat,
+                                "specific": specific,
+                                "scores_list": score_list,
+                            }],
+                        })
+
+    # ---- Determine risk levels (per user) ----
+    for user, members in member_total_risk.items():
+        risk_grouped.setdefault(user, {
+            "RISK LEVEL-1": {},
+            "RISK LEVEL-2": {},
+            "RISK LEVEL-3": {}
+        })
+
+        for member_id, scores in members.items():
+            total = scores.get(last_date, 0)
+            if total < 3:
+                level = "RISK LEVEL-1"
+            elif 3 <= total <= 7:
+                level = "RISK LEVEL-2"
             else:
-                sort_value = 0  # default/fallback
+                level = "RISK LEVEL-3"
 
-            data_dict[key]['sort'] = sort_value
+            risk_grouped[user][level][member_id] = total
 
-            # --- Copy static fields at this level ---
-            category_array[care_coordinator][member_name][subcat2_name]['sub_category2_id'] = monthly_score[
-                'sub_category2_id']
-            category_array[care_coordinator][member_name][subcat2_name]['risk_category'] = monthly_score[
-                'risk_category']
-            category_array[care_coordinator][member_name][subcat2_name]['sub_category_name'] = monthly_score[
-                'sub_category_name']
-
-            # --- Update sort array ---
-            categorywise_sort_array.setdefault(care_coordinator, {})
-            categorywise_sort_array[care_coordinator].setdefault(member_name, {})
-            categorywise_sort_array[care_coordinator][member_name][subcat2_name] = sort_value
-
-            # --- Append formatted date ---
-            date_str = monthly_score['to_date'].split('T')[0]  # gets '2025-10-24'
-            toDateArray.append(date_str)
-
-        data = {}
-        to_date_array = sorted(set(toDateArray), key=lambda x: datetime.strptime("01-" + x, "%d-%m-%Y"))
-        sorted_categorywise = dict(
-            sorted(categorywise_sort_array.items(), key=lambda item: item[1].get('score', 0), reverse=True)
-        )
-        last_date = to_date_array[-1]
-
-        newarray = {}
-        for key, categorywise in sorted_categorywise.items():
-            onelinearray = category_array[key]
-            inner_dict = list(onelinearray.values())[0]
-            sub_category_dict = list(inner_dict.values())[0]
-            risk_category = sub_category_dict['risk_category']
-            newarray.setdefault(risk_category, {})[key] = onelinearray
-
-
-        farray = {}
-        for key, mainarray111 in newarray.items():
-            farray = mainarray111
-
-    return render(request, 'risk_profile.html', {
-        'pageTitle': "MEMBER RISK PROFILE",
-        'user_list': member_details_monthly_score['data']['userlist'],
-        'toDateArray': to_date_array,
-        'tabarray': farray,
-        'member_total_risk_array': memberTotalRiskArray,
-        'user_id': request.POST.get("user_id"),
-        'last_date': last_date,
+    # ---- Render ----
+    return render(request, "risk_profile.html", {
+        "pageTitle": "MEMBER RISK PROFILE",
+        "user_list": user_list,
+        "toDateArray": toDateArray,
+        "category_array": category_array,
+        "member_total_risk": member_total_risk,
+        "risk_grouped": risk_grouped,
+        "user_id": request.POST.get("user_id"),
+        "last_date": last_date,
+        "flat_for_template": flat_for_template,  # ✅ New key
+        "colspan_count": len(toDateArray) + 10,   # ✅ for colspan in template
     })
 
 def download_users_csv(request):
