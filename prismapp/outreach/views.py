@@ -142,7 +142,7 @@ def mywork(request):
             #print("Step 2 - 1st API Call Start:", now)  # prints in console
             ################
             myWorkSpaceResult = api_call(data, "prismOutreachAllmyworkspaceSP")
-            print(myWorkSpaceResult)
+            #print(myWorkSpaceResult)
             #myWorkSpaceResult = response.json()  # Decode the JSON response
 
         except requests.exceptions.RequestException as e:
