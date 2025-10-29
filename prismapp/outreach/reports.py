@@ -175,7 +175,9 @@ def risk_profile(request):
     })
 
 def download_users_csv(request):
+
     today = date.today()
+    formatted_date = today.strftime("%m-%d-%Y")
     startdate = today.replace(day=1)
     enddate = date(today.year, today.month, calendar.monthrange(today.year, today.month)[1])
 
@@ -231,9 +233,9 @@ def download_users_csv(request):
 
     # Create HTTP response with CSV data
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="risk_gaps_observation_data.csv"'
+    response['Content-Disposition'] = 'attachment; filename="RISK_GAPS_CIH_('+formatted_date+').CSV"'
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter='|', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(header)   # Write headers first
     writer.writerows(body)    # Then write all data rows
 
