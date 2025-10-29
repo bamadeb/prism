@@ -418,47 +418,47 @@
                                           <input type="hidden" name="quality_gap_id" value="${quality.id}">
                                         <div class="row">
                                             <div class="col-2 mb-2">
-                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker text-uppercase" >
+                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}" placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date_quality"  class="form-control datepicker" >
                                             </div>
 
                                              <div class="col-2 mb-2">
-                                                 <input value="${quality.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${quality.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier_quality"  class="form-control text-uppercase" >
+                                                  <input value="${quality.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${quality.Observation_Code_Set || 'ICD10'}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Observation_Code_Set || 'ICD10'}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${quality.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${quality.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI_quality"  class="form-control text-uppercase" >
+                                                  <input value="${quality.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${quality.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code_quality"  class="form-control text-uppercase" >
+                                                  <input value="${quality.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${quality.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name_quality"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${quality.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type_quality"  class="form-control" >
                                              </div>
                                             <div class="col-2 mb-2">
-                                                <input value="${quality.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag_quality"  class="form-control text-uppercase" >
+                                                <input value="${quality.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag_quality"  class="form-control" >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${quality.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI_quality"  class="form-control" >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${quality.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code_quality"  class="form-control" >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${quality.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name_quality"  class="form-control text-uppercase" >
+                                                 <input value="${quality.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name_quality"  class="form-control" >
                                             </div>
                                             <div class="col-10 mb-2">
-                                                <textarea name="quality_note" placeholder="Note" title="Note"  class="form-control text-uppercase" style="height: 36px;">${quality.note || ''}</textarea>
+                                                <textarea name="quality_note" placeholder="Note" title="Note"  class="form-control" style="height: 36px;">${quality.note || ''}</textarea>
                                             </div>
                                         </div>
                                         </div>
@@ -497,46 +497,46 @@
                                          <input type="hidden" name="risk_gap_id" value="${gap.id}">
                                         <div class="row">
                                             <div class="col-2 mb-2">
-                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}"  placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker text-uppercase" >
+                                                <input value="${ObservationDate === '01/01/1900' ? '' : ObservationDate}"  placeholder="Observation Date" title="Observation Date" type="text" name="Observation_Date"  class="form-control datepicker" >
                                             </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${gap.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Observation_Code || ''}" placeholder="Observation Code" title="Observation Code" type="text" name="Observation_Code"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${gap.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier"  class="form-control text-uppercase" >
+                                                  <input value="${gap.CPT_Code_Modifier || ''}" placeholder="CPT Code Modifier" title="CPT Code Modifier" type="text" name="CPT_Code_Modifier"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${gap.Observation_Code_Set || 'ICD10'}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Observation_Code_Set || 'ICD10'}" placeholder="Observation Code Set" title="Observation Code Set" type="text" name="Observation_Code_Set"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${gap.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Observation_Result || ''}" placeholder="Observation Result" title="Observation Result" type="text" name="Observation_Result"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${gap.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI"  class="form-control text-uppercase" >
+                                                  <input value="${gap.Service_Provider_NPI || ''}" placeholder="Service Provider NPI" title="Service Provider NPI" type="text" name="Service_Provider_NPI"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                  <input value="${gap.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code"  class="form-control text-uppercase" >
+                                                  <input value="${gap.Service_Provider_Taxonomy_Code || ''}" placeholder="Service Provider Taxonomy Code" title="Service Provider Taxonomy Code" type="text" name="Service_Provider_Taxonomy_Code"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${gap.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Service_Provider_Name || ''}" placeholder="Service Provider Name" title="Service Provider Name" type="text" name="Service_Provider_Name"  class="form-control" >
                                              </div>
                                              <div class="col-2 mb-2">
-                                                 <input value="${gap.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Service_Provider_Type || ''}" placeholder="Service Provider Type" title="Service Provider Type" type="text" name="Service_Provider_Type"  class="form-control " >
                                              </div>
                                             <div class="col-2 mb-2">
-                                                <input value="${gap.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag"  class="form-control text-uppercase" >
+                                                <input value="${gap.Service_Provider_RxProviderFlag || ''}" placeholder="Service Provider RxProviderFlag" title="Service Provider RxProviderFlag" type="text" name="Service_Provider_RxProviderFlag"  class="form-control " >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${gap.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Provider_Group_NPI || ''}" placeholder="Provider Group NPI" title="Provider Group NPI" type="text" name="Provider_Group_NPI"  class="form-control " >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${gap.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Provider_Group_Taxonomy_Code || ''}" placeholder="Provider Group Taxonomy Code" title="Provider Group Taxonomy Code" type="text" name="Provider_Group_Taxonomy_Code"  class="form-control " >
                                             </div>
                                             <div class="col-2 mb-2">
-                                                 <input value="${gap.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name"  class="form-control text-uppercase" >
+                                                 <input value="${gap.Provider_Group_Name || ''}" placeholder="Provider Group Name" title="Provider Group Name" type="text" name="Provider_Group_Name"  class="form-control " >
                                             </div>
                                             <div class="col-10 mb-2">
-                                                <textarea name="risk_note" placeholder="Note" title="Note"  class="form-control text-uppercase" style="height: 36px;">${gap.note || ''}</textarea>
+                                                <textarea name="risk_note" placeholder="Note" title="Note"  class="form-control " style="height: 36px;">${gap.note || ''}</textarea>
                                             </div>
 
                                         </div>
