@@ -14,7 +14,7 @@
             <form method="post" action="/risk_profile/">
               {% csrf_token %}
               <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                   <select name="user_id" class="form-control darrow" style="text-transform: uppercase;">
                     <option value="">ALL USER</option>
                     {% for user in user_list %}
@@ -25,8 +25,17 @@
 
                   </select>
                 </div>
-                <div class="col-lg-4">
-                  <button type="submit" id="btnsubmit" class="btn btn-primary">Search</button>
+                <div class="col-lg-2">
+                  <button type="submit" id="btnsubmit" class="btn btn-primary">SEARCH</button>
+                </div>
+                <div class="col-lg-7">
+                   <div class="row">HINTS :
+                  {% for hints in riskLevel %}
+                     <div class="col-lg-3">
+                       {{hints.level}} ({{hints.range_from}} - {{hints.range_to}})
+                     </div>
+                  {% endfor %}
+                   </div>
                 </div>
               </div>
 
@@ -34,10 +43,11 @@
 
         </div>
         <div class="">
+
           <table class="table table-sm" id="member_risk_profile_table">
             <thead>
             <tr>
-              <th>USER</th>
+<!--              <th>USER</th>-->
               <th>MEMBER</th>
               <th>CATEGORY</th>
               <th width="10%">SUB-CATEGORY</th>
@@ -49,25 +59,39 @@
             </thead>
             <tbody>
               {% for user, levels in risk_grouped.items %}
-                <tr>
-                  <td colspan="{{ colspan_count }}" style="background:#e3e3e3; font-weight:bold;" class="text-uppercase">{{ user }}</td>
+                <tr onclick="risk_summary('{{ user|cut:' ' }}')" style="cursor:pointer;">
+                  <td colspan="{{ colspan_count }}" style="background:#e3e3e3; font-weight:bold;" class="text-uppercase" align="center">{{ user }}
+
+                     {% for u, arr in user_member_counts.items %}
+                       {% if u == user|cut:" " %}
+                             ({{arr}} MEMBER{{ arr|pluralize:"S" }})
+                       {% endif %}
+                    {% endfor %}
+
+                  </td>
                 </tr>
 
                 {% for risk_label, members in levels.items %}
                   {% if members %}
-                  <tr><td colspan="{{ colspan_count }}" style="color:#000; font-weight:bold;">{{ risk_label }}</td></tr>
+                  <tr align="center" onclick="level_summary('{{ user|cut:' ' }}','{{ risk_label|cut:' ' }}')" style="cursor:pointer;">
+                    <td colspan="{{ colspan_count }}" style="color:#000; font-weight:bold;">{{ risk_label }}
+                    ({{ members|length }})
+                   </td>
+                  </tr>
 
                   {% for member_id, total in members.items %}
-                    <tr style="background:#f8f9fa;">
-                      <td></td>
+
+                    <tr style="background:#f8f9fa; display:none;" class="{{ user|cut:' ' }} {{ risk_label|cut:' ' }}">
+<!--                      <td></td>-->
                       <td class="text-uppercase">#{{ member_id }}</td>
                       <td colspan="10" style="font-weight:bold;">TOTAL: {{ total }}</td>
                     </tr>
                   {% for entry in flat_for_template %}
                     {% if entry.user == user and entry.member_id == member_id %}
                       {% for item in entry.items %}
-                    <tr>
-                      <td></td><td></td>
+                    <tr style="display:none;" class="{{ user|cut:' ' }} {{ risk_label|cut:' ' }}">
+<!--                      <td></td>-->
+                      <td></td>
                       <td>{{ item.category }}</td>
                       <td>{{ item.sub_category }}</td>
                       <td>{{ item.specific }}</td>
@@ -108,8 +132,27 @@
     </div><!-- End Default Card -->
   </section>
 </main>
+{% include "include/processingloder.html" %}
+<script>
+  function risk_summary(val){
+   const element = $('.' + val);
 
+    if (element.is(':visible')) {
+        element.hide();
+    } else {
+        element.show();
+    }
+  }
+  function level_summary(u,l){
+    const element = $('.' + u + '.' + l);
 
+    if (element.is(':visible')) {
+        element.hide();
+    } else {
+        element.show();
+    }
+  }
+</script>
 
 {% endblock %}
 

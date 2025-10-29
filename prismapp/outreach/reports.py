@@ -55,7 +55,7 @@ def risk_profile(request):
     risk_grouped = {}
     toDateArray = []
     flat_category_array = {}
-    flat_for_template = []  # ✅ Added flattened version
+    flat_for_template = []
 
     # ---- Prepare API parameters ----
     params = {}
@@ -66,11 +66,11 @@ def risk_profile(request):
     member_details_monthly_score = api_call(params, "prismMemberriskprofile")
     monthly_score_data = member_details_monthly_score["data"]["riskSummary"]
     user_list = member_details_monthly_score["data"]["userlist"]
+    riskLevel = member_details_monthly_score["data"]["riskLevel"]
 
     # ---- Build structured data ----
     for row in monthly_score_data:
         care_user = row.get("Care_Coordinator_name", "UNKNOWN")
-        member = row.get("member_name", "UNKNOWN")
         medicaid_id = row.get("medicaid_id")
         category = row.get("risk_category")
         subcat = row.get("sub_category_name")
@@ -79,57 +79,38 @@ def risk_profile(request):
         score = row.get("score", 0)
         level = row.get("level", "N/A")
 
-        # ---- Date clean ----
         date_clean = date_str.split("T")[0] if "T" in date_str else date_str
         if date_clean not in toDateArray:
             toDateArray.append(date_clean)
 
-        # ---- Member total by month ----
-        member_total_risk.setdefault(care_user, {})
-        member_total_risk[care_user].setdefault(medicaid_id, {})
-        member_total_risk[care_user][medicaid_id].setdefault(date_clean, 0)
+        member_total_risk.setdefault(care_user, {}).setdefault(medicaid_id, {}).setdefault(date_clean, 0)
         member_total_risk[care_user][medicaid_id][date_clean] += score
 
-        # ---- Build nested category data ----
-        category_array.setdefault(care_user, {})
-        category_array[care_user].setdefault(medicaid_id, {})
-        category_array[care_user][medicaid_id].setdefault(category, {})
-        category_array[care_user][medicaid_id][category].setdefault(subcat, {})
-        category_array[care_user][medicaid_id][category][subcat].setdefault(specific, {})
-
-        category_array[care_user][medicaid_id][category][subcat][specific][date_clean] = {
-            "score": score,
-            "level": level,
-        }
+        category_array.setdefault(care_user, {}).setdefault(medicaid_id, {}).setdefault(category, {}) \
+            .setdefault(subcat, {}).setdefault(specific, {})[date_clean] = {
+                "score": score,
+                "level": level,
+            }
 
     # ---- Sort dates chronologically ----
     toDateArray = sorted(set(toDateArray), key=lambda d: datetime.strptime(d, "%m-%Y"))
     last_date = toDateArray[-1] if toDateArray else None
 
-    # ---- Flatten data for easy template iteration ----
+    # ---- Flatten data for template ----
     for care_user, member_dict in category_array.items():
         for medicaid_id, cat_dict in member_dict.items():
-            flat_category_array.setdefault(care_user, {})
-            flat_category_array[care_user].setdefault(medicaid_id, [])
-
+            flat_category_array.setdefault(care_user, {}).setdefault(medicaid_id, [])
             for category, subcats in cat_dict.items():
                 for subcat, specifics in subcats.items():
                     for specific, scores in specifics.items():
-                        score_list = [
-                            {
-                                "date": d,
-                                "score": v.get("score", "-"),
-                                "level": v.get("level", "N/A")
-                            }
-                            for d, v in scores.items()
-                        ]
+                        score_list = [{"date": d, "score": v.get("score", "-"), "level": v.get("level", "N/A")}
+                                      for d, v in scores.items()]
                         flat_category_array[care_user][medicaid_id].append({
                             "category": category,
                             "sub_category": subcat,
                             "specific": specific,
                             "scores_list": score_list,
                         })
-                        # ✅ Add flattened entry
                         flat_for_template.append({
                             "user": care_user,
                             "member_id": medicaid_id,
@@ -141,24 +122,45 @@ def risk_profile(request):
                             }],
                         })
 
-    # ---- Determine risk levels (per user) ----
+    # ---- Group by dynamic risk levels ----
     for user, members in member_total_risk.items():
-        risk_grouped.setdefault(user, {
-            "RISK LEVEL-1": {},
-            "RISK LEVEL-2": {},
-            "RISK LEVEL-3": {}
-        })
+        risk_grouped.setdefault(user, {})
+
+        # initialize empty levels for each risk level
+        for rl in riskLevel:
+            risk_grouped[user].setdefault(rl["level"], {})
 
         for member_id, scores in members.items():
             total = scores.get(last_date, 0)
-            if total < 3:
-                level = "RISK LEVEL-1"
-            elif 3 <= total <= 7:
-                level = "RISK LEVEL-2"
-            else:
-                level = "RISK LEVEL-3"
+            assigned_level = None
 
-            risk_grouped[user][level][member_id] = total
+            for i, rl in enumerate(riskLevel):
+                low, high = rl["range_from"], rl["range_to"]
+                if (low <= total < high) or (i == len(riskLevel) - 1 and low <= total <= high):
+                    assigned_level = rl["level"]
+                    break
+
+            if not assigned_level:
+                assigned_level = riskLevel[-1]["level"]
+
+            risk_grouped[user].setdefault(assigned_level, {})[member_id] = total
+
+    # ---- Sort levels (LEVEL-1 → LEVEL-2 → LEVEL-3) ----
+    for user in risk_grouped:
+        risk_grouped[user] = dict(sorted(
+            risk_grouped[user].items(),
+            key=lambda x: int(''.join(filter(str.isdigit, x[0])) or 999)
+        ))
+
+    # ---- Count members per user ----
+    user_member_counts = {}
+    for user, levels in risk_grouped.items():
+        member_ids = set()
+        for members in levels.values():
+            if isinstance(members, dict):
+                member_ids.update(members.keys())
+        user_key = user.replace(" ", "")
+        user_member_counts[user_key] = len(member_ids)
 
     # ---- Render ----
     return render(request, "risk_profile.html", {
@@ -170,8 +172,10 @@ def risk_profile(request):
         "risk_grouped": risk_grouped,
         "user_id": request.POST.get("user_id"),
         "last_date": last_date,
-        "flat_for_template": flat_for_template,  # ✅ New key
-        "colspan_count": len(toDateArray) + 10,   # ✅ for colspan in template
+        "flat_for_template": flat_for_template,
+        "colspan_count": len(toDateArray) + 10,
+        "user_member_counts": user_member_counts,
+        "riskLevel": riskLevel,
     })
 
 def download_users_csv(request):

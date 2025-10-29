@@ -812,8 +812,6 @@ def add_action(request):
                     "note": request.POST.getlist("risk_note")[i],
                 }
 
-                print(risk_data)
-
                 if risk_gap_id[i] and risk_gap_id[i].strip() != '' and risk_gap_id[i].strip().lower() != 'null':
                     #print(risk_gap_id[i])
                     risk_data['updated_date'] = date.today().strftime("%Y-%m-%d")
