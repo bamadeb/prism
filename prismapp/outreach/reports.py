@@ -46,6 +46,7 @@ def gapsreport(request):
     })
 
 def risk_profile(request):
+    # ---- Check session ----
     if not request.session.get('is_logged_in', False):
         return render(request, 'login.html')
 
@@ -62,39 +63,46 @@ def risk_profile(request):
     if request.POST.get("user_id"):
         params["user_id"] = request.POST.get("user_id")
 
-    # ---- API data ----
+    # ---- Fetch API Data ----
     member_details_monthly_score = api_call(params, "prismMemberriskprofile")
-    monthly_score_data = member_details_monthly_score["data"]["riskSummary"]
-    user_list = member_details_monthly_score["data"]["userlist"]
-    riskLevel = member_details_monthly_score["data"]["riskLevel"]
+    monthly_score_data = member_details_monthly_score["data"].get("riskSummary", [])
+    user_list = member_details_monthly_score["data"].get("userlist", [])
+    riskLevel = member_details_monthly_score["data"].get("riskLevel", [])
 
     # ---- Build structured data ----
     for row in monthly_score_data:
-        care_user = row.get("Care_Coordinator_name", "UNKNOWN")
+        care_user = row.get("Care_Coordinator_name", "UNKNOWN").strip()
         medicaid_id = row.get("medicaid_id")
         category = row.get("risk_category")
         subcat = row.get("sub_category_name")
         specific = row.get("sub_category2_name")
         date_str = row.get("to_date", "")
-        score = row.get("score", 0)
+        score = float(row.get("score", 0) or 0)
         level = row.get("level", "N/A")
 
+        # Clean date
         date_clean = date_str.split("T")[0] if "T" in date_str else date_str
-        if date_clean not in toDateArray:
+        if date_clean and date_clean not in toDateArray:
             toDateArray.append(date_clean)
 
+        # Build risk total per user/member/date
         member_total_risk.setdefault(care_user, {}).setdefault(medicaid_id, {}).setdefault(date_clean, 0)
         member_total_risk[care_user][medicaid_id][date_clean] += score
 
-        category_array.setdefault(care_user, {}).setdefault(medicaid_id, {}).setdefault(category, {}) \
-            .setdefault(subcat, {}).setdefault(specific, {})[date_clean] = {
-                "score": score,
-                "level": level,
-            }
+        # Build nested category hierarchy
+        category_array \
+            .setdefault(care_user, {}) \
+            .setdefault(medicaid_id, {}) \
+            .setdefault(category, {}) \
+            .setdefault(subcat, {}) \
+            .setdefault(specific, {})[date_clean] = {"score": score, "level": level}
 
     # ---- Sort dates chronologically ----
-    toDateArray = sorted(set(toDateArray), key=lambda d: datetime.strptime(d, "%m-%Y"))
-    last_date = toDateArray[-1] if toDateArray else None
+    if toDateArray:
+        toDateArray = sorted(set(toDateArray), key=lambda d: datetime.strptime(d, "%m-%Y"))
+        last_date = toDateArray[-1]
+    else:
+        last_date = None
 
     # ---- Flatten data for template ----
     for care_user, member_dict in category_array.items():
@@ -103,30 +111,27 @@ def risk_profile(request):
             for category, subcats in cat_dict.items():
                 for subcat, specifics in subcats.items():
                     for specific, scores in specifics.items():
-                        score_list = [{"date": d, "score": v.get("score", "-"), "level": v.get("level", "N/A")}
-                                      for d, v in scores.items()]
-                        flat_category_array[care_user][medicaid_id].append({
+                        score_list = [
+                            {"date": d, "score": v.get("score", "-"), "level": v.get("level", "N/A")}
+                            for d, v in scores.items()
+                        ]
+                        flat_item = {
                             "category": category,
                             "sub_category": subcat,
                             "specific": specific,
                             "scores_list": score_list,
-                        })
+                        }
+                        flat_category_array[care_user][medicaid_id].append(flat_item)
                         flat_for_template.append({
                             "user": care_user,
                             "member_id": medicaid_id,
-                            "items": [{
-                                "category": category,
-                                "sub_category": subcat,
-                                "specific": specific,
-                                "scores_list": score_list,
-                            }],
+                            "items": [flat_item],
                         })
 
     # ---- Group by dynamic risk levels ----
     for user, members in member_total_risk.items():
         risk_grouped.setdefault(user, {})
-
-        # initialize empty levels for each risk level
+        # Initialize empty levels
         for rl in riskLevel:
             risk_grouped[user].setdefault(rl["level"], {})
 
@@ -135,21 +140,23 @@ def risk_profile(request):
             assigned_level = None
 
             for i, rl in enumerate(riskLevel):
-                low, high = rl["range_from"], rl["range_to"]
+                low, high = rl.get("range_from", 0), rl.get("range_to", 0)
+                # Handle inclusive ranges correctly
                 if (low <= total < high) or (i == len(riskLevel) - 1 and low <= total <= high):
                     assigned_level = rl["level"]
                     break
 
             if not assigned_level:
-                assigned_level = riskLevel[-1]["level"]
+                assigned_level = riskLevel[-1]["level"]  # Fallback
 
             risk_grouped[user].setdefault(assigned_level, {})[member_id] = total
 
-    # ---- Sort levels (LEVEL-1 → LEVEL-2 → LEVEL-3) ----
+    # ---- Sort risk levels descending (LEVEL-3 → LEVEL-1) ----
     for user in risk_grouped:
         risk_grouped[user] = dict(sorted(
             risk_grouped[user].items(),
-            key=lambda x: int(''.join(filter(str.isdigit, x[0])) or 999)
+            key=lambda x: int(''.join(filter(str.isdigit, x[0])) or 0),
+            reverse=True
         ))
 
     # ---- Count members per user ----
@@ -162,7 +169,7 @@ def risk_profile(request):
         user_key = user.replace(" ", "")
         user_member_counts[user_key] = len(member_ids)
 
-    # ---- Render ----
+    # ---- Render Template ----
     return render(request, "risk_profile.html", {
         "pageTitle": "MEMBER RISK PROFILE",
         "user_list": user_list,
