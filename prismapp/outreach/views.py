@@ -666,7 +666,7 @@ def add_action(request):
             gap_code_qualitys = request.POST.getlist("gap_code_quality")
 
             paramsunsetq = {"medicaid_id": medicaid_id, "action_id": action_id}
-            updatereturn = api_call(paramsunsetq, "prismUnSetqualityStatus")
+            updatereturn = api_call(paramsunsetq, "prismUnSetMemberGapsStatus")
             #print(updatereturn)
             #################
             # now = timezone.now()  # gets current datetime with timezone support
@@ -757,8 +757,8 @@ def add_action(request):
             gap_ids = request.POST.getlist("gap_id")
             gap_codes = request.POST.getlist("gap_code")
             risk_gap_id = request.POST.getlist("risk_gap_id")
-            paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
-            api_call(paramsunset, "prismUnSetgapStatus")
+            # paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
+            # api_call(paramsunset, "prismUnSetgapStatus")
 
             #################
             now = timezone.now()  # gets current datetime with timezone support
@@ -843,8 +843,9 @@ def add_action(request):
             # print("Step 10:", now)  # prints in console
             # ################
             # Always return after POSTadd_action_source
-            add_action_source = request.POST.getlist("add_action_source")
-            if add_action_source== 'memberdetails':
+            add_action_source = request.POST.get("add_action_source")
+            #print(add_action_source)
+            if add_action_source == 'memberdetails':
                 medicaid_id = request.POST.get("medicaid_id")
                 return redirect("memberdetails", medicaid_id=medicaid_id)
             else:
