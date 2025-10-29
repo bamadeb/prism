@@ -555,9 +555,6 @@ def memberdetails(request, medicaid_id):
 
 @csrf_exempt
 def add_action(request):
-    #print(request.POST)
-    #return HttpResponse("Not allowed")
-
     # 1. Check login session
     if not request.session.get('is_logged_in'):
         return redirect('login')
@@ -566,6 +563,11 @@ def add_action(request):
         try:
             action_id = request.POST.get("update_action_id")
             insertDataArray1 = []
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 1:", now)  # prints in console
+            ################
+
             if not action_id:
                 insertDataArray = []
 
@@ -587,7 +589,7 @@ def add_action(request):
                     "insertDataArray": insertDataArray,
                 }
                 insert = api_call(apidata, "prismMultipleinsert")
-                #print(insert)
+                # print(insert)
                 action_id = insert["insertedIds"]
                 next_panel_id = request.POST.get("next_panel_id")
                 if next_panel_id:
@@ -632,6 +634,10 @@ def add_action(request):
                 }
                 # API call
                 api_call(params, "prismMultiplefieldupdate")
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 2:", now)  # prints in console
+            ################
 
             #print(insert)
             insert_data1 = {
@@ -648,6 +654,10 @@ def add_action(request):
                 "insertDataArray": insertDataArray1,
             }
             api_call(apidata1, "prismMultipleinsert")
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 3:", now)  # prints in console
+            ################
 
             ##### update quality data
             medicaid_id = request.POST.get("medicaid_id")
@@ -656,11 +666,29 @@ def add_action(request):
             gap_code_qualitys = request.POST.getlist("gap_code_quality")
 
             paramsunsetq = {"medicaid_id": medicaid_id, "action_id": action_id}
-            api_call(paramsunsetq, "prismUnSetqualityStatus")
-            insertqualityDataArray = []
-            for i, qid in enumerate(quality_ids):
-                qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
-                api_call(qualityupdate, "prismUpdatequalityStatus")
+            updatereturn = api_call(paramsunsetq, "prismUnSetqualityStatus")
+            #print(updatereturn)
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 4:", now)  # prints in console
+            ################
+
+            insertRiskQualityDataArray = []
+            updateRiskQualityDataArray = []
+
+            if quality_ids:
+                measur_code_val = ",".join(f"'{qid}'" for qid in quality_ids)
+                paramsupdate = {"medicaid_id": medicaid_id, "measur_code_val": measur_code_val, "action_id": action_id}
+                qualityresult = api_call(paramsupdate, "prismUpdatequalityStatus")
+                #print(qualityresult)
+            # for i, qid in enumerate(quality_ids):
+            #     qualityupdate = {"medicaid_id": medicaid_id, "measur_code": qid, "action_id": action_id}
+            #     api_call(qualityupdate, "prismUpdatequalityStatus")
+
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 5:", now)  # prints in console
+            ################
 
             ###  Risk gap Observation data updated
             for i, qcode in enumerate(gap_code_qualitys):
@@ -694,24 +722,37 @@ def add_action(request):
                 }
                 if quality_gap_id[i] and quality_gap_id[i].strip() != '' and quality_gap_id[
                     i].strip().lower() != 'null':
-                    #print('Quality: '+quality_gap_id[i])
-                    params = {
-                        "updateData": quality_data,
-                        "table_name": "MEM_GAP_OBSERVATION_DATA",
-                        "id_field_name": "id",
-                        "id_field_value": quality_gap_id[i],
-                    }
-                    api_call(params, "prismMultiplefieldupdate")
+                    # Add the ID field to the update data
+                    quality_data["id"] = quality_gap_id[i]
+                    updateRiskQualityDataArray.append(quality_data)
 
                 else:
                     #print('Quality: '+qcode)
-                    insertqualityDataArray.append(quality_data)
-            apiparam = {
-                "table_name": "MEM_GAP_OBSERVATION_DATA",
-                "insertDataArray": insertqualityDataArray,
-            }
-            api_call(apiparam, "prismMultipleinsert")
+                    insertRiskQualityDataArray.append(quality_data)
 
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 6:", now)  # prints in console
+            # ################
+            # if updatequalityDataArray:
+            #     apiparam = {
+            #         "table_name": "MEM_GAP_OBSERVATION_DATA",
+            #         "id_field_name": "id",
+            #         "updates": updatequalityDataArray
+            #     }
+            #     res = api_call(apiparam, "prismMultipleRowAndFieldUpdate")
+            #     print(res)
+            # if insertqualityDataArray:
+            #     apiparam = {
+            #         "table_name": "MEM_GAP_OBSERVATION_DATA",
+            #         "insertDataArray": insertqualityDataArray,
+            #     }
+            #     api_call(apiparam, "prismMultipleinsert")
+
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 7:", now)  # prints in console
+            ################
             ##### update gap data
             gap_ids = request.POST.getlist("gap_id")
             gap_codes = request.POST.getlist("gap_code")
@@ -719,11 +760,28 @@ def add_action(request):
             paramsunset = {"medicaid_id": medicaid_id, "action_id": action_id}
             api_call(paramsunset, "prismUnSetgapStatus")
 
-            insertriskDataArray = []
-            for j,gid in enumerate(gap_ids):
-                paramsupdate = {"medicaid_id": medicaid_id, "diag_code": gid, "action_id": action_id}
-                api_call(paramsupdate, "prismUpdategapStatus")
+            #################
+            now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 8:", now)  # prints in console
+            ################
+            #insertriskDataArray = []
+            #updateriskDataArray = []
+            if gap_ids:
+                diag_val = ",".join(f"'{gid}'" for gid in gap_ids)
+                paramsupdate = {"medicaid_id": medicaid_id, "diag_codes": diag_val, "action_id": action_id}
+                gapresult = api_call(paramsupdate, "prismUpdategapStatus")
+                #print(gapresult)
+            # for j,gid in enumerate(gap_ids):
+            #     print(gid)
+            #     paramsupdate = {"medicaid_id": medicaid_id, "diag_codes": gid, "action_id": action_id}
+            #     gapresult = api_call(paramsupdate, "prismUpdategapStatus")
+            #     print(gapresult)
+            #     print(paramsupdate)
 
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 9:", now)  # prints in console
+            ################
                 ###  Risk gap Observation data updated
             for i, gcode in enumerate(gap_codes):
                 date_str = request.POST.getlist("Observation_Date")[i].strip()
@@ -757,24 +815,33 @@ def add_action(request):
                 if risk_gap_id[i] and risk_gap_id[i].strip() != '' and risk_gap_id[i].strip().lower() != 'null':
                     #print(risk_gap_id[i])
                     risk_data['updated_date'] = date.today().strftime("%Y-%m-%d")
-                    params = {
-                        "updateData": risk_data,
-                        "table_name": "MEM_GAP_OBSERVATION_DATA",
-                        "id_field_name": "id",
-                        "id_field_value": risk_gap_id[i],
-                    }
-                    api_call(params, "prismMultiplefieldupdate")
+                    risk_data['id'] = risk_gap_id[i]
+
+                    updateRiskQualityDataArray.append(risk_data)
 
                 else:
                     risk_data['added_date'] = date.today().strftime("%Y-%m-%d")
                     #print(gcode)
-                    insertriskDataArray.append(risk_data)
-            apiparam = {
-                "table_name": "MEM_GAP_OBSERVATION_DATA",
-                "insertDataArray": insertriskDataArray,
-            }
-            api_call(apiparam, "prismMultipleinsert")
+                    insertRiskQualityDataArray.append(risk_data)
+            if updateRiskQualityDataArray:
+                apiparam = {
+                    "table_name": "MEM_GAP_OBSERVATION_DATA",
+                    "id_field_name": "id",
+                    "updates": updateRiskQualityDataArray
+                }
+                res = api_call(apiparam, "prismMultipleRowAndFieldUpdate")
+                # print(res)
+            if insertRiskQualityDataArray:
+                apiparam = {
+                    "table_name": "MEM_GAP_OBSERVATION_DATA",
+                    "insertDataArray": insertRiskQualityDataArray,
+                }
+                api_call(apiparam, "prismMultipleinsert")
 
+            #################
+            # now = timezone.now()  # gets current datetime with timezone support
+            # print("Step 10:", now)  # prints in console
+            # ################
             # Always return after POSTadd_action_source
             add_action_source = request.POST.getlist("add_action_source")
             if add_action_source== 'memberdetails':
