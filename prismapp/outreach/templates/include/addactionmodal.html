@@ -44,7 +44,7 @@
                                         <div class="col-sm-6 mt-3 p-2 mt-3 ">
                                             <div class="border rounded p-3">
                                                 <div class="mb-2 text-uppercase" style="cursor:pointer" onclick="action_view();"><h4><b>Action</b></h4></div>
-                                                <div class="row" id="action_view" style="display:none;">
+                                                <div class="row" id="action_view" >
                                                     <div class="col-sm-3">
                                                         <label class="form-label text-uppercase" style="border:none;font-weight:100;">Activity Category:</label>
                                                     </div>
@@ -83,7 +83,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
-                                                        <textarea class="form-control text-uppercase " name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
+                                                        <textarea class="form-control" name="action_note" id="action_note" required placeholder="Type your text..."></textarea>
                                                     </div>
                                                     <div class="col-sm-12 mt-4">
                                                         <input class="form-control" disabled type="file" name="file_visit_update" accept="application/pdf">
