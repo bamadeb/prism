@@ -366,6 +366,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker select.ui-datepicker-year {
 	width: 45%;
 	color:#000;
+	line-height: 1rem;
 }
 .ui-datepicker table {
 	width: 100%;
