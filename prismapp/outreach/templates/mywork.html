@@ -79,26 +79,23 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card mb-2">
+                    <div class="card-body py-1">
                         <div id="accordion" class=" mb-0">
                             <div class="row">
-                                <div class="col-xl-3 col-sm-3 mb-xl-0">
-                                </div>
-                                <div class="col-xl-6 col-sm-6 mb-xl-0">
-                                    <h3 class="mb-0 mt-0 text-center">
+                                <div class="col-xl-4 col-sm-4 text-right">
+                                    <h3 class="mb-0 mt-0">
                                         <button style="    font-size: 18px; color:#000;" class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                             PROJECT OVERVIEW
                                         </button>
                                     </h3>
                                 </div>
-                                <div class="col-xl-1 col-sm-1 mb-xl-0">
-                                </div>
-                                <div class="col-xl-2 col-sm-2 mb-xl-0">
+                                <div class="col-xl-4 col-sm-4"></div>
+                                <div class="col-xl-4 col-sm-4">
                                     {% if request.session.user_data.role_id == 7 or request.session.user_data.role_id == 20 %}
                                     <form action="/mywork/" name="navigatorForm" id="navigatorForm"  enctype="multipart/form-data" method="post" >
                                     {% csrf_token %}
-                                    <select class="w-100" style="text-transform: uppercase;" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
+                                    <select class="text-uppercase" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
                                         <option value="">SELECT NEVIGATOR</option>
                                         {% for value in navigatorList %}
                                         <option value="{{ value.ID }}" {% if value.ID|stringformat:"s" == user_id|stringformat:"s" %}selected{% endif %}>
@@ -109,6 +106,8 @@
                                     </form>
                                     {% endif %}
                                 </div>
+
+
 
                             </div>
                             <div id="collapseThree"  {% if request.session.user_data.role_id == 7 or request.session.user_data.role_id == 9 %} class="collapse" {% endif %} aria-labelledby="headingThree" data-parent="#accordion">
@@ -333,11 +332,7 @@
             <div class="col-lg-12">
                 <div class="row">
                      <div class="col-2">
-                        <select  onchange="get_action(this.value)" id="action_ids">
-                            <option VALUE="">ACTION</option>
-                            <option VALUE="1">TRANSFER</option>
-                             <option VALUE="2">ASSIGN PLAN</option>
-                        </select>
+
                     </div>
                     <div class="col-4">
                         {% if messages %}
@@ -358,6 +353,13 @@
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="nav-link" id="referred-tab" data-bs-toggle="tab" data-bs-target="#referred" type="button" role="tab" aria-controls="task" aria-selected="false">TRANSFER</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                    <select  onchange="get_action(this.value)" id="action_ids" class="ms-4 mb-2">
+                                        <option VALUE="">ACTION</option>
+                                        <option VALUE="1">TRANSFER</option>
+                                         <option VALUE="2">ASSIGN PLAN</option>
+                                    </select>
                                     </li>
                                 </ul>
                                 <!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
