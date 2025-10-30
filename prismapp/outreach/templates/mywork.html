@@ -95,7 +95,7 @@
                                     {% if request.session.user_data.role_id == 7 or request.session.user_data.role_id == 20 %}
                                     <form action="/mywork/" name="navigatorForm" id="navigatorForm"  enctype="multipart/form-data" method="post" >
                                     {% csrf_token %}
-                                    <select class="text-uppercase" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
+                                    <select class="text-uppercase mt-2" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
                                         <option value="">SELECT NEVIGATOR</option>
                                         {% for value in navigatorList %}
                                         <option value="{{ value.ID }}" {% if value.ID|stringformat:"s" == user_id|stringformat:"s" %}selected{% endif %}>
