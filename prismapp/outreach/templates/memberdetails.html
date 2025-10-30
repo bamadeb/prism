@@ -473,7 +473,7 @@
                         </div>
                         <div class="col-lg-4 mt-3" >
                             <label for="assign_to"><strong>ASSIGNED TO</strong></label>
-                            <select id="assign_to" name="assign_to"  class="form-control form-select darrow">
+                            <select id="assign_to" name="assign_to"  class="w-100 text-uppercase">
                                 <option value="">SELECT</option>
                                 {% for user in assign_to_user %}
                                     <option value="{{ user.ID }}"
@@ -616,7 +616,7 @@
                         <input type="hidden" name="member_id"  id="member_id" value="{{medicaid_id}}">
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select darrow" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
+                            <select class="w-100" style="text-transform: uppercase;" name="alert_id" id="alert_id" onchange="get_alert_type(this.value);" required>
                                 <option value="">SELECT ALERT</option>
                                 {% for alert in alertList %}
                                   <option value="{{ alert.id }}">{{ alert.alert }}</option>
@@ -624,13 +624,13 @@
                             </select>
                         </div>
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select darrow" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
+                            <select class="w-100" style="text-transform: uppercase;" id="alert_type_id" name="alert_type_id" required>
                                 <option value="">SELECT TYPE</option>
                             </select>
                         </div>
 
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select darrow" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
+                            <select class="w-100" style="text-transform: uppercase;" id="alert_status_id" name="alert_status_id" onchange="get_assign_to_user(this.value,'');" required>
                                 <option value="">SELECT STATUS</option>
                                  {% for alertStatus in alert_statusList %}
                                   <option value="{{ alertStatus.id }}">
@@ -640,7 +640,7 @@
                             </select>
                         </div>
                         <div class="col-lg-4 mt-3" style="display:none;" id="assign_user_id_field">
-                            <select class="form-control form-select darrow"  name="assign_user_id" id="assign_user_id">
+                            <select class="w-100"  name="assign_user_id" id="assign_user_id">
                                 <option value="">SELECT USER</option>
                                 {% for assign in assign_to_user %}
                                   <option value="{{ assign.ID }}">
@@ -824,7 +824,7 @@
                             <input type="hidden" name="medicaid_id"  value="{{medicaid_id}}">
                             <input type="hidden" name="alt_language_name" id="alt_language_name">
                             <div class="col-lg-12  mt-3">
-                                <select name="alt_language" id="alt_language" class="form-control form-select" onchange="get_language_name();" required>
+                                <select name="alt_language" id="alt_language" class="w-100" onchange="get_language_name();" required>
                                      <option value="">SELECT</option>
                                     {% for language in all_language_master_list %}
                                         <option value="{{ language.LANGUAGE_CD }}">{{ language.LANGUAGE_DESC }}</option>
@@ -996,7 +996,7 @@
                             <input type="text" id="txt_code_desc" name="txt_code_desc" placeholder="DESCRIPTION" class="form-control" required>
                         </div>
                         <div class="col-lg-4  mt-3">
-                            <select class="form-control form-select"  id="select_type" name="select_claim_type"  required>
+                            <select class="w-100"  id="select_type" name="select_claim_type"  required>
                                 <option value="">TYPE</option>
                                 <option value="IP">IP</option>
                                 <option value="OP">OP</option>
@@ -2027,7 +2027,7 @@
                             <input type="text" name="DOS" id="DOS" placeholder="DATE OF SERVICE" value="06/06/2025" class="form-control datepicker" required>
                         </div>
                         <div class="col-lg-6  mt-2">
-                            <select class="form-control" name="claim_category" style="text-transform: uppercase;" onchange="getkpi(this.value);" required>
+                            <select class="w-100" name="claim_category" style="text-transform: uppercase;" onchange="getkpi(this.value);" required>
                                 <option value="">SELECT CATEGORY</option>
                                 <option value="1">Clinical Events</option>
                                 <option value="2">Care Outcomes</option>
@@ -2036,7 +2036,7 @@
                             </select>
                         </div>
                         <div class="col-lg-6  mt-2">
-                            <select class="form-control" name="claim_kpi" id="claim_kpi" onchange="get_desease_type(this.value)" required style="text-transform: uppercase;">
+                            <select class="w-100" name="claim_kpi" id="claim_kpi" onchange="get_desease_type(this.value)" required style="text-transform: uppercase;">
                                 <option value="">SELECT TYPE</option>
                             </select>
                         </div>
@@ -2046,7 +2046,7 @@
                         </div>
 
                         <div class="col-lg-6  mt-2" id="deseaseType">
-                            <select class="form-control" name="desease_type" id="desease_type" onchange='getcode(this.value)'  style="text-transform: uppercase;">
+                            <select class="w-100" name="desease_type" id="desease_type" onchange='getcode(this.value)'  style="text-transform: uppercase;">
                                 <option value="">SELECT DISEASE</option>
                             </select>
                         </div>

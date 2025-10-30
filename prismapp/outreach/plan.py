@@ -68,6 +68,7 @@ def assign_plan(request):
             loginsertDataArray.append(loginsert_data)
 
         # Insert referrals
+        print(insertDataArray)
         plan_payload = {
             "table_name": "MEM_PLAN_MEMBERS",
             "insertDataArray": insertDataArray,
@@ -156,7 +157,7 @@ def add_plan(request):
                     "file_type": file_extension[1],
                     "status": status
                 }
-
+            print(update_data1)
             dataList2 = {
                 "updateData": update_data1,
                 "table_name": "MEM_PLAN_DOCUMENTS",
@@ -195,7 +196,10 @@ def add_plan(request):
                             "table_name": "MEM_PLAN_DOCUMENTS",
                             "insertDataArray": insert_data_array1,
                         }
-                        api_call(document, "prismMultipleinsert")
+                        insert1 = api_call(document, "prismMultipleinsert")
+                        print(document)
+                        print(insert1)
+
             else:
                 if request.FILES.get('file_name'):
                     handle_uploaded_file(request.FILES['file_name'])

@@ -98,7 +98,7 @@
                                     {% if request.session.user_data.role_id == 7 or request.session.user_data.role_id == 20 %}
                                     <form action="/mywork/" name="navigatorForm" id="navigatorForm"  enctype="multipart/form-data" method="post" >
                                     {% csrf_token %}
-                                    <select class="form-control darrow" style="text-transform: uppercase;" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
+                                    <select class="w-100" style="text-transform: uppercase;" name="selected_navigator" id="selected_navigator" onchange="navigator_change();">
                                         <option value="">SELECT NEVIGATOR</option>
                                         {% for value in navigatorList %}
                                         <option value="{{ value.ID }}" {% if value.ID|stringformat:"s" == user_id|stringformat:"s" %}selected{% endif %}>
@@ -333,7 +333,7 @@
             <div class="col-lg-12">
                 <div class="row">
                      <div class="col-2">
-                        <select CLASS="form-control darrow" onchange="get_action(this.value)" id="action_ids">
+                        <select  onchange="get_action(this.value)" id="action_ids">
                             <option VALUE="">ACTION</option>
                             <option VALUE="1">TRANSFER</option>
                              <option VALUE="2">ASSIGN PLAN</option>
@@ -755,7 +755,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select" name="action_id" id="action_id" required onchange="set_scheduled_action_status(this.value);">
+                                            <select class="w-100" name="action_id" id="action_id" required onchange="set_scheduled_action_status(this.value);">
                                                 <option value="">Activity Category</option>
                                                 {% for region in sel_panel_list %}
                                                 <option value="{{ region.id }}">{{ region.Panel_Name }}</option>
@@ -766,7 +766,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select" name="panel_id" id="panel_id" required>
+                                            <select class="w-100" name="panel_id" id="panel_id" required>
                                                 <option value="">Activity Type</option>
                                                 {% for type in sel_panel_type %}
                                                 <option value="{{ type.id }}">{{ type.action_type }}</option>
@@ -783,7 +783,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select darrow" name="action_result_id" id="action_result_id" required>
+                                            <select class="w-100" name="action_result_id" id="action_result_id" required>
                                                 <option value="">Status</option>
                                             </select>
                                         </div>
@@ -791,7 +791,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-select darrow" name="action_status" id="action_status" required>
+                                            <select class="w-100" name="action_status" id="action_status" required>
                                                 <option value="Scheduled">Scheduled</option>
                                                 <option value="Success">Success</option>
                                                 <option value="Failure">Failure</option>
@@ -811,7 +811,7 @@
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-select darrow" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
+                                                        <select class="w-100" name="visit_alert_id" id="visit_alert_id" onchange="get_visit_alert_name();">
                                                             <option value="">SELECT ALERT</option>
                                                             {% for visit in member_need_visit %}
                                                             <option value="{{ visit.alert_id }}/{{ visit.id }}">
@@ -821,7 +821,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-select darrow" name="visit_alert_status_id">
+                                                        <select class="w-100" name="visit_alert_status_id">
                                                             {% for alertStatus in alert_statusList %}
                                                             {% if alertStatus.id == 28 %}
                                                             <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
@@ -918,7 +918,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-control" name="transportation_needed" id="transportation_needed" required>
+                                            <select class="w-100" name="transportation_needed" id="transportation_needed" required>
                                                 <option value="">Transportation Needed</option>
                                                 <option value="No">No</option>
                                                 <option value="Yes">Yes</option>
@@ -928,7 +928,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-control" name="appointment_action" id="appointment_action" required>
+                                            <select class="w-100" name="appointment_action" id="appointment_action" required>
                                                 <option value="Failure">Appointment Failure</option>
                                                 <option value="Rescheduled">Appointment Rescheduled</option>
                                                 <option value="Scheduled" selected>Appointment Scheduled</option>
@@ -949,7 +949,7 @@
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-control" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
+                                                        <select class="w-100" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
                                                             <option value="">SELECT ALERT</option>
                                                             {% for value in member_last_alert %}
                                                             <option value="{{ value.alert_id }}/{{ value.id }}">
@@ -959,7 +959,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" name="app_alert_status_id">
+                                                        <select class="w-100" name="app_alert_status_id">
                                                             {% for alertStatus in alert_statusList %}
                                                             {% if alertStatus.id == 5 %}
                                                             <option value="{{ alertStatus.id }}">{{ alertStatus.alert_status }}</option>
@@ -1012,7 +1012,7 @@
                     <input type="hidden" id="ref_medicaid_id" name="ref_medicaid_id">
                      <div class="row">
                          <div class="col-6 mb-2">
-                             <select CLASS="form-control darrow text-uppercase" name="department_id" onchange="get_dept_user(this.value)" required>
+                             <select CLASS="w-100 text-uppercase" name="department_id" onchange="get_dept_user(this.value)" required>
                                  <option VALUE="">SELECT DEPARTMENT</option>
                                   {% for dept in departmentList %}
                                  <option VALUE="{{dept.id}}">{{dept.department}}</option>
@@ -1020,7 +1020,7 @@
                              </select>
                          </div>
                          <div class="col-6 mb-2">
-                             <select CLASS="form-control darrow text-uppercase" name="referral_user_id" id="referral_user_id" required>
+                             <select CLASS="w-100 text-uppercase" name="referral_user_id" id="referral_user_id" required>
                                  <option VALUE="">SELECT USER</option>
                              </select>
                          </div>
@@ -1076,7 +1076,7 @@
                         <input type="hidden" id="plan_medicaid_id" name="plan_medicaid_id">
                   <div class="row">
                        <div class="col-12 mb-3">
-                            <select CLASS="form-control darrow text-uppercase" name="plan_id" id="plan_id" required>
+                            <select CLASS="w-100 text-uppercase" name="plan_id" id="plan_id" required>
                                  <option VALUE="">SELECT PLAN</option>
                                  {% for plan in planList %}
                                  <option VALUE="{{plan.id}}">{{plan.plan_name}} ({{plan.start_date}} - {{plan.end_date}})</option>

@@ -76,7 +76,7 @@
 
                             <div class="row">
                                  <div class="col-sm-6 mb-3" id="l_plan_id">
-                                    <select class="form-control text-uppercase darrow" name="plan_id" id="plan_id" required onchange="getdata(this.value)">
+                                    <select class="text-uppercase w-100" name="plan_id" id="plan_id" required onchange="getdata(this.value)">
                                         <option value="0">NEW</option>
                                         {% for plans in planlist %}
                                         <option value="{{plans.id}}">{{plans.plan_name}} ({{plans.start_date}} - {{plans.end_date}})</option>
@@ -99,7 +99,7 @@
                                    <input type="file" name="file_name" id="file_name" class="form-control text-uppercase" >
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <select class="form-control text-uppercase darrow" name="status" id="status" required>
+                                    <select class=" text-uppercase w-100" name="status" id="status" required>
                                         <option value="0">Active</option>
                                         <option value="1">Inactive</option>
                                     </select>

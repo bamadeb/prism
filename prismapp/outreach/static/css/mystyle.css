@@ -474,3 +474,37 @@ width:40px;height:40px;background-color:#F00;color:#000;padding:8px;font-weight:
   position: relative;
   z-index: 2;
 }
+
+select {
+  appearance: none;             /* Remove default OS styling */
+  -webkit-appearance: none;     /* For Safari */
+  -moz-appearance: none;        /* For Firefox */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 32px 6px 12px;   /* Space for arrow */
+  font-size: 14px;
+  line-height: 1.5;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='12' viewBox='0 0 24 24' width='12' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 14px;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.dataTables_length select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+    background-size: 14px;
+  padding-right: 20px !important;   /* Make room for the arrow */
+  text-align: left;               /* Center number properly */
+  min-width:40px;                  /* Prevent text/arrow overlap */
+background-position: right 6px center !important;
+
+}

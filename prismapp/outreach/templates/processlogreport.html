@@ -17,7 +17,7 @@
                                     {% csrf_token %}
                                     <div class="row g-2 align-items-center">
                                         <div class="col-lg-3 text-uppercase">
-                                            <select class="form-control form-select text-uppercase darrow" name="process_type" id="process_type" required onchange="getProcessList(this.value);">
+                                            <select class="text-uppercase w-100" name="process_type" id="process_type" required onchange="getProcessList(this.value);">
                                                 <option value=""> -- SELECT PROCESS TYPE --</option>
                                                 <option value="Member Process">Member File Process</option>
                                                 <option value="Risk Gaps Process">Risk Gaps File Process</option>
@@ -25,7 +25,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3 text-uppercase">
-                                            <select class="form-control form-select text-uppercase darrow" name="process_list" id="process_list" required onchange="get_log_details(this.value);">
+                                            <select class="text-uppercase w-100" name="process_list" id="process_list" required onchange="get_log_details(this.value);">
                                                 <option value=""> -- SELECT PROCESS --</option>
                                             </select>
 

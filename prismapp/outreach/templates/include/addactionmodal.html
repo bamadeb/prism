@@ -71,14 +71,14 @@
                                                         <input placeholder="Action Date" type="text" name="action_date"  id="action_date"  class="form-control datepicker text-uppercase" required>
                                                     </div>
                                                     <div class="col-sm-3 mt-4">
-                                                        <select class="form-control form-select text-uppercase darrow" name="action_status" id="action_status" required style=" text-transform: uppercase;">
+                                                        <select class="w-100 text-uppercase " name="action_status" id="action_status" required style=" text-transform: uppercase;">
                                                             <option value="Scheduled">Scheduled</option>
                                                             <option value="Success">Success</option>
                                                             <option value="Failure">Failure</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-6 mt-4">
-                                                        <select class="form-control form-select text-uppercase darrow" name="action_result_id" id="action_result_id" required>
+                                                        <select class="w-100 text-uppercase" name="action_result_id" id="action_result_id" required>
                                                             <option value=""> -- ACTION STATUS --</option>
                                                         </select>
                                                     </div>
@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-control darrow" name="transportation_needed" id="transportation_needed" required style="text-transform: uppercase;">
+                                            <select class="w-100" name="transportation_needed" id="transportation_needed" required style="text-transform: uppercase;">
                                                 <option value="" >Transportation Needed</option>
                                                 <option value="No" >No</option>
                                                 <option value="Yes">Yes</option>
@@ -251,7 +251,7 @@
 
                                     <div class="row mb-3">
                                         <div class="col-sm-12">
-                                            <select class="form-control darrow" name="appointment_action" id="appointment_action" required style="text-transform: uppercase;">
+                                            <select class="w-100" name="appointment_action" id="appointment_action" required style="text-transform: uppercase;">
                                                 <option value="Failure">Appointment Failure</option>
                                                 <option value="Rescheduled">Appointment Rescheduled</option>
                                                 <option value="Scheduled" selected >Appointment Scheduled</option>
@@ -271,7 +271,7 @@
                                             <table width="100%">
                                                 <tr>
                                                     <td>
-                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
+                                                        <select class="w-100" style="text-transform: uppercase;" name="app_alert_id" id="app_alert_id" onchange="get_alert_name();">
                                                             <option value="">SELECT ALERT</option>
                                                             {% for value in member_last_alert %}
                                                             <option value="{{ value.alert_id }}/{{ value.id }}">
@@ -281,7 +281,7 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" style="text-transform: uppercase;" name="app_alert_status_id">
+                                                        <select class="w-100" style="text-transform: uppercase;" name="app_alert_status_id">
                                                             {% for alertStatus in alert_statusList %}
                                                             {% if alertStatus.id|stringformat:"s" == "5" %}
                                                             <option value="{{ alertStatus.id }}">

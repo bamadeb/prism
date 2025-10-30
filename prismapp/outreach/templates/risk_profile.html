@@ -15,7 +15,7 @@
               {% csrf_token %}
               <div class="row">
                 <div class="col-lg-3">
-                  <select name="user_id" class="form-control darrow" style="text-transform: uppercase;">
+                  <select name="user_id" class="w-100 text-uppercase">
                     <option value="">ALL USER</option>
                     {% for user in user_list %}
                     <option value="{{ user.ID }}" {% if user.ID == user_id %}selected{% endif %}>

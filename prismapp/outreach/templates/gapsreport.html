@@ -2,7 +2,14 @@
 {% block title%} PRISM  :: {{pageTitle}} {% endblock %}
 {% load static %}
 {% block body %}
-
+<style>
+.dataTables_wrapper {
+    width: 100%;
+    overflow-x: auto;
+    height:450px;
+    overflow-y:auto;
+}
+</style>
 <main id="main" class="main" style="margin-top:50px!important;min-height:550px;">
     <section class="section dashboard">
         <div class="row">
