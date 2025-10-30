@@ -173,7 +173,7 @@ def add_plan(request):
         else:
             update_data = {
                 "status": status
-            } 
+            }
         payload = {
             "updateData": update_data,
             "table_name": "MEM_PLAN_DOCUMENTS",

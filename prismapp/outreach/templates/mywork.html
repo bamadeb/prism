@@ -334,13 +334,7 @@
                      <div class="col-2">
 
                     </div>
-                    <div class="col-4">
-                        {% if messages %}
-                          {% for message in messages %}
-                            <div style="color: red;font-size: 18px;" align="center">{{ message }}</div>
-                          {% endfor %}
-                        {% endif %}
-                    </div>
+
 
                     <div class="col-12">
                         <div class="card">
@@ -355,11 +349,18 @@
                                         <button class="nav-link" id="referred-tab" data-bs-toggle="tab" data-bs-target="#referred" type="button" role="tab" aria-controls="task" aria-selected="false">TRANSFER</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                    <select  onchange="get_action(this.value)" id="action_ids" class="ms-4 mb-2">
+                                    <select  onchange="get_action(this.value)" id="action_ids" class="ms-4 mb-2" style="position: absolute;z-index: 647;margin-top: -7px;width:120px;">
                                         <option VALUE="">ACTION</option>
                                         <option VALUE="1">TRANSFER</option>
                                          <option VALUE="2">ASSIGN PLAN</option>
                                     </select>
+                                    </li>
+                                    <li>
+                                          {% if messages %}
+                                              {% for message in messages %}
+                                                <div class="text-danger" style="font-size: 14px;margin-left:150px;" align="center">{{ message }}</div>
+                                              {% endfor %}
+                                            {% endif %}
                                     </li>
                                 </ul>
                                 <!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
