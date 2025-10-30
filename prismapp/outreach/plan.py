@@ -112,109 +112,107 @@ def handle_uploaded_file(f):
     #print(f"File saved to: {upload_path}")
 
 def add_plan(request):
-    plan_id = int(request.POST.get('plan_id', 0))
-    edit_plan_id = request.POST.get('edit_plan_id')
-    status = request.POST.get('status')
-    plan_document_id = request.POST.get('plan_document_id')
+    if request.method != "POST":
+        return HttpResponse("Not allowed", status=405)
+
     user_data = request.session.get('user_data', {})
     added_by = user_data.get('ID')
-    if request.FILES.get('file_name'):
-        uploaded_file = request.FILES.get('file_name')
-        file_name = uploaded_file.name
-        file_extension = os.path.splitext(file_name)
 
-    if request.method == "POST":
-        #print(request.POST)
-        #print(request.FILES)
-        #return HttpResponse("Not allowed")
-        insert_data_array = []
-        insert_data_array1 = []
+    plan_id = int(request.POST.get('plan_id', 0))
+    edit_plan_id = request.POST.get('edit_plan_id')
+    plan_document_id = request.POST.get('plan_document_id')
+    status = request.POST.get('status')
 
-        if edit_plan_id:
+    uploaded_file = request.FILES.get('file_name')
+    file_name = uploaded_file.name if uploaded_file else None
+    file_extension = os.path.splitext(file_name)[1] if file_name else None
+
+    def insert_plan(plan_data):
+        payload = {
+            "table_name": "MEM_PLAN_MASTER",
+            "insertDataArray": [plan_data],
+        }
+        return api_call(payload, "prismMultipleinsert")
+
+    def update_plan(plan_id, data):
+        payload = {
+            "updateData": data,
+            "table_name": "MEM_PLAN_MASTER",
+            "id_field_name": "id",
+            "id_field_value": plan_id,
+        }
+        return api_call(payload, "prismMultiplefieldupdate")
+
+    def insert_plan_document(plan_id):
+        """Insert file metadata into MEM_PLAN_DOCUMENTS"""
+        if not uploaded_file:
+            return
+        handle_uploaded_file(uploaded_file)
+        file_data = {
+            "plan_id": plan_id,
+            "file_name": file_name,
+            "file_type": file_extension,
+            "added_by": added_by,
+            "status": status
+        }
+        payload = {
+            "table_name": "MEM_PLAN_DOCUMENTS",
+            "insertDataArray": [file_data],
+        }
+        api_call(payload, "prismMultipleinsert")
+
+    def update_plan_document(doc_id):
+        """Update document info if edit mode"""
+        if uploaded_file:
+            handle_uploaded_file(uploaded_file)
             update_data = {
-                "plan_name": request.POST.get("plan_name"),
-                "start_date": request.POST.get("start_date"),
-                "end_date": request.POST.get("end_date")
-            }
-            dataList1 = {
-                "updateData": update_data,
-                "table_name": "MEM_PLAN_MASTER",
-                "id_field_name": "id",
-                "id_field_value": edit_plan_id,
-            }
-            api_call(dataList1, "prismMultiplefieldupdate")
-
-            # update the query
-            update_data1 = {
-                "plan_id": edit_plan_id,
-                "added_by": added_by,
+                "file_name": file_name,
+                "file_type": file_extension,
                 "status": status
             }
-            if request.FILES.get('file_name'):
-                handle_uploaded_file(request.FILES['file_name'])
-                update_data1 = {
-                    "file_name": uploaded_file.name,
-                    "file_type": file_extension[1],
-                    "status": status
-                }
-            print(update_data1)
-            dataList2 = {
-                "updateData": update_data1,
-                "table_name": "MEM_PLAN_DOCUMENTS",
-                "id_field_name": "id",
-                "id_field_value": plan_document_id,
-            }
-            #print(dataList2)
-            api_call(dataList2, "prismMultiplefieldupdate")
         else:
-            if plan_id == 0:
-                insert_data = {
-                    "plan_name": request.POST.get("plan_name"),
-                    "start_date": request.POST.get("start_date"),
-                    "end_date": request.POST.get("end_date"),
-                }
-                insert_data_array.append(insert_data)
-                plan_payload = {
-                    "table_name": "MEM_PLAN_MASTER",
-                    "insertDataArray": insert_data_array,
-                }
+            update_data = {
+                "status": status
+            } 
+        payload = {
+            "updateData": update_data,
+            "table_name": "MEM_PLAN_DOCUMENTS",
+            "id_field_name": "id",
+            "id_field_value": doc_id,
+        }
+        api_call(payload, "prismMultiplefieldupdate")
 
-                insert = api_call(plan_payload, "prismMultipleinsert")
+    # ---------- MAIN LOGIC ----------
 
-                if insert['insertedIds']:
-                    if request.FILES.get('file_name'):
-                        handle_uploaded_file(request.FILES['file_name'])
-                        file_insert_data = {
-                            "plan_id": insert['insertedIds'],
-                            "file_name": uploaded_file.name,
-                            "file_type": file_extension[1],
-                            "added_by": added_by,
-                            "status": status
-                        }
-                        insert_data_array1.append(file_insert_data)
-                        document = {
-                            "table_name": "MEM_PLAN_DOCUMENTS",
-                            "insertDataArray": insert_data_array1,
-                        }
-                        insert1 = api_call(document, "prismMultipleinsert")
-                        print(document)
-                        print(insert1)
+    # CASE 1: Edit existing plan
+    if edit_plan_id:
+        update_data = {
+            "plan_name": request.POST.get("plan_name"),
+            "start_date": request.POST.get("start_date"),
+            "end_date": request.POST.get("end_date")
+        }
+        update_plan(edit_plan_id, update_data)
+        update_plan_document(plan_document_id)
 
-            else:
-                if request.FILES.get('file_name'):
-                    handle_uploaded_file(request.FILES['file_name'])
-                    file_insert_data = {
-                        "plan_id": plan_id,
-                        "file_name": uploaded_file.name,
-                        "file_type": file_extension[1],
-                        "added_by": added_by,
-                        "status": status
-                    }
-                    insert_data_array1.append(file_insert_data)
-                    document = {
-                        "table_name": "MEM_PLAN_DOCUMENTS",
-                        "insertDataArray": insert_data_array1,
-                    }
-                    api_call(document, "prismMultipleinsert")
+    # CASE 2: Add new plan
+    elif plan_id == 0:
+        plan_data = {
+            "plan_name": request.POST.get("plan_name"),
+            "start_date": request.POST.get("start_date"),
+            "end_date": request.POST.get("end_date"),
+        }
+        insert_result = insert_plan(plan_data)
+
+        inserted_id = insert_result.get("insertedIds")
+        # handle case where API returns a list like [13]
+        if isinstance(inserted_id, list) and len(inserted_id) == 1:
+            inserted_id = inserted_id[0]
+
+        if inserted_id:
+            insert_plan_document(inserted_id)
+
+    # CASE 3: Existing plan (no edit), new document upload
+    else:
+        insert_plan_document(plan_id)
 
     return redirect("plans")
