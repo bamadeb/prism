@@ -38,6 +38,7 @@ def users(request):
             'projectName': settings.PROJECT_NAME,
             "user_list": user_list['data']['users'],
             "role_list": user_list['data']['roles'],
+            "department_list": user_list['data']['department'],
         }
     return render(request, 'users.html', context)
 
@@ -59,6 +60,7 @@ def add_user(request):
                     "FistName": request.POST.get("FistName"),
                     "LastName": request.POST.get("LastName"),
                     "role_id": request.POST.get("role_id"),
+                    "department_id": request.POST.get("department_id"),
                     "Password": request.POST.get("Password"),
                     "member_status": request.POST.get("member_status")
                 }
@@ -82,6 +84,7 @@ def add_user(request):
                         "FistName": request.POST.get("FistName"),
                         "LastName": request.POST.get("LastName"),
                         "role_id": request.POST.get("role_id"),
+                        "department_id": request.POST.get("department_id"),
                         "EmailID": request.POST.get("EmailID"),
                         "Password": request.POST.get("Password"),
                         "member_status": request.POST.get("member_status")

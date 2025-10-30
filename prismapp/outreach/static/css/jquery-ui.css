@@ -334,15 +334,19 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-datepicker .ui-datepicker-prev {
 	left: 2px;
+	top:4px;
 }
 .ui-datepicker .ui-datepicker-next {
 	right: 2px;
+	top:4px;
 }
 .ui-datepicker .ui-datepicker-prev-hover {
 	left: 1px;
+	top:4px;
 }
 .ui-datepicker .ui-datepicker-next-hover {
 	right: 1px;
+	top:4px;
 }
 .ui-datepicker .ui-datepicker-prev span,
 .ui-datepicker .ui-datepicker-next span {
@@ -366,7 +370,7 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker select.ui-datepicker-year {
 	width: 45%;
 	color:#000;
-	line-height: 1rem;
+	line-height: 1.5rem;
 }
 .ui-datepicker table {
 	width: 100%;
