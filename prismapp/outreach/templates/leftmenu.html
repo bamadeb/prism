@@ -16,7 +16,7 @@
             <!--                    <span>Home</span>-->
             <!--                </a>-->
             <!--            </li>-->
-            {% if request.session.user_data.role_id == 9 %}
+            {% if request.session.user_data.role_id == 9 or request.session.user_data.role_id == 21 %}
             <li class="nav-item">
                 <a class="nav-link collapsed text-decoration-none" href="/mywork/">
                     <i class="fa fa-building"></i>
