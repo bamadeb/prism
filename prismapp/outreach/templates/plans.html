@@ -69,7 +69,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                 <form onsubmit="frm_submit()" method="post" action="/add_plan/" enctype="multipart/form-data">
+                 <form onsubmit="return frm_submit()" method="post" action="/add_plan/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="edit_plan_id" id="edit_plan_id">
                             <input type="hidden" name="plan_document_id" id="plan_document_id">
@@ -120,9 +120,6 @@
 
 <script type="text/javascript">
     $('#members').DataTable({language: { search: "", searchPlaceholder: 'Search...' }});
-    function frm_submit(){
-        $("#gapLoader").show();
-    }
     function add_plan(){
         $('#file_name').attr('required', true);
         $('#l_plan_id').show();
@@ -142,6 +139,7 @@
     }
   }
     function update_plan(id,plan_name,start_date,end_date,status,plan_document_id){
+         $('#file_name').val('');
          $('#file_name').attr('required', false);
          $('#l_plan_id').hide();
          $('#edit_plan_id').val(id);
@@ -152,7 +150,16 @@
          $('#plan_document_id').val(plan_document_id);
         var myModal = new bootstrap.Modal(document.getElementById('callList'));
         myModal.show();
-
+    }
+    function frm_submit(){
+        const fromDate = new Date($('#start_date').val());
+        const toDate = new Date($('#end_date').val());
+        if (fromDate > toDate) {
+            alert("Start Date cannot be after End Date.");
+            return false;
+        }else{
+             $("#gapLoader").show();
+        }
     }
 
  </script>
